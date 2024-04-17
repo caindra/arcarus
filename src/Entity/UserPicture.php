@@ -30,10 +30,9 @@ class UserPicture
         return $this->binaryCode;
     }
 
-    public function setBinaryCode(string $binaryCode): static
+    public function setBinaryCode(?string $binaryCode): UserPicture
     {
         $this->binaryCode = $binaryCode;
-
         return $this;
     }
 
@@ -42,10 +41,9 @@ class UserPicture
         return $this->description;
     }
 
-    public function setDescription(?string $description): static
+    public function setDescription(?string $description): UserPicture
     {
         $this->description = $description;
-
         return $this;
     }
 }
