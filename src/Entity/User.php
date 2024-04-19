@@ -25,6 +25,9 @@ class User
     #[ORM\Column(length: 255)]
     private ?string $password = null;
 
+    #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?UserPicture $picture = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -74,5 +77,14 @@ class User
         return $this;
     }
 
+    public function getPicture(): ?UserPicture
+    {
+        return $this->picture;
+    }
+
+    public function setPicture(?UserPicture $picture): void
+    {
+        $this->picture = $picture;
+    }
 
 }

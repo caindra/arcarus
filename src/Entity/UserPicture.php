@@ -20,6 +20,9 @@ class UserPicture
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
+    #[ORM\OneToOne(mappedBy: 'picture', cascade: ['persist', 'remove'])]
+    private ?User $user = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,6 +47,28 @@ class UserPicture
     public function setDescription(?string $description): UserPicture
     {
         $this->description = $description;
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($user === null && $this->user !== null) {
+            $this->user->setPicture(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($user !== null && $user->getPicture() !== $this) {
+            $user->setPicture($this);
+        }
+
+        $this->user = $user;
+
         return $this;
     }
 }
