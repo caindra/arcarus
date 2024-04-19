@@ -20,14 +20,17 @@ class Section
     private ?float $width = null;
 
     #[ORM\Column]
-    private ?int $rowNumber = null;
+    private ?int $maxRowNumber = null;
 
     #[ORM\Column]
-    private ?int $columNumber = null;
+    private ?int $maxColumNumber = null;
 
     #[ORM\ManyToOne(inversedBy: 'sections')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Template $template = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $position = null;
 
     public function getId(): ?int
     {
@@ -58,27 +61,25 @@ class Section
         return $this;
     }
 
-    public function getRowNumber(): ?int
+    public function getMaxRowNumber(): ?int
     {
-        return $this->rowNumber;
+        return $this->maxRowNumber;
     }
 
-    public function setRowNumber(int $rowNumber): static
+    public function setMaxRowNumber(?int $maxRowNumber): Section
     {
-        $this->rowNumber = $rowNumber;
-
+        $this->maxRowNumber = $maxRowNumber;
         return $this;
     }
 
-    public function getColumNumber(): ?int
+    public function getMaxColumNumber(): ?int
     {
-        return $this->columNumber;
+        return $this->maxColumNumber;
     }
 
-    public function setColumNumber(int $columNumber): static
+    public function setMaxColumNumber(?int $maxColumNumber): Section
     {
-        $this->columNumber = $columNumber;
-
+        $this->maxColumNumber = $maxColumNumber;
         return $this;
     }
 
@@ -90,6 +91,17 @@ class Section
     public function setTemplate(?Template $template): Section
     {
         $this->template = $template;
+        return $this;
+    }
+
+    public function getPosition(): ?string
+    {
+        return $this->position;
+    }
+
+    public function setPosition(?string $position): Section
+    {
+        $this->position = $position;
         return $this;
     }
 
