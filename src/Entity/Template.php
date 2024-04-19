@@ -25,6 +25,14 @@ class Template
     #[ORM\JoinColumn(nullable: false)]
     private ?Organization $organization = null;
 
+    #[ORM\OneToMany(targetEntity: Section::class, mappedBy: 'template', orphanRemoval: true)]
+    private Collection $sections;
+
+    public function __construct()
+    {
+        $this->sections = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +68,36 @@ class Template
     public function setOrganization(?Organization $organization): Template
     {
         $this->organization = $organization;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Section>
+     */
+    public function getSections(): Collection
+    {
+        return $this->sections;
+    }
+
+    public function addSection(Section $section): static
+    {
+        if (!$this->sections->contains($section)) {
+            $this->sections->add($section);
+            $section->setTemplate($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSection(Section $section): static
+    {
+        if ($this->sections->removeElement($section)) {
+            // set the owning side to null (unless already changed)
+            if ($section->getTemplate() === $this) {
+                $section->setTemplate(null);
+            }
+        }
+
         return $this;
     }
 

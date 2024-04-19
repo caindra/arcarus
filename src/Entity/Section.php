@@ -25,6 +25,10 @@ class Section
     #[ORM\Column]
     private ?int $columNumber = null;
 
+    #[ORM\ManyToOne(inversedBy: 'sections')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Template $template = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -77,4 +81,16 @@ class Section
 
         return $this;
     }
+
+    public function getTemplate(): ?Template
+    {
+        return $this->template;
+    }
+
+    public function setTemplate(?Template $template): Section
+    {
+        $this->template = $template;
+        return $this;
+    }
+
 }
