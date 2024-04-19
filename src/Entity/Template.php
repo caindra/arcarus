@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\TemplateRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TemplateRepository::class)]
@@ -18,6 +20,10 @@ class Template
 
     #[ORM\Column(length: 255)]
     private ?string $layout = null;
+
+    #[ORM\ManyToOne(inversedBy: 'templates')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Organization $organization = null;
 
     public function getId(): ?int
     {
@@ -45,4 +51,16 @@ class Template
         $this->layout = $layout;
         return $this;
     }
+
+    public function getOrganization(): ?Organization
+    {
+        return $this->organization;
+    }
+
+    public function setOrganization(?Organization $organization): Template
+    {
+        $this->organization = $organization;
+        return $this;
+    }
+
 }
