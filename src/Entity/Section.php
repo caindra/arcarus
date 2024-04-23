@@ -14,72 +14,82 @@ class Section
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?float $height = null;
+    private ?int $height = null;
 
     #[ORM\Column]
-    private ?float $width = null;
+    private ?int $width = null;
 
     #[ORM\Column]
-    private ?int $maxRowNumber = null;
-
-    #[ORM\Column]
-    private ?int $maxColumNumber = null;
+    private ?int $maxColQuantity = null;
 
     #[ORM\ManyToOne(inversedBy: 'sections')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Template $template = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $position = null;
+    #[ORM\Column]
+    private ?int $positionTop = null;
+
+    #[ORM\Column]
+    private ?int $positionLeft = null;
+
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getHeight(): ?float
+    public function getHeight(): ?int
     {
         return $this->height;
     }
 
-    public function setHeight(float $height): static
+    public function setHeight(?int $height): Section
     {
         $this->height = $height;
-
         return $this;
     }
 
-    public function getWidth(): ?float
+    public function getWidth(): ?int
     {
         return $this->width;
     }
 
-    public function setWidth(float $width): static
+    public function setWidth(?int $width): Section
     {
         $this->width = $width;
-
         return $this;
     }
 
-    public function getMaxRowNumber(): ?int
+    public function getMaxColQuantity(): ?int
     {
-        return $this->maxRowNumber;
+        return $this->maxColQuantity;
     }
 
-    public function setMaxRowNumber(?int $maxRowNumber): Section
+    public function setMaxColQuantity(?int $maxColQuantity): Section
     {
-        $this->maxRowNumber = $maxRowNumber;
+        $this->maxColQuantity = $maxColQuantity;
         return $this;
     }
 
-    public function getMaxColumNumber(): ?int
+    public function getPositionTop(): ?int
     {
-        return $this->maxColumNumber;
+        return $this->positionTop;
     }
 
-    public function setMaxColumNumber(?int $maxColumNumber): Section
+    public function setPositionTop(?int $positionTop): Section
     {
-        $this->maxColumNumber = $maxColumNumber;
+        $this->positionTop = $positionTop;
+        return $this;
+    }
+
+    public function getPositionLeft(): ?int
+    {
+        return $this->positionLeft;
+    }
+
+    public function setPositionLeft(?int $positionLeft): Section
+    {
+        $this->positionLeft = $positionLeft;
         return $this;
     }
 
@@ -91,17 +101,6 @@ class Section
     public function setTemplate(?Template $template): Section
     {
         $this->template = $template;
-        return $this;
-    }
-
-    public function getPosition(): ?string
-    {
-        return $this->position;
-    }
-
-    public function setPosition(?string $position): Section
-    {
-        $this->position = $position;
         return $this;
     }
 
