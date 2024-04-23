@@ -20,6 +20,10 @@ class Grade
     #[ORM\JoinColumn(nullable: false)]
     private ?Organization $organization = null;
 
+    #[ORM\ManyToOne(inversedBy: 'grades')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?AcademicYear $academicYear = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -41,10 +45,20 @@ class Grade
         return $this->organization;
     }
 
-    public function setOrganization(?Organization $organization): static
+    public function setOrganization(?Organization $organization): Grade
     {
         $this->organization = $organization;
+        return $this;
+    }
 
+    public function getAcademicYear(): ?AcademicYear
+    {
+        return $this->academicYear;
+    }
+
+    public function setAcademicYear(?AcademicYear $academicYear): Grade
+    {
+        $this->academicYear = $academicYear;
         return $this;
     }
 

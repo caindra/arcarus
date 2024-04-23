@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\AcademicYearRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,6 +24,14 @@ class AcademicYear
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $endDate = null;
+
+    #[ORM\OneToMany(targetEntity: Grade::class, mappedBy: 'academicYear')]
+    private Collection $grades;
+
+    public function __construct()
+    {
+        $this->grades = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -58,6 +68,36 @@ class AcademicYear
     public function setEndDate(?\DateTimeInterface $endDate): AcademicYear
     {
         $this->endDate = $endDate;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Grade>
+     */
+    public function getGrades(): Collection
+    {
+        return $this->grades;
+    }
+
+    public function addGrade(Grade $grade): static
+    {
+        if (!$this->grades->contains($grade)) {
+            $this->grades->add($grade);
+            $grade->setAcademicYear($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGrade(Grade $grade): static
+    {
+        if ($this->grades->removeElement($grade)) {
+            // set the owning side to null (unless already changed)
+            if ($grade->getAcademicYear() === $this) {
+                $grade->setAcademicYear(null);
+            }
+        }
+
         return $this;
     }
 }
