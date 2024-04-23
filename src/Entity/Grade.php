@@ -16,6 +16,10 @@ class Grade
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[ORM\ManyToOne(inversedBy: 'grades')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Organization $organization = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -29,6 +33,18 @@ class Grade
     public function setName(?string $name): Grade
     {
         $this->name = $name;
+        return $this;
+    }
+
+    public function getOrganization(): ?Organization
+    {
+        return $this->organization;
+    }
+
+    public function setOrganization(?Organization $organization): static
+    {
+        $this->organization = $organization;
+
         return $this;
     }
 

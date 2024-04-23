@@ -21,9 +21,13 @@ class Organization
     #[ORM\OneToMany(targetEntity: Template::class, mappedBy: 'organization', orphanRemoval: true)]
     private Collection $templates;
 
+    #[ORM\OneToMany(targetEntity: Grade::class, mappedBy: 'organization', orphanRemoval: true)]
+    private Collection $grades;
+
     public function __construct()
     {
         $this->templates = new ArrayCollection();
+        $this->grades = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -66,6 +70,36 @@ class Organization
             // set the owning side to null (unless already changed)
             if ($template->getOrganization() === $this) {
                 $template->setOrganization(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Grade>
+     */
+    public function getGrades(): Collection
+    {
+        return $this->grades;
+    }
+
+    public function addGrade(Grade $grade): static
+    {
+        if (!$this->grades->contains($grade)) {
+            $this->grades->add($grade);
+            $grade->setOrganization($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGrade(Grade $grade): static
+    {
+        if ($this->grades->removeElement($grade)) {
+            // set the owning side to null (unless already changed)
+            if ($grade->getOrganization() === $this) {
+                $grade->setOrganization(null);
             }
         }
 
