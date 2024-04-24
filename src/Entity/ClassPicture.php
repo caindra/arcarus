@@ -21,6 +21,9 @@ class ClassPicture
     #[ORM\OneToMany(targetEntity: SectionContent::class, mappedBy: 'classPicture')]
     private Collection $sectionContents;
 
+    #[ORM\OneToOne(mappedBy: 'classPicture', cascade: ['persist', 'remove'])]
+    private ?Grade $grade = null;
+
     public function __construct()
     {
         $this->sectionContents = new ArrayCollection();
@@ -68,6 +71,28 @@ class ClassPicture
                 $sectionContent->setClassPicture(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getGrade(): ?Grade
+    {
+        return $this->grade;
+    }
+
+    public function setGrade(?Grade $grade): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($grade === null && $this->grade !== null) {
+            $this->grade->setClassPicture(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($grade !== null && $grade->getClassPicture() !== $this) {
+            $grade->setClassPicture($this);
+        }
+
+        $this->grade = $grade;
 
         return $this;
     }

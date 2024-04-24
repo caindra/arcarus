@@ -35,6 +35,9 @@ class Grade
     #[ORM\OneToMany(targetEntity: Professor::class, mappedBy: 'mentoredClass')]
     private Collection $mentors;
 
+    #[ORM\OneToOne(inversedBy: 'grade', cascade: ['persist', 'remove'])]
+    private ?ClassPicture $classPicture = null;
+
     public function __construct()
     {
         $this->students = new ArrayCollection();
@@ -161,6 +164,17 @@ class Grade
             }
         }
 
+        return $this;
+    }
+
+    public function getClassPicture(): ?ClassPicture
+    {
+        return $this->classPicture;
+    }
+
+    public function setClassPicture(?ClassPicture $classPicture): Grade
+    {
+        $this->classPicture = $classPicture;
         return $this;
     }
 
