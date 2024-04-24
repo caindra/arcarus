@@ -20,6 +20,10 @@ class SectionContent
     #[ORM\JoinColumn(nullable: false)]
     private ?Section $section = null;
 
+    #[ORM\ManyToOne(inversedBy: 'sectionContents')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?ClassPicture $classPicture = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,6 +48,17 @@ class SectionContent
     public function setSection(?Section $section): SectionContent
     {
         $this->section = $section;
+        return $this;
+    }
+
+    public function getClassPicture(): ?ClassPicture
+    {
+        return $this->classPicture;
+    }
+
+    public function setClassPicture(?ClassPicture $classPicture): SectionContent
+    {
+        $this->classPicture = $classPicture;
         return $this;
     }
 
