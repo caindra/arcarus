@@ -29,9 +29,13 @@ class Grade
     #[ORM\OneToMany(targetEntity: Student::class, mappedBy: 'grade')]
     private Collection $students;
 
+    #[ORM\ManyToMany(targetEntity: Professor::class, inversedBy: 'grades')]
+    private Collection $professors;
+
     public function __construct()
     {
         $this->students = new ArrayCollection();
+        $this->professors = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -98,6 +102,30 @@ class Grade
                 $student->setGrade(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Professor>
+     */
+    public function getProfessors(): Collection
+    {
+        return $this->professors;
+    }
+
+    public function addProfessor(Professor $professor): static
+    {
+        if (!$this->professors->contains($professor)) {
+            $this->professors->add($professor);
+        }
+
+        return $this;
+    }
+
+    public function removeProfessor(Professor $professor): static
+    {
+        $this->professors->removeElement($professor);
 
         return $this;
     }
