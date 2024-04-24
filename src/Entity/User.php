@@ -33,6 +33,9 @@ abstract class User
     #[ORM\Column(length: 255)]
     private ?string $userName = null;
 
+    #[ORM\ManyToOne(inversedBy: 'containedUsers')]
+    private ?UserSectionContent $userSectionContent = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -102,5 +105,18 @@ abstract class User
         $this->userName = $userName;
         return $this;
     }
+
+    public function getUserSectionContent(): ?UserSectionContent
+    {
+        return $this->userSectionContent;
+    }
+
+    public function setUserSectionContent(?UserSectionContent $userSectionContent): User
+    {
+        $this->userSectionContent = $userSectionContent;
+        return $this;
+    }
+
+
 
 }
