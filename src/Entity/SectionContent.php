@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\SectionContentRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SectionContentRepository::class)]
@@ -23,6 +25,14 @@ class SectionContent
     #[ORM\ManyToOne(inversedBy: 'sectionContents')]
     #[ORM\JoinColumn(nullable: false)]
     private ?ClassPicture $classPicture = null;
+
+    #[ORM\OneToMany(targetEntity: UserSectionContent::class, mappedBy: 'sectionContent')]
+    private Collection $userContents;
+
+    public function __construct()
+    {
+        $this->userContents = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -59,6 +69,36 @@ class SectionContent
     public function setClassPicture(?ClassPicture $classPicture): SectionContent
     {
         $this->classPicture = $classPicture;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserSectionContent>
+     */
+    public function getUserContents(): Collection
+    {
+        return $this->userContents;
+    }
+
+    public function addUserContent(UserSectionContent $userContent): static
+    {
+        if (!$this->userContents->contains($userContent)) {
+            $this->userContents->add($userContent);
+            $userContent->setSectionContent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserContent(UserSectionContent $userContent): static
+    {
+        if ($this->userContents->removeElement($userContent)) {
+            // set the owning side to null (unless already changed)
+            if ($userContent->getSectionContent() === $this) {
+                $userContent->setSectionContent(null);
+            }
+        }
+
         return $this;
     }
 

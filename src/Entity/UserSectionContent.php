@@ -24,6 +24,9 @@ class UserSectionContent
     #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'userSectionContent')]
     private Collection $containedUsers;
 
+    #[ORM\ManyToOne(inversedBy: 'userContents')]
+    private ?SectionContent $sectionContent = null;
+
     public function __construct()
     {
         $this->containedUsers = new ArrayCollection();
@@ -83,6 +86,17 @@ class UserSectionContent
             }
         }
 
+        return $this;
+    }
+
+    public function getSectionContent(): ?SectionContent
+    {
+        return $this->sectionContent;
+    }
+
+    public function setSectionContent(?SectionContent $sectionContent): UserSectionContent
+    {
+        $this->sectionContent = $sectionContent;
         return $this;
     }
 
