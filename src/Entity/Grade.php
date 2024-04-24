@@ -32,10 +32,14 @@ class Grade
     #[ORM\ManyToMany(targetEntity: Professor::class, inversedBy: 'grades')]
     private Collection $professors;
 
+    #[ORM\OneToMany(targetEntity: Professor::class, mappedBy: 'mentoredClass')]
+    private Collection $mentors;
+
     public function __construct()
     {
         $this->students = new ArrayCollection();
         $this->professors = new ArrayCollection();
+        $this->mentors = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -126,6 +130,36 @@ class Grade
     public function removeProfessor(Professor $professor): static
     {
         $this->professors->removeElement($professor);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Professor>
+     */
+    public function getMentors(): Collection
+    {
+        return $this->mentors;
+    }
+
+    public function addMentor(Professor $mentor): static
+    {
+        if (!$this->mentors->contains($mentor)) {
+            $this->mentors->add($mentor);
+            $mentor->setMentoredClass($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMentor(Professor $mentor): static
+    {
+        if ($this->mentors->removeElement($mentor)) {
+            // set the owning side to null (unless already changed)
+            if ($mentor->getMentoredClass() === $this) {
+                $mentor->setMentoredClass(null);
+            }
+        }
 
         return $this;
     }

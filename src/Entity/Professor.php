@@ -16,6 +16,9 @@ class Professor extends User
     #[ORM\ManyToMany(targetEntity: Grade::class, mappedBy: 'professors')]
     private Collection $grades;
 
+    #[ORM\ManyToOne(inversedBy: 'mentors')]
+    private ?Grade $mentoredClass = null;
+
     public function __construct()
     {
         $this->grades = new ArrayCollection();
@@ -59,4 +62,17 @@ class Professor extends User
 
         return $this;
     }
+
+    public function getMentoredClass(): ?Grade
+    {
+        return $this->mentoredClass;
+    }
+
+    public function setMentoredClass(?Grade $mentoredClass): Professor
+    {
+        $this->mentoredClass = $mentoredClass;
+        return $this;
+    }
+
+
 }
