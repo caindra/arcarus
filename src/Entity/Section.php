@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\SectionRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SectionRepository::class)]
@@ -31,6 +33,14 @@ class Section
 
     #[ORM\Column]
     private ?int $positionLeft = null;
+
+    #[ORM\OneToMany(targetEntity: SectionContent::class, mappedBy: 'section', orphanRemoval: true)]
+    private Collection $sectionContents;
+
+    public function __construct()
+    {
+        $this->sectionContents = new ArrayCollection();
+    }
 
 
     public function getId(): ?int
@@ -101,6 +111,36 @@ class Section
     public function setTemplate(?Template $template): Section
     {
         $this->template = $template;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SectionContent>
+     */
+    public function getSectionContents(): Collection
+    {
+        return $this->sectionContents;
+    }
+
+    public function addSectionContent(SectionContent $sectionContent): static
+    {
+        if (!$this->sectionContents->contains($sectionContent)) {
+            $this->sectionContents->add($sectionContent);
+            $sectionContent->setSection($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSectionContent(SectionContent $sectionContent): static
+    {
+        if ($this->sectionContents->removeElement($sectionContent)) {
+            // set the owning side to null (unless already changed)
+            if ($sectionContent->getSection() === $this) {
+                $sectionContent->setSection(null);
+            }
+        }
+
         return $this;
     }
 
