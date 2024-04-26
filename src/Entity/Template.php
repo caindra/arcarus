@@ -16,10 +16,13 @@ class Template
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    private ?string $styleName = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $layout = null;
+    #[ORM\Column(type: 'blob')]
+    /**
+     * @var resource|null $layout
+     */
+    private $layout = null;
 
     #[ORM\ManyToOne(inversedBy: 'templates')]
     #[ORM\JoinColumn(nullable: false)]
@@ -38,14 +41,14 @@ class Template
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getStyleName(): ?string
     {
-        return $this->name;
+        return $this->styleName;
     }
 
-    public function setName(?string $name): Template
+    public function setStyleName(?string $styleName): Template
     {
-        $this->name = $name;
+        $this->styleName = $styleName;
         return $this;
     }
 
@@ -54,7 +57,7 @@ class Template
         return $this->layout;
     }
 
-    public function setLayout(?string $layout): Template
+    public function setLayout($layout): Template
     {
         $this->layout = $layout;
         return $this;
