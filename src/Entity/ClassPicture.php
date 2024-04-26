@@ -16,7 +16,7 @@ class ClassPicture
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $decoration = null;
+    private ?string $description = null;
 
     #[ORM\OneToMany(targetEntity: SectionContent::class, mappedBy: 'classPicture')]
     private Collection $sectionContents;
@@ -34,14 +34,14 @@ class ClassPicture
         return $this->id;
     }
 
-    public function getDecoration(): ?string
+    public function getDescription(): ?string
     {
-        return $this->decoration;
+        return $this->description;
     }
 
-    public function setDecoration(?string $decoration): ClassPicture
+    public function setDescription(?string $description): ClassPicture
     {
-        $this->decoration = $decoration;
+        $this->description = $description;
         return $this;
     }
 
