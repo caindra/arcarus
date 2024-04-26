@@ -14,8 +14,11 @@ class UserPicture
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $binaryCode = null;
+    #[ORM\Column(type: 'blob')]
+    /**
+     * @var resource|null $image
+     */
+    private $image = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
@@ -28,14 +31,14 @@ class UserPicture
         return $this->id;
     }
 
-    public function getBinaryCode(): ?string
+    public function getImage(): ?string
     {
-        return $this->binaryCode;
+        return $this->image;
     }
 
-    public function setBinaryCode(?string $binaryCode): UserPicture
+    public function setImage($image): UserPicture
     {
-        $this->binaryCode = $binaryCode;
+        $this->image = $image;
         return $this;
     }
 
