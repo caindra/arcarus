@@ -25,12 +25,12 @@ class AcademicYear
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $endDate = null;
 
-    #[ORM\OneToMany(targetEntity: Grade::class, mappedBy: 'academicYear')]
-    private Collection $grades;
+    #[ORM\OneToMany(targetEntity: Group::class, mappedBy: 'academicYear')]
+    private Collection $groups;
 
     public function __construct()
     {
-        $this->grades = new ArrayCollection();
+        $this->groups = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -72,29 +72,29 @@ class AcademicYear
     }
 
     /**
-     * @return Collection<int, Grade>
+     * @return Collection<int, Group>
      */
-    public function getGrades(): Collection
+    public function getGroups(): Collection
     {
-        return $this->grades;
+        return $this->groups;
     }
 
-    public function addGrade(Grade $grade): static
+    public function addGroup(Group $group): static
     {
-        if (!$this->grades->contains($grade)) {
-            $this->grades->add($grade);
-            $grade->setAcademicYear($this);
+        if (!$this->groups->contains($group)) {
+            $this->groups->add($group);
+            $group->setAcademicYear($this);
         }
 
         return $this;
     }
 
-    public function removeGrade(Grade $grade): static
+    public function removeGroup(Group $group): static
     {
-        if ($this->grades->removeElement($grade)) {
+        if ($this->groups->removeElement($group)) {
             // set the owning side to null (unless already changed)
-            if ($grade->getAcademicYear() === $this) {
-                $grade->setAcademicYear(null);
+            if ($group->getAcademicYear() === $this) {
+                $group->setAcademicYear(null);
             }
         }
 

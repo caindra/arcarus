@@ -9,16 +9,16 @@ use Doctrine\ORM\Mapping as ORM;
 class Student extends User
 {
     #[ORM\ManyToOne(inversedBy: 'students')]
-    private ?Grade $grade = null;
+    private ?Group $group = null;
 
-    public function getGrade(): ?Grade
+    public function getGroup(): ?Group
     {
-        return $this->grade;
+        return $this->group;
     }
 
-    public function setGrade(?Grade $grade): Student
+    public function setGroup(?Group $group): Student
     {
-        $this->grade = $grade;
+        $this->group = $group;
         return $this;
     }
 

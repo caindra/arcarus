@@ -2,27 +2,27 @@
 
 namespace App\Repository;
 
-use App\Entity\Grade;
+use App\Entity\Group;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Grade>
+ * @extends ServiceEntityRepository<Group>
  *
- * @method Grade|null find($id, $lockMode = null, $lockVersion = null)
- * @method Grade|null findOneBy(array $criteria, array $orderBy = null)
- * @method Grade[]    findAll()
- * @method Grade[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Group|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Group|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Group[]    findAll()
+ * @method Group[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class GradeRepository extends ServiceEntityRepository
+class GroupRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Grade::class);
+        parent::__construct($registry, Group::class);
     }
 
 //    /**
-//     * @return Grade[] Returns an array of Grade objects
+//     * @return Group[] Returns an array of Group objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -36,7 +36,7 @@ class GradeRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Grade
+//    public function findOneBySomeField($value): ?Group
 //    {
 //        return $this->createQueryBuilder('g')
 //            ->andWhere('g.exampleField = :val')

@@ -22,7 +22,7 @@ class ClassPicture
     private Collection $sectionContents;
 
     #[ORM\OneToOne(mappedBy: 'classPicture', cascade: ['persist', 'remove'])]
-    private ?Grade $grade = null;
+    private ?Group $group = null;
 
     public function __construct()
     {
@@ -75,24 +75,24 @@ class ClassPicture
         return $this;
     }
 
-    public function getGrade(): ?Grade
+    public function getGroup(): ?Group
     {
-        return $this->grade;
+        return $this->group;
     }
 
-    public function setGrade(?Grade $grade): static
+    public function setGroup(?Group $group): static
     {
         // unset the owning side of the relation if necessary
-        if ($grade === null && $this->grade !== null) {
-            $this->grade->setClassPicture(null);
+        if ($group === null && $this->group !== null) {
+            $this->group->setClassPicture(null);
         }
 
         // set the owning side of the relation if necessary
-        if ($grade !== null && $grade->getClassPicture() !== $this) {
-            $grade->setClassPicture($this);
+        if ($group !== null && $group->getClassPicture() !== $this) {
+            $group->setClassPicture($this);
         }
 
-        $this->grade = $grade;
+        $this->group = $group;
 
         return $this;
     }

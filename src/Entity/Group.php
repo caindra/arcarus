@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\GradeRepository;
+use App\Repository\GroupRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: GradeRepository::class)]
-class Grade
+#[ORM\Entity(repositoryClass: GroupRepository::class)]
+class Group
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -18,24 +18,24 @@ class Grade
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\ManyToOne(inversedBy: 'grades')]
+    #[ORM\ManyToOne(inversedBy: 'groups')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Organization $organization = null;
 
-    #[ORM\ManyToOne(inversedBy: 'grades')]
+    #[ORM\ManyToOne(inversedBy: 'groups')]
     #[ORM\JoinColumn(nullable: false)]
     private ?AcademicYear $academicYear = null;
 
-    #[ORM\OneToMany(targetEntity: Student::class, mappedBy: 'grade')]
+    #[ORM\OneToMany(targetEntity: Student::class, mappedBy: 'group')]
     private Collection $students;
 
-    #[ORM\ManyToMany(targetEntity: Professor::class, inversedBy: 'grades')]
+    #[ORM\ManyToMany(targetEntity: Professor::class, inversedBy: 'groups')]
     private Collection $professors;
 
     #[ORM\OneToMany(targetEntity: Professor::class, mappedBy: 'mentoredClass')]
     private Collection $mentors;
 
-    #[ORM\OneToOne(inversedBy: 'grade', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'group', cascade: ['persist', 'remove'])]
     private ?ClassPicture $classPicture = null;
 
     public function __construct()
@@ -55,7 +55,7 @@ class Grade
         return $this->name;
     }
 
-    public function setName(?string $name): Grade
+    public function setName(?string $name): Group
     {
         $this->name = $name;
         return $this;
@@ -66,7 +66,7 @@ class Grade
         return $this->organization;
     }
 
-    public function setOrganization(?Organization $organization): Grade
+    public function setOrganization(?Organization $organization): Group
     {
         $this->organization = $organization;
         return $this;
@@ -77,7 +77,7 @@ class Grade
         return $this->academicYear;
     }
 
-    public function setAcademicYear(?AcademicYear $academicYear): Grade
+    public function setAcademicYear(?AcademicYear $academicYear): Group
     {
         $this->academicYear = $academicYear;
         return $this;
@@ -95,7 +95,7 @@ class Grade
     {
         if (!$this->students->contains($student)) {
             $this->students->add($student);
-            $student->setGrade($this);
+            $student->setGroup($this);
         }
 
         return $this;
@@ -105,8 +105,8 @@ class Grade
     {
         if ($this->students->removeElement($student)) {
             // set the owning side to null (unless already changed)
-            if ($student->getGrade() === $this) {
-                $student->setGrade(null);
+            if ($student->getGroup() === $this) {
+                $student->setGroup(null);
             }
         }
 
@@ -172,7 +172,7 @@ class Grade
         return $this->classPicture;
     }
 
-    public function setClassPicture(?ClassPicture $classPicture): Grade
+    public function setClassPicture(?ClassPicture $classPicture): Group
     {
         $this->classPicture = $classPicture;
         return $this;

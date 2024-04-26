@@ -13,15 +13,15 @@ class Professor extends User
     #[ORM\Column]
     private ?bool $isAdmin = false;
 
-    #[ORM\ManyToMany(targetEntity: Grade::class, mappedBy: 'professors')]
-    private Collection $grades;
+    #[ORM\ManyToMany(targetEntity: Group::class, mappedBy: 'professors')]
+    private Collection $groups;
 
     #[ORM\ManyToOne(inversedBy: 'mentors')]
-    private ?Grade $mentoredClass = null;
+    private ?Group $mentoredClass = null;
 
     public function __construct()
     {
-        $this->grades = new ArrayCollection();
+        $this->groups = new ArrayCollection();
     }
 
     public function isIsAdmin(): ?bool
@@ -37,38 +37,38 @@ class Professor extends User
     }
 
     /**
-     * @return Collection<int, Grade>
+     * @return Collection<int, Group>
      */
-    public function getGrades(): Collection
+    public function getGroups(): Collection
     {
-        return $this->grades;
+        return $this->groups;
     }
 
-    public function addGrade(Grade $grade): static
+    public function addGroup(Group $group): static
     {
-        if (!$this->grades->contains($grade)) {
-            $this->grades->add($grade);
-            $grade->addProfessor($this);
+        if (!$this->groups->contains($group)) {
+            $this->groups->add($group);
+            $group->addProfessor($this);
         }
 
         return $this;
     }
 
-    public function removeGrade(Grade $grade): static
+    public function removeGroup(Group $group): static
     {
-        if ($this->grades->removeElement($grade)) {
-            $grade->removeProfessor($this);
+        if ($this->groups->removeElement($group)) {
+            $group->removeProfessor($this);
         }
 
         return $this;
     }
 
-    public function getMentoredClass(): ?Grade
+    public function getMentoredClass(): ?Group
     {
         return $this->mentoredClass;
     }
 
-    public function setMentoredClass(?Grade $mentoredClass): Professor
+    public function setMentoredClass(?Group $mentoredClass): Professor
     {
         $this->mentoredClass = $mentoredClass;
         return $this;
