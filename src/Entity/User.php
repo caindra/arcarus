@@ -4,37 +4,40 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\InheritanceType("JOINED")]
 #[ORM\DiscriminatorColumn(name: "username", type: "string")]
-abstract class User
+abstract class User implements UserInterface, UserPasswordHasherInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    protected ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    protected ?string $name = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $surnames = null;
+    protected ?string $surnames = null;
 
     #[ORM\Column(length: 255, unique: true)]
-    private ?string $email = null;
+    protected ?string $email = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $password = null;
+    protected ?string $password = null;
 
     #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
-    private ?UserPicture $picture = null;
+    protected ?UserPicture $picture = null;
 
     #[ORM\Column(length: 255, unique: true)]
-    private ?string $userName = null;
+    protected ?string $userName = null;
 
     #[ORM\ManyToOne(inversedBy: 'containedUsers')]
-    private ?UserSectionContent $userSectionContent = null;
+    protected ?UserSectionContent $userSectionContent = null;
 
     public function getId(): ?int
     {
@@ -117,6 +120,9 @@ abstract class User
         return $this;
     }
 
-
+    public function __toString(): string
+    {
+        return $this->name . ' ' . $this->surnames;
+    }
 
 }
