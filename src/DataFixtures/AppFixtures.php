@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\ClassPicture;
 use App\Entity\Professor;
 use App\Entity\Student;
 use App\Entity\UserPicture;
@@ -93,11 +94,7 @@ class AppFixtures extends Fixture
 
         TemplateFactory::createMany(5);
 
-        SectionFactory::createMany(4);
-
         OrganizationFactory::createMany(3);
-
-        ClassPictureFactory::createMany(6);
 
         GroupFactory::createMany(5, function (){
             return [
@@ -111,6 +108,25 @@ class AppFixtures extends Fixture
 
 
 
+        ClassPictureFactory::createOne([
+            'group' => GroupFactory::random(),
+            'sectionContents' => SectionContentFactory::randomRange(1, 3),
+        ]);
+
+        SectionFactory::createMany(4, function (){
+            return [
+                'sectionContents' => SectionContentFactory::randomRange(1, 3),
+            ];
+        });
+
+
+
         $manager->flush();
     }
 }
+
+/**
+ * TODO: implementar las siguientes clases en las fixtures:
+ * - SectionContent
+ * - UserSectionContent
+ */
