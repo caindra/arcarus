@@ -49,9 +49,8 @@ final class StudentFactory extends ModelFactory
         return [
             'name' => self::faker()->firstName(),
             'surnames' => self::faker()->lastName() . ' ' . self::faker()->lastName(),
-            'email' => self::faker()->email(),
-            'password' => self::faker()->password(),
-            'userName' => self::faker()->userName(),
+            'email' => self::faker()->unique()->email(),
+            'userName' => self::faker()->unique()->userName(),
         ];
     }
 

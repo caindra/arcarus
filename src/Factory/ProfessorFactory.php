@@ -51,9 +51,8 @@ final class ProfessorFactory extends ModelFactory
             'name' => self::faker()->firstName(),
             'surnames' => self::faker()->lastName() . ' ' . self::faker()->lastName(),
             'isAdmin' => $isAdmin,
-            'email' => self::faker()->email(),
-            'password' => self::faker()->password(),
-            'userName' => self::faker()->userName(),
+            'email' => self::faker()->unique()->email(),
+            'userName' => self::faker()->unique()->userName(),
         ];
     }
 
