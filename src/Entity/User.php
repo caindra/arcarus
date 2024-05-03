@@ -21,7 +21,7 @@ abstract class User
     #[ORM\Column(length: 255)]
     private ?string $surnames = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
@@ -30,7 +30,7 @@ abstract class User
     #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
     private ?UserPicture $picture = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     private ?string $userName = null;
 
     #[ORM\ManyToOne(inversedBy: 'containedUsers')]
