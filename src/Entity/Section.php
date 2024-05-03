@@ -144,4 +144,9 @@ class Section
         return $this;
     }
 
+    public function __toString(): string
+    {
+        return 'Height: ' . $this->height . ', Width: ' . $this->width;
+    }
+
 }

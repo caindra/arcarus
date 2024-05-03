@@ -104,4 +104,9 @@ class Template
         return $this;
     }
 
+    public function __toString(): string
+    {
+        return $this->styleName . ' - ' . $this->layout;
+    }
+
 }

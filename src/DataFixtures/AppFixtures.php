@@ -3,10 +3,15 @@
 namespace App\DataFixtures;
 
 use App\Factory\AcademicYearFactory;
+use App\Factory\ClassPictureFactory;
 use App\Factory\GroupFactory;
 use App\Factory\OrganizationFactory;
 use App\Factory\ProfessorFactory;
+use App\Factory\SectionContentFactory;
+use App\Factory\SectionFactory;
 use App\Factory\StudentFactory;
+use App\Factory\TemplateFactory;
+use App\Factory\UserPictureFactory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -20,8 +25,12 @@ class AppFixtures extends Fixture
 
         AcademicYearFactory::createMany(2);
 
+        TemplateFactory::createMany(5);
 
-/*
+        SectionFactory::createMany(4);
+
+        UserPictureFactory::createMany(200);
+
         GroupFactory::createMany(5, function (){
             return [
                 'organization' => OrganizationFactory::createOne(),
@@ -31,7 +40,7 @@ class AppFixtures extends Fixture
                 'academicYear' => AcademicYearFactory::random()
             ];
         });
-*/
+
 
 
         $manager->flush();
