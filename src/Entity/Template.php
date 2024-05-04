@@ -31,9 +31,13 @@ class Template
     #[ORM\OneToMany(targetEntity: Section::class, mappedBy: 'template', orphanRemoval: true)]
     private Collection $sections;
 
+    #[ORM\OneToMany(targetEntity: ClassPicture::class, mappedBy: 'template')]
+    private Collection $classPictures;
+
     public function __construct()
     {
         $this->sections = new ArrayCollection();
+        $this->classPictures = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -107,6 +111,36 @@ class Template
     public function __toString(): string
     {
         return $this->styleName . ' - ' . $this->layout;
+    }
+
+    /**
+     * @return Collection<int, ClassPicture>
+     */
+    public function getClassPictures(): Collection
+    {
+        return $this->classPictures;
+    }
+
+    public function addClassPicture(ClassPicture $classPicture): static
+    {
+        if (!$this->classPictures->contains($classPicture)) {
+            $this->classPictures->add($classPicture);
+            $classPicture->setTemplate($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClassPicture(ClassPicture $classPicture): static
+    {
+        if ($this->classPictures->removeElement($classPicture)) {
+            // set the owning side to null (unless already changed)
+            if ($classPicture->getTemplate() === $this) {
+                $classPicture->setTemplate(null);
+            }
+        }
+
+        return $this;
     }
 
 }

@@ -24,6 +24,9 @@ class ClassPicture
     #[ORM\OneToOne(mappedBy: 'classPicture', cascade: ['persist', 'remove'])]
     private ?Group $group = null;
 
+    #[ORM\ManyToOne(inversedBy: 'classPictures')]
+    private ?Template $template = null;
+
     public function __construct()
     {
         $this->sectionContents = new ArrayCollection();
@@ -101,5 +104,17 @@ class ClassPicture
     {
         return $this->description;
     }
+
+    public function getTemplate(): ?Template
+    {
+        return $this->template;
+    }
+
+    public function setTemplate(?Template $template): ClassPicture
+    {
+        $this->template = $template;
+        return $this;
+    }
+
 
 }
