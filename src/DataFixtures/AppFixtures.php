@@ -16,6 +16,7 @@ use App\Factory\SectionFactory;
 use App\Factory\StudentFactory;
 use App\Factory\TemplateFactory;
 use App\Factory\UserPictureFactory;
+use App\Factory\UserSectionContentFactory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -46,7 +47,7 @@ class AppFixtures extends Fixture
             )
         ]);
 
-        ProfessorFactory::createOne([
+        $sheldon = ProfessorFactory::createOne([
             'name' => 'Sheldon',
             'surnames' => 'Cooper Tucker',
             'email' => 'sheldon@prueba.com',
@@ -57,7 +58,7 @@ class AppFixtures extends Fixture
             'isAdmin' => true
         ]);
 
-        ProfessorFactory::createOne([
+        $aelin = ProfessorFactory::createOne([
             'name' => 'Aelin',
             'surnames' => 'Ashryver Galathynius',
             'email' => 'aelin@prueba.com',
@@ -68,7 +69,7 @@ class AppFixtures extends Fixture
             'isAdmin' => false
         ]);
 
-        ProfessorFactory::createOne([
+        $nesta = ProfessorFactory::createOne([
             'name' => 'Nesta',
             'surnames' => 'Archeron Prythian',
             'email' => 'nesta@prueba.com',
@@ -79,7 +80,7 @@ class AppFixtures extends Fixture
             'isAdmin' => false
         ]);
 
-        StudentFactory::createOne([
+        $cassian = StudentFactory::createOne([
             'name' => 'Cassian',
             'surnames' => 'Velaris Illyrian',
             'email' => 'cassian@prueba.com',
@@ -92,34 +93,111 @@ class AppFixtures extends Fixture
 
         AcademicYearFactory::createMany(2);
 
-        TemplateFactory::createMany(5);
-
-        OrganizationFactory::createMany(3);
-
-        GroupFactory::createMany(5, function (){
-            return [
-                'organization' => OrganizationFactory::random(),
-                'students' => StudentFactory::randomRange(18, 20),
-                'professors' => ProfessorFactory::randomRange(5, 7),
-                'mentors' => ProfessorFactory::randomRange(1, 2),
-                'academicYear' => AcademicYearFactory::random()
-            ];
-        });
-
-
-
-        ClassPictureFactory::createOne([
-            'group' => GroupFactory::random(),
-            'sectionContents' => SectionContentFactory::randomRange(1, 3),
+        AcademicYearFactory::createOne([
+            'description' => 'Curso 2023 - 2024',
+            'startDate' => new \DateTime('2022-09-15'),
+            'endDate' => new \DateTime('2023-06-30')
         ]);
 
-        SectionFactory::createMany(4, function (){
-            return [
-                'sectionContents' => SectionContentFactory::randomRange(1, 3),
-            ];
-        });
+        $plantilla = TemplateFactory::createOne([
+            'styleName' => 'clásico',
+            'layout' => 'clasico.png'
+        ]);
 
+        $oretania = OrganizationFactory::createOne([
+            'name' => 'IES Oretania'
+        ]);
 
+        OrganizationFactory::createMany(2);
+
+        $daw = GroupFactory::createOne([
+            'name' => '2ª DAW',
+            'organization' => $oretania,
+            'students' => StudentFactory::randomRange(18, 20),
+            'professors' => ProfessorFactory::randomRange(5, 7),
+            'mentors' => [$aelin],
+            'academicYear' => AcademicYearFactory::random()
+        ]);
+
+        GroupFactory::createOne([
+            'name' => '2ª ASIR',
+            'organization' => $oretania,
+            'students' => StudentFactory::randomRange(18, 20),
+            'professors' => ProfessorFactory::randomRange(5, 7),
+            'mentors' => [$sheldon, $nesta],
+            'academicYear' => AcademicYearFactory::random()
+        ]);
+
+        GroupFactory::createOne([
+            'name' => '2ª DAM',
+            'organization' => $oretania,
+            'students' => StudentFactory::randomRange(18, 20),
+            'professors' => ProfessorFactory::randomRange(5, 7),
+            'mentors' => [$nesta],
+            'academicYear' => AcademicYearFactory::random()
+        ]);
+
+        $dawClassPicture = ClassPictureFactory::createOne([
+            'description' => 'Orla de 2ºDAW',
+            'group' => $daw,
+            'template' => $plantilla
+        ]);
+
+        $fotos = SectionFactory::createOne([
+            'template' => $plantilla,
+            'height' => 200,
+            'width' => 400,
+            'maxColQuantity' => 11,
+            'positionTop' => 0,
+            'positionLeft' => 0,
+        ]);
+
+        $titulos = SectionFactory::createOne([
+            'template' => $plantilla,
+            'height' => 200,
+            'width' => 400,
+            'maxColQuantity' => 3,
+            'positionTop' => 200,
+            'positionLeft' => 0,
+        ]);
+
+        SectionContentFactory::createOne([
+            'classPicture' => $dawClassPicture,
+            'title' => 'Nombre del centro',
+            'section' => $titulos
+        ]);
+
+        SectionContentFactory::createOne([
+            'classPicture' => $dawClassPicture,
+            'title' => 'Curso, promoción y nombre de la clase',
+            'section' => $titulos
+        ]);
+
+        $profesorado = SectionContentFactory::createOne([
+            'classPicture' => $dawClassPicture,
+            'title' => 'Profesorado',
+            'section' => $fotos
+        ]);
+
+        $alumnado = SectionContentFactory::createOne([
+            'classPicture' => $dawClassPicture,
+            'title' => 'Alumnado',
+            'section' => $fotos
+        ]);
+
+        UserSectionContentFactory::createOne([
+            'description' => 'fotos del profesorado',
+            'orderNumber' => 1,
+            'containedUsers' => ProfessorFactory::randomSet(7),
+            'sectionContent' => $profesorado
+        ]);
+
+        UserSectionContentFactory::createOne([
+            'description' => 'fotos del alumnado',
+            'orderNumber' => 2,
+            'containedUsers' => StudentFactory::randomSet(20),
+            'sectionContent' => $alumnado
+        ]);
 
         $manager->flush();
     }
@@ -127,6 +205,5 @@ class AppFixtures extends Fixture
 
 /**
  * TODO: implementar las siguientes clases en las fixtures:
- * - SectionContent
  * - UserSectionContent
  */
