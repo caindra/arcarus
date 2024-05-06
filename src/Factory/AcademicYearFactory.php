@@ -49,8 +49,8 @@ final class AcademicYearFactory extends ModelFactory
         $year = (int) self::faker()->unique()->numberBetween(2012, 2023);
         return [
             'description' => 'Curso ' . $year . '-' . ($year + 1),
-            'endDate' => new \DateTime($year . '/09/15'),
-            'startDate' => new \DateTime(($year + 1) . '/06/30')
+            'startDate' => new \DateTime($year . '/09/15'),
+            'endDate' => new \DateTime(($year + 1) . '/06/30')
         ];
     }
 

@@ -95,8 +95,8 @@ class AppFixtures extends Fixture
 
         AcademicYearFactory::createOne([
             'description' => 'Curso 2023 - 2024',
-            'startDate' => new \DateTime('2022-09-15'),
-            'endDate' => new \DateTime('2023-06-30')
+            'startDate' => new \DateTime('2023-09-15'),
+            'endDate' => new \DateTime('2024-06-30')
         ]);
 
         $plantilla = TemplateFactory::createOne([
