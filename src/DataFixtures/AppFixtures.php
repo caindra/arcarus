@@ -202,8 +202,3 @@ class AppFixtures extends Fixture
         $manager->flush();
     }
 }
-
-/**
- * TODO: implementar las siguientes clases en las fixtures:
- * - UserSectionContent
- */
