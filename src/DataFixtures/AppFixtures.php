@@ -94,14 +94,14 @@ class AppFixtures extends Fixture
         AcademicYearFactory::createMany(2);
 
         AcademicYearFactory::createOne([
-            'description' => 'Curso 2023 - 2024',
+            'description' => 'Academic Year 2023 - 2024',
             'startDate' => new \DateTime('2023-09-15'),
             'endDate' => new \DateTime('2024-06-30')
         ]);
 
-        $plantilla = TemplateFactory::createOne([
-            'styleName' => 'clásico',
-            'layout' => 'clasico.png'
+        $template = TemplateFactory::createOne([
+            'styleName' => 'classic',
+            'layout' => 'classic.png'
         ]);
 
         $oretania = OrganizationFactory::createOne([
@@ -111,7 +111,7 @@ class AppFixtures extends Fixture
         OrganizationFactory::createMany(2);
 
         $daw = GroupFactory::createOne([
-            'name' => '2ª DAW',
+            'name' => '2nd DAW',
             'organization' => $oretania,
             'students' => StudentFactory::randomRange(18, 20),
             'professors' => ProfessorFactory::randomRange(5, 7),
@@ -120,7 +120,7 @@ class AppFixtures extends Fixture
         ]);
 
         GroupFactory::createOne([
-            'name' => '2ª ASIR',
+            'name' => '2nd ASIR',
             'organization' => $oretania,
             'students' => StudentFactory::randomRange(18, 20),
             'professors' => ProfessorFactory::randomRange(5, 7),
@@ -129,7 +129,7 @@ class AppFixtures extends Fixture
         ]);
 
         GroupFactory::createOne([
-            'name' => '2ª DAM',
+            'name' => '2nd DAM',
             'organization' => $oretania,
             'students' => StudentFactory::randomRange(18, 20),
             'professors' => ProfessorFactory::randomRange(5, 7),
@@ -138,13 +138,13 @@ class AppFixtures extends Fixture
         ]);
 
         $dawClassPicture = ClassPictureFactory::createOne([
-            'description' => 'Orla de 2ºDAW',
+            'description' => 'Class picture of 2nd DAW',
             'group' => $daw,
-            'template' => $plantilla
+            'template' => $template
         ]);
 
-        $fotos = SectionFactory::createOne([
-            'template' => $plantilla,
+        $pictures = SectionFactory::createOne([
+            'template' => $template,
             'height' => 200,
             'width' => 400,
             'maxColQuantity' => 11,
@@ -152,8 +152,8 @@ class AppFixtures extends Fixture
             'positionLeft' => 0,
         ]);
 
-        $titulos = SectionFactory::createOne([
-            'template' => $plantilla,
+        $titles = SectionFactory::createOne([
+            'template' => $template,
             'height' => 200,
             'width' => 400,
             'maxColQuantity' => 3,
@@ -163,40 +163,40 @@ class AppFixtures extends Fixture
 
         SectionContentFactory::createOne([
             'classPicture' => $dawClassPicture,
-            'title' => 'Nombre del centro',
-            'section' => $titulos
+            'title' => 'Name of the organization',
+            'section' => $titles
         ]);
 
         SectionContentFactory::createOne([
             'classPicture' => $dawClassPicture,
-            'title' => 'Curso, promoción y nombre de la clase',
-            'section' => $titulos
+            'title' => 'Academic year, year y name of the class',
+            'section' => $titles
         ]);
 
-        $profesorado = SectionContentFactory::createOne([
+        $faculty = SectionContentFactory::createOne([
             'classPicture' => $dawClassPicture,
-            'title' => 'Profesorado',
-            'section' => $fotos
+            'title' => 'Faculty',
+            'section' => $pictures
         ]);
 
-        $alumnado = SectionContentFactory::createOne([
+        $studentBody = SectionContentFactory::createOne([
             'classPicture' => $dawClassPicture,
-            'title' => 'Alumnado',
-            'section' => $fotos
+            'title' => 'Student Body',
+            'section' => $pictures
         ]);
 
         UserSectionContentFactory::createOne([
-            'description' => 'fotos del profesorado',
+            'description' => 'Pictures from faculty',
             'orderNumber' => 1,
             'containedUsers' => ProfessorFactory::randomSet(7),
-            'sectionContent' => $profesorado
+            'sectionContent' => $faculty
         ]);
 
         UserSectionContentFactory::createOne([
-            'description' => 'fotos del alumnado',
+            'description' => 'Pictures from student body',
             'orderNumber' => 2,
             'containedUsers' => StudentFactory::randomSet(20),
-            'sectionContent' => $alumnado
+            'sectionContent' => $studentBody
         ]);
 
         $manager->flush();
