@@ -1,0 +1,16 @@
+.welcome {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  color: #fff;
+}
+
+.content {
+  margin-left: 16.875em;
+  padding: 1.25em;
+
+  @media screen and (max-width: 1023px) {
+    margin-left: 0;
+    padding-top: 3rem;
+  }
+}

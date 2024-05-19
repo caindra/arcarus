@@ -1,0 +1,39 @@
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 15.625em;
+  background-color: $purple;
+  padding: 1.25em;
+  color: #fff;
+  overflow-y: auto;
+  transition: transform 0.3s ease;
+  transform: translateX(0);
+  z-index: 1;
+
+  @media screen and (max-width: 768px) {
+    transform: translateX(-100%);
+  }
+
+  &.is-active {
+    transform: translateX(0);
+  }
+}
+
+// Estilos para el botón del menú de hamburguesa
+.navbar-burger {
+  display: none;
+
+  @media screen and (max-width: 1023px) {
+    display: block;
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 2;
+  }
+
+  span {
+    background-color: #fff;
+  }
+}

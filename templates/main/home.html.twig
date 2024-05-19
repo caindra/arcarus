@@ -3,36 +3,34 @@
 {% block title %}Arcarus - Class Picture generator{% endblock %}
 
 {% block content %}
-    <h1>Welcome to Arcarus!</h1>
-    <main class="functions">
-        {# para cuando el usuario es administrador, se verá tod0 #}
-        <section class="userpicture">
-
-        </section>
-        <section class="classpicture">
-
-        </section>
-        {# professor #}
-        <section>
-            {#
-                - listar clases que imparte con estudiantes incluidos
-                - mostrar todos las orlas en las que aparece
-            #}
-        </section>
-            {# tutor:
-                -opciones de crear la orla de su clase
-            #}
-            {# admin:
-                -gestion de usuarios (crear, modificar, eliminar)
-            #}
-        <section></section>
-        <section></section>
-        <section></section>
-        <section></section>
-    </main>
+    <section class="section content">
+        <div class="container">
+            <h1 class="title">Bulma</h1>
+            <p class="subtitle">
+                Modern CSS framework based on
+                <a
+                        href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Flexible_Box_Layout/Basic_Concepts_of_Flexbox"
+                >Flexbox</a
+                >
+            </p>
+            <div class="field">
+                <div class="control">
+                    <input class="input" type="text" placeholder="Input">
+                </div>
+            </div>
+            <div class="field">
+                <p class="control">
+            <span class="select">
+              <select>
+                <option>Select dropdown</option>
+              </select>
+            </span>
+                </p>
+            </div>
+            <div class="buttons">
+                <a class="button is-primary">Primary</a>
+                <a class="button is-link">Link</a>
+            </div>
+        </div>
+    </section>
 {% endblock %}
-
-{#
-    hay que crear algún centro? en plan, de forma general
-    ¿que hay del año académico? ¿tengo que crearlo también? ---> preguntar a luisra
-#}
