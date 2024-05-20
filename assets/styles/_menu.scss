@@ -4,7 +4,7 @@
   left: 0;
   height: 100%;
   width: 15.625em;
-  background-color: $purple;
+  background-color: $black;
   padding: 1.25em;
   color: #fff;
   overflow-y: auto;
@@ -12,8 +12,9 @@
   transform: translateX(0);
   z-index: 1;
 
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 1023px) {
     transform: translateX(-100%);
+    width: 100%;
   }
 
   &.is-active {
