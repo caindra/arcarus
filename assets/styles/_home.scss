@@ -7,10 +7,15 @@
 
 .content {
   margin-left: 9em;
-  padding: 1.25em;
+  padding: 1.25em 1.25em 1.25em 4em;
 
   @media screen and (max-width: 1023px) {
     margin-left: 0;
     padding-top: 3rem;
+  }
+
+  head{
+    display: grid;
+    align-items: center;
   }
 }

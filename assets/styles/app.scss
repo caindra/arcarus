@@ -1,4 +1,5 @@
 @import "~bulma/sass/index";
+@import "fonts";
 @import "colors";
 @import "menu";
 @import "home";
@@ -6,4 +7,9 @@
 body {
     color: #0d0d0d;
     background-color: lightgray;
+    font-family: 'Satoshi-Medium', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Neco-Bold', serif; // Tipografía para los títulos
 }
