@@ -1,23 +1,16 @@
-title.section.user_picture: IMAGEN DE
-  L USUARIO
-title.section.class_picture: IMAGEN DE LA CLASE
-title.section.user_admin: ADMINISTRACIÓN DE USUARIOS
-title.section.admin_functions: FUNCIONALIDADES DE ADMINISTRACIÓN
+label.class_picture: Orlas
+label.administration: Administración
+label.help: Ayuda
 
-user_picture.upload: Subir imagen
-user_picture.edit: Editar imagen
+class_picture.user: Subir Foto
+class_picture.create: Crear Orla
+class_picture.edit: Editar Orla
+class_picture.export: Exportar Orla a PDF
+class_picture.watch: Ver Orlas
 
-class_picture.create: Crear orla
-class_picture.edit: Editar orla
+administration.user: Administrar Usuarios
+administration.config: Configuración
 
-user_admin.add: Añadir nuevo usuario
-user_admin.list: Listar usuarios
-
-admin_functions.template.upload: Subir plantilla
-admin_functions.template.edit: Editar plantilla
-admin_functions.organization.create: Crear organización
-admin_functions.organization.edit: Editar organización
-admin_functions.academic_year: Crear un año académico
-
-login: Iniciar sesión
-logout: Cerrar sesión
+help.info: Ayuda
+help.login: Iniciar Sesión
+help.logout: Cerrar Sesión

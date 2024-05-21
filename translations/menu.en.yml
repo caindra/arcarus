@@ -1,22 +1,16 @@
-title.section.user_picture: USER PICTURE
-title.section.class_picture: CLASS PICTURE
-title.section.user_admin: USER ADMINISTRATION
-title.section.admin_functions: ADMIN FUNCTIONALITIES
+label.class_picture: Class Pictures
+label.administration: Administration
+label.help: Help
 
-user_picture.upload: Upload image
-user_picture.edit: Edit image
+class_picture.user: Upload Photo
+class_picture.create: Create Class Picture
+class_picture.edit: Edit Class Picture
+class_picture.export: Export Class Picture to PDF
+class_picture.watch: View Class Picture
 
-class_picture.create: Create a new class picture
-class_picture.edit: Edit class picture
+administration.user: Manage Users
+administration.config: Configuration
 
-user_admin.add: Add new user
-user_admin.list: List users
-
-admin_functions.template.upload: Upload template
-admin_functions.template.edit: Edit template
-admin_functions.organization.create: Create organization
-admin_functions.organization.edit: Edit organization
-admin_functions.academic_year: Create an academic year
-
-login: Log in
-logout: Log out
+help.info: Help
+help.login: Log In
+help.logout: Log Out
