@@ -21,28 +21,18 @@ class OrganizationRepository extends ServiceEntityRepository
         parent::__construct($registry, Organization::class);
     }
 
-//    /**
-//     * @return Organization[] Returns an array of Organization objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('o')
-//            ->andWhere('o.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('o.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function save(): void
+    {
+        $this->getEntityManager()->flush();
+    }
 
-//    public function findOneBySomeField($value): ?Organization
-//    {
-//        return $this->createQueryBuilder('o')
-//            ->andWhere('o.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function remove(Organization $organization): void
+    {
+        $this->getEntityManager()->remove($organization);
+    }
+
+    public function add(Organization $organization): void
+    {
+        $this->getEntityManager()->persist($organization);
+    }
 }

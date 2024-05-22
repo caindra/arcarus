@@ -21,28 +21,18 @@ class UserSectionContentRepository extends ServiceEntityRepository
         parent::__construct($registry, UserSectionContent::class);
     }
 
-//    /**
-//     * @return UserSectionContent[] Returns an array of UserSectionContent objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('u')
-//            ->andWhere('u.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('u.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function save(): void
+    {
+        $this->getEntityManager()->flush();
+    }
 
-//    public function findOneBySomeField($value): ?UserSectionContent
-//    {
-//        return $this->createQueryBuilder('u')
-//            ->andWhere('u.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function remove(UserSectionContent $userSectionContent): void
+    {
+        $this->getEntityManager()->remove($userSectionContent);
+    }
+
+    public function add(UserSectionContent $userSectionContent): void
+    {
+        $this->getEntityManager()->persist($userSectionContent);
+    }
 }

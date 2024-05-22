@@ -21,28 +21,18 @@ class ClassPictureRepository extends ServiceEntityRepository
         parent::__construct($registry, ClassPicture::class);
     }
 
-//    /**
-//     * @return ClassPicture[] Returns an array of ClassPicture objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('c.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function save(): void
+    {
+        $this->getEntityManager()->flush();
+    }
 
-//    public function findOneBySomeField($value): ?ClassPicture
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function remove(ClassPicture $classPicture): void
+    {
+        $this->getEntityManager()->remove($classPicture);
+    }
+
+    public function add(ClassPicture $classPicture): void
+    {
+        $this->getEntityManager()->persist($classPicture);
+    }
 }

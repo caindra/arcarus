@@ -21,28 +21,18 @@ class UserPictureRepository extends ServiceEntityRepository
         parent::__construct($registry, UserPicture::class);
     }
 
-//    /**
-//     * @return UserPicture[] Returns an array of UserPicture objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('u')
-//            ->andWhere('u.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('u.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function save(): void
+    {
+        $this->getEntityManager()->flush();
+    }
 
-//    public function findOneBySomeField($value): ?UserPicture
-//    {
-//        return $this->createQueryBuilder('u')
-//            ->andWhere('u.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function remove(UserPicture $userPicture): void
+    {
+        $this->getEntityManager()->remove($userPicture);
+    }
+
+    public function add(UserPicture $userPicture): void
+    {
+        $this->getEntityManager()->persist($userPicture);
+    }
 }

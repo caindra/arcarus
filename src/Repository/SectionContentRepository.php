@@ -21,28 +21,18 @@ class SectionContentRepository extends ServiceEntityRepository
         parent::__construct($registry, SectionContent::class);
     }
 
-//    /**
-//     * @return SectionContent[] Returns an array of SectionContent objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('s.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function save(): void
+    {
+        $this->getEntityManager()->flush();
+    }
 
-//    public function findOneBySomeField($value): ?SectionContent
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function remove(SectionContent $sectionContent): void
+    {
+        $this->getEntityManager()->remove($sectionContent);
+    }
+
+    public function add(SectionContent $sectionContent): void
+    {
+        $this->getEntityManager()->persist($sectionContent);
+    }
 }

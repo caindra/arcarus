@@ -21,28 +21,18 @@ class AcademicYearRepository extends ServiceEntityRepository
         parent::__construct($registry, AcademicYear::class);
     }
 
-//    /**
-//     * @return AcademicYear[] Returns an array of AcademicYear objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('a.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function save(): void
+    {
+        $this->getEntityManager()->flush();
+    }
 
-//    public function findOneBySomeField($value): ?AcademicYear
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function remove(AcademicYear $academicYear): void
+    {
+        $this->getEntityManager()->remove($academicYear);
+    }
+
+    public function add(AcademicYear $academicYear): void
+    {
+        $this->getEntityManager()->persist($academicYear);
+    }
 }

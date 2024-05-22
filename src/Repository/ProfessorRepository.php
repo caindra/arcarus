@@ -21,28 +21,18 @@ class ProfessorRepository extends ServiceEntityRepository
         parent::__construct($registry, Professor::class);
     }
 
-//    /**
-//     * @return Professor[] Returns an array of Professor objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('p.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function save(): void
+    {
+        $this->getEntityManager()->flush();
+    }
 
-//    public function findOneBySomeField($value): ?Professor
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function remove(Professor $professor): void
+    {
+        $this->getEntityManager()->remove($professor);
+    }
+
+    public function add(Professor $professor): void
+    {
+        $this->getEntityManager()->persist($professor);
+    }
 }
