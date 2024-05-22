@@ -1,0 +1,18 @@
+# User list
+user_list.title: Listado de usuarios
+user_list.table.name: Nombre y Apellidos
+user_list.table.username: Nombre de Usuario
+user_list.table.email: Email
+user_list.table.rol: Rol
+user_list.table.group: Grupo
+user_list.table.mentor: Tutor/a
+
+user_list.btn.add: Añadir un Nuevo Usuario
+user_list.btn.modify: Modificar Usuario
+user_list.btn.delete: Eliminar Usuario
+
+# Add User
+
+# Modify User
+
+# Delete User
