@@ -1,1 +1,37 @@
 {% extends 'layout.html.twig' %}
+{% trans_default_domain 'users.es.yml' %}
+
+{% block content %}
+    <h1></h1>
+    <a href="#" class="">{{ 'user_list.title' | trans({}, 'users') }}</a>
+    <table class="">
+        <thead>
+        <tr>
+            <th>{{ 'user_list.table.name' | trans({}, 'users') }}</th>
+            <th>{{ 'user_list.table.username' | trans({}, 'users') }}</th>
+            <th>{{ 'user_list.table.email' | trans({}, 'users') }}</th>
+            <th>{{ 'user_list.table.rol' | trans({}, 'users') }}</th>
+            <th>{{ 'user_list.table.group' | trans({}, 'users') }}</th>
+            <th>{{ 'user_list.table.mentor' | trans({}, 'users') }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.name }} {{ socio.surnames }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                {# todo - ¿Cómo dejo representado el rol ya que va por herencia? #}
+                <td>{{ user.group ? user.group : 'No' | default('---') }}</td>
+                <td>{{ user.mentor ? user.mentor : 'No' | default('---') }}</td>
+                <td><a href="{{ path('modify_user', {'id': user.id}) }}" class="btn btn-secondary">Modificar</a></td>
+                <td><a href="{{ path('delete_user', {'id': user.id}) }}" class="btn btn-danger">Eliminar</a></td>
+            </tr>
+        {% else %}
+            <tr>
+                <th colspan="5">{{ 'user_list.no_users' | trans({}, 'users') }}</th>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

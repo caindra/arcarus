@@ -11,6 +11,8 @@ user_list.btn.add: Añadir un Nuevo Usuario
 user_list.btn.modify: Modificar Usuario
 user_list.btn.delete: Eliminar Usuario
 
+user_list.no_users: No hay usuarios registrados
+
 # Add User
 
 # Modify User
