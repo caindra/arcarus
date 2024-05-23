@@ -1,0 +1,27 @@
+<nav class="pagination is-centered" role="navigation" aria-label="pagination">
+    {% if pagination.hasPreviousPage %}
+        <a class="pagination-previous" href="{{ pagination.previousPageUrl }}">Previous</a>
+    {% else %}
+        <a class="pagination-previous" disabled>Previous</a>
+    {% endif %}
+
+    {% if pagination.hasNextPage %}
+        <a class="pagination-next" href="{{ pagination.nextPageUrl }}">Next page</a>
+    {% else %}
+        <a class="pagination-next" disabled>Next page</a>
+    {% endif %}
+
+    <ul class="pagination-list">
+        {% for page in pagination.pagesInRange %}
+            {% if page == pagination.currentPage %}
+                <li>
+                    <a class="pagination-link is-current">{{ page }}</a>
+                </li>
+            {% else %}
+                <li>
+                    <a class="pagination-link" href="{{ pagination.pageUrl(page) }}">{{ page }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</nav>
