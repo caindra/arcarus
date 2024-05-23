@@ -9,6 +9,7 @@ class_picture.export: Exportar Orla a PDF
 class_picture.watch: Ver Orlas
 
 administration.user: Administrar Usuarios
+administration.template: Administrar Plantillas
 administration.config: Configuración
 
 help.info: Ayuda

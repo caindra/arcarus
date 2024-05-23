@@ -35,4 +35,14 @@ class UserRepository extends ServiceEntityRepository
     {
         $this->getEntityManager()->persist($user);
     }
+
+    public function findAllBySurnameName()
+    {
+        return $this->createQueryBuilder('u')
+            ->orderBy('u.surnames', 'ASC')
+            ->addOrderBy('u.name', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
 }

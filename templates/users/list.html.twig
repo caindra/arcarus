@@ -2,9 +2,20 @@
 {% trans_default_domain 'users.es.yml' %}
 
 {% block content %}
-    <h1></h1>
+    <section class="section content">
+        <div class="container">
+            <div class="columns is-align-items-center head">
+                <div class="column is-narrow">
+                    <img src="{{ asset('images/logos/arcarus_purple.png') }}" alt="logo" class="image is-64x64">
+                </div>
+                <div class="column">
+                    <h1 class="title">{{ 'user_list.title' | trans({}, 'users') }}</h1>
+                </div>
+            </div>
+        </div>
+    </section>
     <a href="#" class="">{{ 'user_list.title' | trans({}, 'users') }}</a>
-    <table class="">
+    <table class="table is-striped is-narrow is-hoverable is-fullwidth">
         <thead>
         <tr>
             <th>{{ 'user_list.table.name' | trans({}, 'users') }}</th>
@@ -24,12 +35,12 @@
                 {# todo - ¿Cómo dejo representado el rol ya que va por herencia? #}
                 <td>{{ user.group ? user.group : 'No' | default('---') }}</td>
                 <td>{{ user.mentor ? user.mentor : 'No' | default('---') }}</td>
-                <td><a href="{{ path('modify_user', {'id': user.id}) }}" class="btn btn-secondary">Modificar</a></td>
-                <td><a href="{{ path('delete_user', {'id': user.id}) }}" class="btn btn-danger">Eliminar</a></td>
+                <td><a href="{{ path('modify_user', {'id': user.id}) }}" class="">{{ 'user_list.btn.modify' | trans({}, 'users') }}</a></td>
+                <td><a href="{{ path('delete_user', {'id': user.id}) }}" class="">{{ 'user_list.btn.delete' | trans({}, 'users') }}</a></td>
             </tr>
         {% else %}
             <tr>
-                <th colspan="5">{{ 'user_list.no_users' | trans({}, 'users') }}</th>
+                <th colspan="6">{{ 'user_list.no_users' | trans({}, 'users') }}</th>
             </tr>
         {% endfor %}
         </tbody>

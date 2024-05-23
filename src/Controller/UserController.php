@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -9,10 +11,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends AbstractController
 {
     #[Route('/users', name: 'users')]
-    final public function listUsers(): Response
+    final public function listUsers(
+        EntityManagerInterface $entityManager,
+        UserRepository $userRepository): Response
     {
-        //implement methods on repositories
-        return $this->render('users/list.html.twig');
+        $users = $userRepository->findAllBySurnameName();
+        return $this->render('users/list.html.twig', [
+            'users' => $users
+        ]);
     }
 
     #[Route('/users', name: 'add_user')]
