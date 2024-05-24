@@ -2,6 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Professor;
+use App\Entity\Student;
+use App\Form\ProfessorType;
+use App\Form\StudentType;
+use App\Repository\ProfessorRepository;
+use App\Repository\StudentRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -25,7 +31,7 @@ class UserController extends AbstractController
             $request->query->getInt('page', 1), // page number
             15 // limit per page
         );
-
+        dump($pagination);
         return $this->render('users/list.html.twig', [
             'pagination' => $pagination
         ]);
@@ -38,11 +44,38 @@ class UserController extends AbstractController
         return $this->render('users/list.html.twig');
     }
 
-    #[Route('/users', name: 'modify_user')]
-    final public function modifyUser(): Response
+    #[Route('/users/modify/student/{id}', name: 'modify_student')]
+    final public function modifyStudent(
+        Request $request,
+        StudentRepository $studentRepository,
+        Student $student
+    ): Response
     {
-        //implement methods on repositories
-        return $this->render('users/list.html.twig');
+        $form = $this->createForm(StudentType::class, $student);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $studentRepository->save();
+        }
+        return $this->render('users/modify_student.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    #[Route('/users/modify/professor/{id}', name: 'modify_professor')]
+    final public function modifyProfessor(
+        Request $request,
+        ProfessorRepository $professorRepository,
+        Professor $professor
+    ): Response
+    {
+        $form = $this->createForm(ProfessorType::class, $professor);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $professorRepository->save();
+        }
+        return $this->render('users/modify_professor.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 
     #[Route('/users', name: 'delete_user')]

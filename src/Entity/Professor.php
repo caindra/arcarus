@@ -117,4 +117,9 @@ class Professor extends User
     {
         return $this->name . ' ' . $this->surnames;
     }
+
+    public function isProfessor() : bool
+    {
+        return true;
+    }
 }
