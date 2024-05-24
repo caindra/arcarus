@@ -2,16 +2,16 @@ label.class_picture: Orlas
 label.administration: Administración
 label.help: Ayuda
 
-class_picture.user: Subir Foto
-class_picture.create: Crear Orla
-class_picture.edit: Editar Orla
-class_picture.export: Exportar Orla a PDF
-class_picture.watch: Ver Orlas
+class_picture.user: Subir foto
+class_picture.create: Crear orla
+class_picture.edit: Editar orla
+class_picture.export: Exportar orla a PDF
+class_picture.watch: Ver orlas
 
-administration.user: Administrar Usuarios
-administration.template: Administrar Plantillas
-administration.config: Configuración
+administration.user: Usuarios
+administration.template: Plantillas
+administration.config: Configuración general
 
 help.info: Ayuda
-help.login: Iniciar Sesión
-help.logout: Cerrar Sesión
+help.login: Iniciar sesión
+help.logout: Cerrar sesión
