@@ -1,0 +1,15 @@
+.pagination{
+  span{
+    padding: 2em;
+    border: 1px solid #2a1b8c;
+    border-radius: 20%;
+    color: #2a1b8c;
+    width: 2em;
+    height: auto;
+  }
+
+  .current{
+    background-color: #2a1b8c;
+    color: #fafafa;
+  }
+}
