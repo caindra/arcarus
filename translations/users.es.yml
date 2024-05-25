@@ -10,14 +10,18 @@ user_list.table.rol: Rol
 user_list.table.group: Grupo
 user_list.table.mentor: Tutor/a
 
-user_list.btn.add: Añadir un nuevo usuario
+user_list.btn.add.student: Añadir un nuevo estudiante
+user_list.btn.add.professor: Añadir un nuevo profesor
 user_list.btn.modify: Modificar usuario
 user_list.btn.delete: Eliminar usuario
 
 user_list.no_users: No hay usuarios registrados
 
+save: Guardar
+
 # Add User
 
 # Modify User
-
+modify.title.student: Modificar estudiante
+modify.title.professor: Modificar professor
 # Delete User

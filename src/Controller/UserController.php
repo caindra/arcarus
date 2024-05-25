@@ -31,7 +31,6 @@ class UserController extends AbstractController
             $request->query->getInt('page', 1), // page number
             15 // limit per page
         );
-        dump($pagination);
         return $this->render('users/list.html.twig', [
             'pagination' => $pagination
         ]);
@@ -54,7 +53,13 @@ class UserController extends AbstractController
         $form = $this->createForm(StudentType::class, $student);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $studentRepository->save();
+            try {
+                $studentRepository->save();
+                $this->addFlash('success', 'La modificación se ha realizado correctamente');
+                return $this->redirectToRoute('users');
+            }catch (\Exception $e){
+                $this->addFlash('error', 'No se han podido aplicar las modificaciones');
+            }
         }
         return $this->render('users/modify_student.html.twig', [
             'form' => $form->createView()
@@ -71,7 +76,13 @@ class UserController extends AbstractController
         $form = $this->createForm(ProfessorType::class, $professor);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $professorRepository->save();
+            try {
+                $professorRepository->save();
+                $this->addFlash('success', 'La modificación se ha realizado correctamente');
+                return $this->redirectToRoute('users');
+            }catch (\Exception $e){
+                $this->addFlash('error', 'No se han podido aplicar las modificaciones');
+            }
         }
         return $this->render('users/modify_professor.html.twig', [
             'form' => $form->createView()

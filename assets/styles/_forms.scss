@@ -1,0 +1,21 @@
+@import "bulma";
+
+#professor, #student {
+  @extend .panel;
+
+  label {
+    @extend .label;
+  }
+
+  input{
+    @extend .input;
+  }
+}
+
+#professor_groups{
+  @extend .checkbox;
+}
+
+input[type="checkbox"]{
+  @extend .checkbox;
+}
