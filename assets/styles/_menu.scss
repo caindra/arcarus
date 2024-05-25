@@ -1,20 +1,21 @@
 .sidebar {
+  display: none;
   position: fixed;
   top: 0;
   left: 0;
   height: 100%;
   width: 20em;
-  background-color: $menu_bg;
+  background-color: #14161A;
   padding: 1.25em;
   color: #fff;
   overflow-y: auto;
   transition: transform 0.3s ease;
-  transform: translateX(0);
+  transform: translateX(-100%);
   z-index: 1;
 
-  @media screen and (max-width: 1023px) {
-    transform: translateX(-100%);
-    width: 100%;
+  @media screen and (min-width: 1024px) {
+    display: block;
+    transform: translateX(0);
   }
 
   &.is-active {
@@ -22,7 +23,6 @@
   }
 }
 
-// Estilos para el botón del menú de hamburguesa
 .navbar-burger {
   display: none;
 
@@ -34,7 +34,7 @@
     z-index: 2;
   }
 
-  span {
-    background-color: #fff;
+  svg {
+    fill: #fff; /* Ajusta el color del icono aquí */
   }
 }

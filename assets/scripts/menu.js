@@ -1,9 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const navbarBurger = document.querySelector('.navbar-burger');
-    const sidebar = document.getElementById('sidebarMenu');
+    const $navbarBurger = document.querySelector('.navbar-burger');
+    const $sidebarMenu = document.getElementById('sidebarMenu');
 
-    navbarBurger.addEventListener('click', () => {
-        navbarBurger.classList.toggle('is-active');
-        sidebar.classList.toggle('is-active');
-    });
+    if ($navbarBurger && $sidebarMenu) {
+        $navbarBurger.addEventListener('click', () => {
+            $navbarBurger.classList.toggle('is-active');
+            $sidebarMenu.classList.toggle('is-active');
+        });
+    }
 });

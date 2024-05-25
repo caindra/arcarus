@@ -1,9 +1,13 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="content grid">
-        {% include 'menu.html.twig' %}
-        {% block content %}
-        {% endblock content %}
+    <div class="columns">
+        <div class="column is-2 sidebar" id="sidebarMenu">
+            {% include 'menu.html.twig' %}
+        </div>
+        <div class="column is-11 main-content">
+            {% block content %}
+            {% endblock content %}
+        </div>
     </div>
 {% endblock %}

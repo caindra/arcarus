@@ -12,51 +12,67 @@
                     <h1 class="title">{{ 'user_list.title' | trans({}, 'users') }}</h1>
                 </div>
             </div>
-        </div>
-        <a href="{{ path('main') }}" class="button is-dark">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0" /><path d="M5 12l6 6" /><path d="M5 12l6 -6" /></svg>
-            {{ 'going_back' | trans({}, 'users') }}
-        </a>
-        <a href="#" class="button is-link">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M16 19h6" /><path d="M19 16v6" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4" /></svg>
-            {{ 'user_list.btn.add' | trans({}, 'users') }}
-        </a>
-
-        <table class="table is-striped is-narrow is-hoverable is-fullwidth">
-            <thead>
-            <tr>
-                <th>{{ 'user_list.table.name' | trans({}, 'users') }}</th>
-                <th>{{ 'user_list.table.username' | trans({}, 'users') }}</th>
-                <th>{{ 'user_list.table.email' | trans({}, 'users') }}</th>
-                <th>{{ 'user_list.table.rol' | trans({}, 'users') }}</th>
-                <th>{{ 'user_list.table.group' | trans({}, 'users') }}</th>
-                <th>{{ 'user_list.table.mentor' | trans({}, 'users') }}</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for user in pagination.items %}
-                <tr>
-                    <td>{{ user.name }} {{ user.surnames }}</td>
-                    <td>{{ user.username }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>{{ user.isProfessor ? 'Profesor' : 'Estudiante' | default('---') }}</td>
-                    <td>{{ user.group ? user.group : 'No' | default('---') }}</td>
-                    <td>{{ user.mentor ? user.mentor : 'No' | default('---') }}</td>
-                    <td><a href="{{ path(user.isProfessor ? 'modify_professor' : 'modify_student', {'id': user.id}) }}" class="">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h3.5" /><path d="M18.42 15.61a2.1 2.1 0 0 1 2.97 2.97l-3.39 3.42h-3v-3l3.42 -3.39z" /></svg>
-                            {{ 'user_list.btn.modify' | trans({}, 'users') }}</a></td>
-                    <td><a href="{{ path('delete_user', {'id': user.id}) }}" class="">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user-minus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4c.348 0 .686 .045 1.009 .128" /><path d="M16 19h6" /></svg>
-                            {{ 'user_list.btn.delete' | trans({}, 'users') }}</a></td>
-                </tr>
-            {% else %}
-                <tr>
-                    <th colspan="6">{{ 'user_list.no_users' | trans({}, 'users') }}</th>
-                </tr>
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success">{{ message }}</div>
             {% endfor %}
-            </tbody>
-        </table>
-        {{ knp_pagination_render(pagination) }}
+            {% for message in app.flashes('error') %}
+                <div class="alert alert-error">{{ message }}</div>
+            {% endfor %}
+            <a href="{{ path('main') }}" class="button is-dark">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0" /><path d="M5 12l6 6" /><path d="M5 12l6 -6" /></svg>
+                {{ 'going_back' | trans({}, 'users') }}
+            </a>
+            <a href="#" class="button is-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M16 19h6" /><path d="M19 16v6" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4" /></svg>
+                {{ 'user_list.btn.add.student' | trans({}, 'users') }}
+            </a>
+            <a href="#" class="button is-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M16 19h6" /><path d="M19 16v6" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4" /></svg>
+                {{ 'user_list.btn.add.professor' | trans({}, 'users') }}
+            </a>
+
+            <div class="table-container">
+                <table class="table is-striped is-narrow is-hoverable is-fullwidth is-desktop">
+                    <thead>
+                    <tr>
+                        <th>{{ 'user_list.table.name' | trans({}, 'users') }}</th>
+                        <th>{{ 'user_list.table.username' | trans({}, 'users') }}</th>
+                        <th>{{ 'user_list.table.email' | trans({}, 'users') }}</th>
+                        <th>{{ 'user_list.table.rol' | trans({}, 'users') }}</th>
+                        <th>{{ 'user_list.table.group' | trans({}, 'users') }}</th>
+                        <th>{{ 'user_list.table.mentor' | trans({}, 'users') }}</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for user in pagination.items %}
+                        <tr>
+                            <td>{{ user.name }} {{ user.surnames }}</td>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.isProfessor ? 'Profesor' : 'Estudiante' | default('---') }}</td>
+                            <td>{{ user.group | default('---') }}</td>
+                            <td>{{ user.mentor ? user.mentor : 'No' | default('---') }}</td>
+                            <td><a href="{{ path(user.isProfessor ? 'modify_professor' : 'modify_student', {'id': user.id}) }}" class="">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h3.5" /><path d="M18.42 15.61a2.1 2.1 0 0 1 2.97 2.97l-3.39 3.42h-3v-3l3.42 -3.39z" /></svg>
+                                    {{ 'user_list.btn.modify' | trans({}, 'users') }}</a></td>
+                            <td><a href="{{ path('delete_user', {'id': user.id}) }}" class="">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user-minus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4c.348 0 .686 .045 1.009 .128" /><path d="M16 19h6" /></svg>
+                                    {{ 'user_list.btn.delete' | trans({}, 'users') }}</a></td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <th colspan="6">{{ 'user_list.no_users' | trans({}, 'users') }}</th>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="has-text-centered">
+                {{ knp_pagination_render(pagination) }}
+            </div>
+        </div>
     </section>
 {% endblock %}
 

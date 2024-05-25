@@ -1,3 +1,4 @@
+@import "reset";
 @import "~bulma/sass/index";
 @import "fonts";
 @import "colors";
@@ -5,6 +6,7 @@
 @import "home";
 @import "table";
 @import "pagination";
+@import "forms";
 
 body {
     color: #0d0d0d;
