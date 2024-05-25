@@ -89,10 +89,49 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/users', name: 'delete_user')]
-    final public function deleteUser(): Response
+    #[Route('/users/delete/student/{id}', name: 'delete_student')]
+    final public function deleteStudent(
+        Student $student,
+        StudentRepository $studentRepository,
+        Request $request
+    ): Response
     {
-        //implement methods on repositories
-        return $this->render('users/list.html.twig');
+        if ($request->request->has('confirmar')) {
+            try{
+                $studentRepository->remove($student);
+                $studentRepository->save();
+                $this->addFlash('success', 'El estudiante ha sido eliminado con éxito');
+                return $this->redirectToRoute('users');
+            }catch (\Exception $e){
+                $this->addFlash('error', 'No se ha podido eliminar al estudiante. Error: ' . $e);
+            }
+        }
+
+        return $this->render('users/delete_student.html.twig', [
+            'user' => $student
+        ]);
+    }
+
+    #[Route('/users/delete/professor/{id}', name: 'delete_professor')]
+    final public function deleteProfessor(
+        Professor $professor,
+        ProfessorRepository $professorRepository,
+        Request $request
+    ): Response
+    {
+        if ($request->request->has('confirmar')) {
+            try{
+                $professorRepository->remove($professor);
+                $professorRepository->save();
+                $this->addFlash('success', 'El profesor ha sido eliminado con éxito');
+                return $this->redirectToRoute('users');
+            }catch (\Exception $e){
+                $this->addFlash('error', 'No se ha podido eliminar al profesor. Error: ' . $e);
+            }
+        }
+
+        return $this->render('users/delete_professor.html.twig', [
+            'user' => $professor
+        ]);
     }
 }

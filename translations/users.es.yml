@@ -18,10 +18,17 @@ user_list.btn.delete: Eliminar usuario
 user_list.no_users: No hay usuarios registrados
 
 save: Guardar
+confirm: Confirmar
 
 # Add User
 
 # Modify User
 modify.title.student: Modificar estudiante
 modify.title.professor: Modificar professor
+
 # Delete User
+delete.title.student: Eliminar estudiante
+delete.title.professor: Eliminar profesor/a
+
+delete.text.professor: El profesor/a "{{ user.name }} {{ user.surnames }}" será eliminado de la aplicación. Esta operación no se puede deshacer, ¿desea continuar?
+delete.text.student: El estudiante "{{ user.name }} {{ user.surnames }}" del grupo {{ user.group }} será eliminado de la aplicación. Esta operación no se puede deshacer, ¿desea continuar?
