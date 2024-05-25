@@ -1,11 +1,28 @@
+@import "bulma";
+
 .pagination{
   span{
-    padding: 2em;
+    padding: 1em;
     border: 1px solid #2a1b8c;
-    border-radius: 20%;
-    color: #2a1b8c;
-    width: 2em;
-    height: auto;
+    border-radius: 50%;
+    width: .5em;
+    height: .5em;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: start;
+    align-items: start;
+
+    a{
+      color: #2a1b8c;
+    }
+
+    &:hover{
+      background-color: #f9bdaf;
+
+      a{
+        color: #0d0d0d;
+      }
+    }
   }
 
   .current{
