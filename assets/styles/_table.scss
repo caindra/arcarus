@@ -1,3 +1,38 @@
-table{
-  margin: .6em;
+.table-container {
+  overflow-x: auto;
+}
+
+.table thead th {
+  text-align: left;
+}
+
+.table td, .table th {
+  white-space: nowrap;
+}
+
+@media screen and (max-width: 768px) {
+  .table thead {
+    display: none;
+  }
+  .table, .table tbody, .table tr, .table td {
+    display: block;
+    width: 100%;
+  }
+  .table tr {
+    margin-bottom: 1rem;
+  }
+  .table td {
+    text-align: right;
+    padding-left: 50%;
+    position: relative;
+  }
+  .table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 1rem;
+    width: calc(50% - 1rem);
+    white-space: nowrap;
+    text-align: left;
+    font-weight: bold;
+  }
 }

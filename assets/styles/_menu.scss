@@ -32,9 +32,20 @@
     top: 1rem;
     right: 1rem;
     z-index: 2;
-  }
-
-  svg {
-    fill: #fff; /* Ajusta el color del icono aquí */
+    background: white;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 }
+
+
+.navbar-burger.is-active + .sidebar {
+  display: block;
+}
+
+
+  svg {
+    fill: #fafafa;
+  }
+

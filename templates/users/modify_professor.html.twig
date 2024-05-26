@@ -8,7 +8,7 @@
                     <img src="{{ asset('images/logos/arcarus_purple.png') }}" alt="logo" class="image is-64x64">
                 </div>
                 <div class="column">
-                    <h1 class="title">{{ 'user_list.btn.add.professor' | trans({}, 'users') }}</h1>
+                    <h1 class="title">{{ 'modify.title.professor' | trans({}, 'users') }}</h1>
                 </div>
                 <div class="column">
                     <a href="{{ path('users') }}" class="button is-dark">
@@ -19,7 +19,7 @@
             </div>
         </div>
 
-        <div class="form">
+        <div class="form box">
             {{ form_start(form) }}
                 {{ form_widget(form) }}
                 <button type="submit" class="button is-link">{{ 'save' | trans({}, 'users') }}</button>
