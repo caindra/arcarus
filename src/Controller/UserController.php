@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Professor;
 use App\Entity\Student;
+use App\Form\NewProfessorType;
+use App\Form\NewStudentType;
 use App\Form\ProfessorType;
 use App\Form\StudentType;
 use App\Repository\ProfessorRepository;
@@ -14,6 +16,7 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class UserController extends AbstractController
@@ -36,11 +39,70 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/users', name: 'add_user')]
-    final public function addUser(): Response
+    #[Route('/users/create/student', name: 'add_student')]
+    final public function addStudent(
+        StudentRepository $studentRepository,
+        Request $request,
+        UserPasswordHasherInterface $passwordHasher
+    ): Response
     {
-        //implement methods on repositories
-        return $this->render('users/list.html.twig');
+        $student = new Student();
+        $studentRepository->add($student);
+        $form = $this->createForm(NewStudentType::class, $student);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            try{
+                $hashedPassword = $passwordHasher->hashPassword(
+                    $student,
+                    $student->getPassword()
+                );
+                $student->setPassword($hashedPassword);
+
+                $studentRepository->save();
+                $this->addFlash('success', 'El estudiante ha sido creado con éxito');
+                return $this->redirectToRoute('users');
+            }catch (\Exception $e){
+                $this->addFlash('error', 'No se ha podido crear al estudiante. Error: ' . $e);
+            }
+        }
+
+        return $this->render('users/create_student.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    #[Route('/users/create/professor', name: 'add_professor')]
+    final public function addProfessor(
+        ProfessorRepository $professorRepository,
+        Request $request,
+        UserPasswordHasherInterface $passwordHasher
+    ): Response
+    {
+        $professor = new Professor();
+        $professorRepository->add($professor);
+        $form = $this->createForm(NewProfessorType::class, $professor);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            try{
+                $hashedPassword = $passwordHasher->hashPassword(
+                    $professor,
+                    $professor->getPassword()
+                );
+                $professor->setPassword($hashedPassword);
+
+                $professorRepository->save();
+                $this->addFlash('success', 'El profesor ha sido creado con éxito');
+                return $this->redirectToRoute('users');
+            }catch (\Exception $e){
+                $this->addFlash('error', 'No se ha podido crear al profesor. Error: ' . $e);
+            }
+        }
+
+        return $this->render('users/create_professor.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 
     #[Route('/users/modify/student/{id}', name: 'modify_student')]

@@ -21,6 +21,8 @@ save: Guardar
 confirm: Confirmar
 
 # Add User
+create.title.student: Crear estudiante
+create.title.professor: Crear profesor
 
 # Modify User
 modify.title.student: Modificar estudiante
