@@ -1,0 +1,71 @@
+{% extends 'layout.html.twig' %}
+{% trans_default_domain 'users.es.yml' %}
+
+{% block content %}
+    <section class="section content">
+        <div class="container">
+            <div class="columns is-align-items-center head">
+                <div class="column is-narrow">
+                    <img src="{{ asset('images/logos/arcarus_purple.png') }}" alt="logo" class="image is-64x64">
+                </div>
+                <div class="column">
+                    <h1 class="title">{{ 'user_list.title' | trans({}, 'users') }}</h1>
+                </div>
+                <div class="column has-text-right">
+                    <a href="{{ path('main') }}" class="button is-dark">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0" /><path d="M5 12l6 6" /><path d="M5 12l6 -6" /></svg>
+                        {{ 'going_back' | trans({}, 'users') }}
+                    </a>
+                    <a href="{{ path('create_template') }}" class="button is-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M16 19h6" /><path d="M19 16v6" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4" /></svg>
+                        {{ 'list.add.template' | trans({}, 'users') }}
+                    </a>
+                </div>
+            </div>
+            {% for message in app.flashes('success') %}
+                <div class="notification is-success">{{ message }}</div>
+            {% endfor %}
+            {% for message in app.flashes('error') %}
+                <div class="notification is-danger">{{ message }}</div>
+            {% endfor %}
+
+            <div class="card-container">
+                    {% for template in pagination.items %}
+                        <div class="card">
+                            <header class="card-header">
+                                <p class="card-header-title">
+                                    {{ template.styleName }}
+                                </p>
+                            </header>
+                            <div class="card-content">
+                                <div class="content">
+                                    {% if template.layout %}
+                                        <figure class="image">
+                                            <img src="data:image/jpeg;base64,{{ template.layout|base64_encode }}" alt="Template Image">
+                                        </figure>
+                                    {% else %}
+                                        <p>No image available.</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <footer class="card-footer">
+                                <a href="{{ path('modify_template', {id: template.id}) }}" class="card-footer-item button is-primary">Edit</a>
+                                <a href="{{ path('delete_template', {id: template.id}) }}" class="card-footer-item button is-danger">Delete</a>
+                            </footer>
+                        </div>
+                    {% else %}
+                        <tr>
+                            <th colspan="8">{{ 'user_list.no_users' | trans({}, 'users') }}</th>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="has-text-centered">
+                {{ knp_pagination_render(pagination) }}
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block title %}{{ 'user_list.title' | trans({}, 'users') }}{% endblock %}

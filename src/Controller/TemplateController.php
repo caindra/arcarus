@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class TemplateController extends AbstractController
 {
     #[Route('/templates', name: 'templates')]
-    final public function listUsers(
+    final public function listTemplates(
         EntityManagerInterface $entityManager,
         TemplateRepository $templateRepository,
         PaginatorInterface $paginator,
@@ -28,13 +28,13 @@ class TemplateController extends AbstractController
             $request->query->getInt('page', 1), // page number
             15 // limit per page
         );
-        return $this->render('users/list.html.twig', [
+        return $this->render('template/list.html.twig', [
             'pagination' => $pagination
         ]);
     }
 
     #[Route('/templates/create', name: 'create_template')]
-    final public function addStudent(
+    final public function createTemplate(
         TemplateRepository $templateRepository,
         Request $request,
     ): Response
@@ -45,12 +45,21 @@ class TemplateController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            try{
+            $layoutFile = $form->get('layout')->getData();
+
+            if ($layoutFile) {
+                $layoutStream = fopen($layoutFile->getRealPath(), 'rb');
+                $template->setLayout(stream_get_contents($layoutStream));
+                fclose($layoutStream);
+            }
+
+            try {
+                $templateRepository->add($template);
                 $templateRepository->save();
                 $this->addFlash('success', 'Se ha creado la plantilla con éxito');
                 return $this->redirectToRoute('templates');
-            }catch (\Exception $e){
-                $this->addFlash('error', 'No se ha podido crear la plantilla. Error: ' . $e);
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'No se ha podido crear la plantilla. Error: ' . $e->getMessage());
             }
         }
 
@@ -60,7 +69,7 @@ class TemplateController extends AbstractController
     }
 
     #[Route('/templates/modify/{id}', name: 'modify_template')]
-    final public function modifyStudent(
+    final public function modifyTemplate(
         Request $request,
         TemplateRepository $templateRepository,
         Template $template
@@ -82,8 +91,8 @@ class TemplateController extends AbstractController
         ]);
     }
 
-    #[Route('/templates/delete/{id}', name: 'delete_student')]
-    final public function deleteStudent(
+    #[Route('/templates/delete/{id}', name: 'delete_template')]
+    final public function deleteTemplate(
         Template $template,
         TemplateRepository $templateRepository,
         Request $request
