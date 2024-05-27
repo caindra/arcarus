@@ -11,6 +11,7 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 class TemplateController extends AbstractController
@@ -31,6 +32,18 @@ class TemplateController extends AbstractController
         return $this->render('template/list.html.twig', [
             'pagination' => $pagination
         ]);
+    }
+
+    #[Route('/template/layout/{id}', name: 'template_layout')]
+    public function getLayoutAction(Template $template): Response
+    {
+        $callback = function () use ($template) {
+            echo stream_get_contents($template->getLayout());
+        };
+
+        $response = new StreamedResponse($callback);
+        $response->headers->set('Content-Type', 'image/png');
+        return $response;
     }
 
     #[Route('/templates/create', name: 'create_template')]

@@ -1,6 +1,7 @@
 # List templates
 list.title: Listado de plantillas
-list.add.temlate: Añadir nueva plantilla
+list.add.template: Añadir nueva plantilla
+not_found: No se han podido encontrar plantillas
 # Create template
 
 # Modify template

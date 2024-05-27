@@ -25,7 +25,8 @@ class TemplateType extends AbstractType
             ])
             ->add('organization', EntityType::class, [
                 'class' => Organization::class,
-
+                'placeholder' => 'Selecciona una opción',
+                'label' => 'Centro educativo'
             ])
         ;
     }
