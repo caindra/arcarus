@@ -7,3 +7,5 @@ not_found: No se han podido encontrar plantillas
 # Modify template
 
 # Delete template
+template.delete.title: Eliminar plantilla
+template.delete.text: La plantilla seleccionada será eliminada de la aplicación. Esta operación no se puede deshacer, ¿desea continuar?
