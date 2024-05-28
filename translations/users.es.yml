@@ -1,5 +1,4 @@
-# General
-going_back: Atrás
+
 
 # User list
 user_list.title: Listado de usuarios
@@ -17,8 +16,7 @@ user_list.btn.delete: Eliminar usuario
 
 user_list.no_users: No hay usuarios registrados
 
-save: Guardar
-confirm: Confirmar
+
 
 # Add User
 create.title.student: Crear estudiante
