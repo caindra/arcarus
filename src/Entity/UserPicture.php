@@ -31,7 +31,10 @@ class UserPicture
         return $this->id;
     }
 
-    public function getImage(): ?string
+    /**
+     * @return resource|null
+     */
+    public function getImage()
     {
         return $this->image;
     }
