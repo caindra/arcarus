@@ -56,7 +56,10 @@ class Template
         return $this;
     }
 
-    public function getLayout(): ?string
+    /**
+     * @return resource|null
+     */
+    public function getLayout()
     {
         return $this->layout;
     }
