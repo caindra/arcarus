@@ -82,21 +82,26 @@ class TemplateController extends AbstractController
     }
 
     #[Route('/templates/modify/{id}', name: 'modify_template')]
-    final public function modifyTemplate(
+    public function modifyTemplate(
         Request $request,
         TemplateRepository $templateRepository,
         Template $template
-    ): Response
-    {
+    ): Response {
         $form = $this->createForm(TemplateType::class, $template);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $layoutFile = $form->get('layout')->getData();
+            if ($layoutFile) {
+                $layoutStream = fopen($layoutFile->getRealPath(), 'rb');
+                $template->setLayout(stream_get_contents($layoutStream));
+                fclose($layoutStream);
+            }
             try {
                 $templateRepository->save();
                 $this->addFlash('success', 'La modificación se ha realizado correctamente');
                 return $this->redirectToRoute('templates');
-            }catch (\Exception $e){
-                $this->addFlash('error', 'No se han podido aplicar las modificaciones');
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'No se han podido aplicar las modificaciones. Error: ' . $e->getMessage());
             }
         }
         return $this->render('template/modify.html.twig', [

@@ -5,6 +5,7 @@ not_found: No se han podido encontrar plantillas
 # Create template
 
 # Modify template
+modify.title: Modificar plantilla
 
 # Delete template
 template.delete.title: Eliminar plantilla
