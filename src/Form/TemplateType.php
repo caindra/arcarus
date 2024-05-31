@@ -21,7 +21,8 @@ class TemplateType extends AbstractType
             ])
             ->add('layout', FileType::class, [
                 'label' => 'Subir imagen',
-                'mapped' => false
+                'mapped' => false,
+                'required' => false
             ])
             ->add('organization', EntityType::class, [
                 'class' => Organization::class,

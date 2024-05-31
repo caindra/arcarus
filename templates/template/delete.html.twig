@@ -1,8 +1,7 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
-    <section class="section content">
-        <div class="container">
+
             <div class="columns is-align-items-center head">
                 <div class="column is-narrow">
                     <img src="{{ asset('images/logos/arcarus_purple.png') }}" alt="logo" class="image is-64x64">
@@ -17,14 +16,14 @@
                     </a>
                 </div>
             </div>
-        </div>
+
         <div class="notification is-danger">
             {{ 'template.delete.text' | trans({}, 'templates') }}
             <form method="post">
                 <button type="submit" name="confirmar" class="button is-danger is-dark is-right">{{ 'confirm' | trans({}, 'home') }}</button>
             </form>
         </div>
-    </section>
+
 {% endblock %}
 
 {% block title %}

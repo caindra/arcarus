@@ -14,4 +14,11 @@ class MainController extends AbstractController
         //$this->denyAccessUnlessGranted('ROLE_USER');
         return $this->render('main/home.html.twig');
     }
+
+    #[Route('/', name: 'help')]
+    final public function help(): Response
+    {
+        //$this->denyAccessUnlessGranted('ROLE_USER');
+        return $this->render('general/help.html.twig');
+    }
 }
