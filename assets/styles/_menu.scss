@@ -1,10 +1,11 @@
+/* Estilos para el sidebar */
 .sidebar {
   display: none;
   position: fixed;
   top: 0;
   left: 0;
   height: 100%;
-  width: 20em;
+  width: 20em; /* Ajusta el ancho del sidebar */
   background-color: #14161A;
   padding: 1.25em;
   color: #fff;
@@ -12,40 +13,54 @@
   transition: transform 0.3s ease;
   transform: translateX(-100%);
   z-index: 1;
-
-  @media screen and (min-width: 1024px) {
-    display: block;
-    transform: translateX(0);
-  }
-
-  &.is-active {
-    transform: translateX(0);
-  }
 }
 
-.navbar-burger {
-  display: none;
-
-  @media screen and (max-width: 1023px) {
-    display: block;
-    position: fixed;
-    top: 1rem;
-    right: 1rem;
-    z-index: 2;
-    background: white;
-    padding: 0.5rem;
-    border-radius: 0.25rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-}
-
-
-.navbar-burger.is-active + .sidebar {
+.sidebar.is-active {
+  transform: translateX(0);
   display: block;
 }
 
-
-  svg {
-    fill: #fafafa;
+@media screen and (min-width: 1024px) {
+  .sidebar {
+    display: block;
+    transform: translateX(0);
   }
 
+  .main-content {
+    margin-left: 20em; /* Igual al ancho del sidebar */
+    width: calc(100% - 20em); /* Ajusta el ancho del contenido principal */
+  }
+}
+
+@media screen and (max-width: 1023px) {
+  .sidebar {
+    width: 100%; /* Ocupa toda la pantalla en dispositivos pequeños */
+  }
+
+  .navbar-burger {
+    display: block;
+  }
+
+  .main-content {
+    margin-left: 0;
+    padding-top: 3rem;
+    width: 100%; /* Asegúrate de que el contenido principal ocupe todo el ancho */
+  }
+}
+
+/* Estilos para el navbar burger */
+.navbar-burger {
+  display: none;
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 2;
+  background: white;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+svg {
+  fill: #fafafa;
+}

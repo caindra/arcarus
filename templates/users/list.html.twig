@@ -2,84 +2,66 @@
 {% trans_default_domain 'users.es.yml' %}
 
 {% block content %}
+    <div class="columns is-align-items-center head">
+        <div class="column is-narrow">
+            <img src="{{ asset('images/logos/arcarus_purple.png') }}" alt="logo" class="image is-64x64">
+        </div>
+        <div class="column">
+            <h1 class="title is-4 mb-2">{{ 'user_list.title' | trans({}, 'users') }}</h1>
+        </div>
+        <div class="column">
+            <a href="{{ path('users') }}" class="button is-dark">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0" /><path d="M5 12l6 6" /><path d="M5 12l6 -6" /></svg>
+                {{ 'going_back' | trans({}, 'home') }}
+            </a>
+        </div>
+    </div>
+    <div class="box" id="users-list">
+        {% for message in app.flashes('success') %}
+            <div class="notification is-success">{{ message }}</div>
+        {% endfor %}
+        {% for message in app.flashes('error') %}
+            <div class="notification is-danger">{{ message }}</div>
+        {% endfor %}
 
-            <div class="columns is-align-items-center head">
-                <div class="column is-narrow">
-                    <img src="{{ asset('images/logos/arcarus_purple.png') }}" alt="logo" class="image is-64x64">
+        <div class="list">
+            {% for user in pagination.items %}
+                <div class="list-item columns is-mobile is-multiline">
+                    <div class="list-item-content column is-full-mobile is-two-thirds-tablet is-four-fifths-desktop">
+                        <div class="list-item-title">{{ user.name }} {{ user.surnames }}</div>
+                        <div class="list-item-description">
+                            <div class="tags">
+                                <span class="tag is-rounded">{{ user.email }}</span>
+                                <span class="tag is-rounded">{{ user.username }}</span>
+                                <span class="tag is-rounded">{{ user.isProfessor ? 'Profesor' : 'Estudiante' | default('———') }}</span>
+                                <span class="tag is-rounded">{{ user.group | default('---') }}</span>
+                                <span class="tag is-rounded">{{ user.mentor ? user.mentor : 'No tiene clase tutorizada' | default('———') }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="list-item-controls column is-full-mobile is-one-third-tablet is-one-fifth-desktop has-text-right">
+                        <div class="buttons is-centered-mobile">
+                            <a href="{{ path(user.isProfessor ? 'modify_professor' : 'modify_student', {'id': user.id}) }}" class="button is-medium is-info is-inverted">
+                            <span class="icon">
+                                <i class="fas fa-pencil-alt"></i>
+                            </span>
+                            </a>
+                            <a href="{{ path(user.isProfessor ? 'delete_professor' : 'delete_student', {'id': user.id}) }}" class="button is-medium is-danger is-inverted">
+                            <span class="icon">
+                                <i class="fas fa-user-minus"></i>
+                            </span>
+                            </a>
+                        </div>
+                    </div>
                 </div>
-                <div class="column">
-                    <h1 class="title">{{ 'user_list.title' | trans({}, 'users') }}</h1>
-                </div>
-                <div class="column has-text-right">
-                    <a href="{{ path('main') }}" class="button is-dark">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0" /><path d="M5 12l6 6" /><path d="M5 12l6 -6" /></svg>
-                        {{ 'going_back' | trans({}, 'home') }}
-                    </a>
-                    <a href="{{ path('add_student') }}" class="button is-link">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M16 19h6" /><path d="M19 16v6" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4" /></svg>
-                        {{ 'user_list.btn.add.student' | trans({}, 'users') }}
-                    </a>
-                    <a href="{{ path('add_professor') }}" class="button is-link">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M16 19h6" /><path d="M19 16v6" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4" /></svg>
-                        {{ 'user_list.btn.add.professor' | trans({}, 'users') }}
-                    </a>
-                </div>
-            </div>
-            {% for message in app.flashes('success') %}
-                <div class="notification is-success">{{ message }}</div>
+            {% else %}
+                <div class="notification is-warning">{{ 'user_list.no_users' | trans({}, 'users') }}</div>
             {% endfor %}
-            {% for message in app.flashes('error') %}
-                <div class="notification is-danger">{{ message }}</div>
-            {% endfor %}
-
-            <div class="table-container is-fullwidth">
-                <table class="table is-striped is-narrow is-hoverable is-fullwidth">
-                    <thead>
-                    <tr>
-                        <th>{{ 'user_list.table.name' | trans({}, 'users') }}</th>
-                        <th>{{ 'user_list.table.username' | trans({}, 'users') }}</th>
-                        <th>{{ 'user_list.table.email' | trans({}, 'users') }}</th>
-                        <th>{{ 'user_list.table.rol' | trans({}, 'users') }}</th>
-                        <th>{{ 'user_list.table.group' | trans({}, 'users') }}</th>
-                        <th>{{ 'user_list.table.mentor' | trans({}, 'users') }}</th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for user in pagination.items %}
-                        <tr>
-                            <td>{{ user.name }} {{ user.surnames }}</td>
-                            <td>{{ user.username }}</td>
-                            <td>{{ user.email }}</td>
-                            <td>{{ user.isProfessor ? 'Profesor' : 'Estudiante' | default('---') }}</td>
-                            <td>{{ user.group | default('---') }}</td>
-                            <td>{{ user.mentor ? user.mentor : 'No' | default('---') }}</td>
-                            <td>
-                                <a href="{{ path(user.isProfessor ? 'modify_professor' : 'modify_student', {'id': user.id}) }}" class="button is-small is-info">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h3.5" /><path d="M18.42 15.61a2.1 2.1 0 0 1 2.97 2.97l-3.39 3.42h-3v-3l3.42 -3.39z" /></svg>
-                                    {{ 'user_list.btn.modify' | trans({}, 'users') }}
-                                </a>
-                            </td>
-                            <td>
-                                <a href="{{ path(user.isProfessor ? 'delete_professor' : 'delete_student', {'id': user.id}) }}" class="button is-small is-danger">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user-minus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4c.348 0 .686 .045 1.009 .128" /><path d="M16 19h6" /></svg>
-                                    {{ 'user_list.btn.delete' | trans({}, 'users') }}
-                                </a>
-                            </td>
-                        </tr>
-                    {% else %}
-                        <tr>
-                            <th colspan="8">{{ 'user_list.no_users' | trans({}, 'users') }}</th>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            <div class="has-text-centered">
-                {{ knp_pagination_render(pagination) }}
-            </div>
-
+        </div>
+        <div class="block has-text-centered">
+            {{ knp_pagination_render(pagination) }}
+        </div>
+    </div>
 {% endblock %}
 
 {% block title %}{{ 'user_list.title' | trans({}, 'users') }}{% endblock %}
