@@ -20,4 +20,10 @@ class MainController extends AbstractController
     {
         return $this->render('general/help.html.twig');
     }
+
+    #[Route('/general', name: 'general')]
+    final public function general(): Response
+    {
+        return $this->render('general/lobby.html.twig');
+    }
 }

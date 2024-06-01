@@ -32,24 +32,25 @@
                 {% for template in pagination.items %}
                     <div class="column is-full-mobile is-full-tablet is-half-desktop">
                         <div class="card">
-                            <header class="card-header">
-                                <h4 class="card-header-title">
-                                    {{ template.styleName }}
-                                </h4>
-                            </header>
+                            <div class="card-image">
+                                <figure class="image is-16by9">
+                                    <img src="{{ path('template_layout', {'id': template.id}) }}" alt="Template Image">
+                                </figure>
+                            </div>
                             <div class="card-content">
-                                <div class="content">
-                                    <figure class="image is-16by9">
-                                        <img src="{{ path('template_layout', {'id': template.id}) }}" alt="Template Image">
-                                    </figure>
+                                <div class="media">
+                                    <div class="media-content">
+                                        <p class="title is-4">{{ template.styleName }}</p>
+                                    </div>
                                 </div>
                             </div>
                             <footer class="card-footer">
-                                <a href="{{ path('modify_template', {id: template.id}) }}" class="card-footer-item button is-primary">Edit</a>
-                                <a href="{{ path('delete_template', {id: template.id}) }}" class="card-footer-item button is-danger">Delete</a>
+                                <a href="{{ path('modify_template', {id: template.id}) }}" class="card-footer-item button is-primary is-fullwidth">Edit</a>
+                                <a href="{{ path('delete_template', {id: template.id}) }}" class="card-footer-item button is-danger is-fullwidth">Delete</a>
                             </footer>
                         </div>
                     </div>
+
                 {% else %}
                     <div class="column is-full">
                         <div class="notification is-info">

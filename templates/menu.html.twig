@@ -20,7 +20,7 @@
             <ul class="menu-list">
                 <li class="menu-item"><a href="{{ path('users') }}">{{ 'administration.user' | trans({}, 'menu') }}</a></li>
                 <li class="menu-item"><a href="{{ path('templates') }}">{{ 'administration.template' | trans({}, 'menu') }}</a></li>
-                <li class="menu-item"><a href="#">{{ 'administration.config' | trans({}, 'menu') }}</a></li>
+                <li class="menu-item"><a href="{{ path('general') }}">{{ 'administration.config' | trans({}, 'menu') }}</a></li>
             </ul>
             <p class="menu-label">{{ 'label.help' | trans({}, 'menu') }}</p>
             <ul class="menu-list">

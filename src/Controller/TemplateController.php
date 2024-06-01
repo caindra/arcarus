@@ -128,7 +128,7 @@ class TemplateController extends AbstractController
         }
 
         return $this->render('template/delete.html.twig', [
-            'user' => $template
+            'template' => $template
         ]);
     }
 }
