@@ -27,13 +27,13 @@ class Group
     #[ORM\JoinColumn(nullable: false)]
     private ?AcademicYear $academicYear = null;
 
-    #[ORM\OneToMany(targetEntity: Student::class, mappedBy: 'group')]
+    #[ORM\OneToMany(targetEntity: Student::class, mappedBy: 'group', cascade: ['remove'])]
     private Collection $students;
 
-    #[ORM\ManyToMany(targetEntity: Professor::class, inversedBy: 'groups')]
+    #[ORM\ManyToMany(targetEntity: Professor::class, inversedBy: 'groups', cascade: ['remove'])]
     private Collection $professors;
 
-    #[ORM\OneToMany(targetEntity: Professor::class, mappedBy: 'mentoredClass')]
+    #[ORM\OneToMany(targetEntity: Professor::class, mappedBy: 'mentoredClass', cascade: ['remove'])]
     private Collection $mentors;
 
     #[ORM\OneToOne(inversedBy: 'group', cascade: ['persist', 'remove'])]
