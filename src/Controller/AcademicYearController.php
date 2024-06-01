@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\AcademicYear;
 use App\Form\AcademicYearType;
 use App\Repository\AcademicYearRepository;
+use App\Repository\GroupRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,6 +28,10 @@ class AcademicYearController extends AbstractController
             $request->query->getInt('page', 1), // page number
             15 // limit per page
         );
+        foreach ($pagination as $academicYear) {
+            $academicYear->formattedStartDate = $academicYear->getStartDate()->format('d/m/Y');
+            $academicYear->formattedEndDate = $academicYear->getEndDate()->format('d/m/Y');
+        }
         return $this->render('general/academic_year/index.html.twig', [
             'pagination' => $pagination
         ]);
@@ -85,17 +90,26 @@ class AcademicYearController extends AbstractController
     final public function deleteAcademicYear(
         AcademicYear $academicYear,
         AcademicYearRepository $academicYearRepository,
+        GroupRepository $groupRepository, // Asegúrate de inyectar el repositorio de Group
         Request $request
     ): Response
     {
         if ($request->request->has('confirmar')) {
-            try{
+            try {
+                // Eliminar todos los grupos asociados al curso académico
+                foreach ($academicYear->getGroups() as $group) {
+                    $groupRepository->remove($group);
+                }
+                $academicYearRepository->save();
+
+                // Ahora eliminar el curso académico
                 $academicYearRepository->remove($academicYear);
                 $academicYearRepository->save();
+
                 $this->addFlash('success', 'El curso académico ha sido eliminado con éxito');
                 return $this->redirectToRoute('academic-years');
-            }catch (\Exception $e){
-                $this->addFlash('error', 'No se ha podido eliminar el curso académico. Error: ' . $e);
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'No se ha podido eliminar el curso académico. Error: ' . $e->getMessage());
             }
         }
 
@@ -103,4 +117,5 @@ class AcademicYearController extends AbstractController
             'academicYear' => $academicYear
         ]);
     }
+
 }

@@ -15,7 +15,7 @@ class AcademicYearType extends AbstractType
     {
         $builder
             ->add('description', TextType::class, [
-                'label' => 'Nombre del centro',
+                'label' => 'Nombre del curso',
             ])
             ->add('startDate', DateType::class, [
                 'widget' => 'single_text',

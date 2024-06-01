@@ -100,7 +100,7 @@ class GroupController extends AbstractController
         }
 
         return $this->render('general/group/delete.html.twig', [
-            'organization' => $group
+            'group' => $group
         ]);
     }
 }
