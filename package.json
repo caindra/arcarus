@@ -23,6 +23,7 @@
         "build": "encore production --progress"
     },
     "dependencies": {
-        "bulma": "^1.0.0"
+        "bulma": "^1.0.0",
+        "bulma-dashboard": "^0.3.2"
     }
 }
