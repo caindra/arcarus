@@ -10,7 +10,7 @@
             <h1 class="title">Eliminar centro</h1>
         </div>
         <div class="column">
-            <a href="{{ path('organizations') }}" class="button is-dark">
+            <a href="{{ path('sections') }}" class="button is-dark">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0" /><path d="M5 12l6 6" /><path d="M5 12l6 -6" /></svg>
                 {{ 'going_back' | trans({}, 'home') }}
             </a>
@@ -18,7 +18,7 @@
     </div>
 
     <div class="notification is-danger">
-        El centro "{{ organization.name }}" seleccionado será eliminado de la aplicación. Esta operación no se puede deshacer, ¿desea continuar?
+        La sección seleccionada será eliminada de la aplicación. Esta operación no se puede deshacer, ¿desea continuar?
         <form method="post">
             <button type="submit" name="confirmar" class="button is-danger is-dark is-right">{{ 'confirm' | trans({}, 'home') }}</button>
         </form>

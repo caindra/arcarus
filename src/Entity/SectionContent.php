@@ -21,7 +21,7 @@ class SectionContent
     private ?string $title = null;
 
     #[ORM\ManyToOne(inversedBy: 'sectionContents')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
     private ?Section $section = null;
 
     #[ORM\ManyToOne(inversedBy: 'sectionContents')]
