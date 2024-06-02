@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class GroupController extends AbstractController
 {
     #[Route('/groups', name: 'groups')]
-    final public function listTemplates(
+    final public function listGroups(
         EntityManagerInterface $entityManager,
         GroupRepository $groupRepository,
         PaginatorInterface $paginator,
@@ -33,7 +33,7 @@ class GroupController extends AbstractController
     }
 
     #[Route('/groups/create', name: 'group_create')]
-    final public function createAcademicYear(
+    final public function createGroup(
         GroupRepository $groupRepository,
         Request $request,
     ): Response
@@ -60,7 +60,7 @@ class GroupController extends AbstractController
     }
 
     #[Route('/groups/modify/{id}', name: 'group_edit')]
-    public function modifyAcademicYear(
+    public function modifyGroup(
         Request $request,
         Group $group,
         GroupRepository $groupRepository,
@@ -82,7 +82,7 @@ class GroupController extends AbstractController
     }
 
     #[Route('/groups/delete/{id}', name: 'group_delete')]
-    final public function deleteAcademicYear(
+    final public function deleteGroup(
         Group $group,
         GroupRepository $groupRepository,
         Request $request

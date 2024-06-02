@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class OrganizationController extends AbstractController
 {
     #[Route('/organizations', name: 'organizations')]
-    final public function listTemplates(
+    final public function listOrganizations(
         EntityManagerInterface $entityManager,
         OrganizationRepository $organizationRepository,
         PaginatorInterface $paginator,
@@ -33,7 +33,7 @@ class OrganizationController extends AbstractController
     }
 
     #[Route('/organizations/create', name: 'organization_create')]
-    final public function createAcademicYear(
+    final public function createOrganization(
         OrganizationRepository $organizationRepository,
         Request $request,
     ): Response
@@ -60,7 +60,7 @@ class OrganizationController extends AbstractController
     }
 
     #[Route('/organizations/modify/{id}', name: 'organization_edit')]
-    public function modifyAcademicYear(
+    public function modifyOrganization(
         Request $request,
         Organization $organization,
         OrganizationRepository $organizationRepository
@@ -82,7 +82,7 @@ class OrganizationController extends AbstractController
     }
 
     #[Route('/organizations/delete/{id}', name: 'organization_delete')]
-    final public function deleteAcademicYear(
+    final public function deleteOrganization(
         Organization $organization,
         OrganizationRepository $organizationRepository,
         Request $request
