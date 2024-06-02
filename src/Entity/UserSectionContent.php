@@ -16,9 +16,13 @@ class UserSectionContent
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 2, max: 255)]
     private ?string $description = null;
 
     #[ORM\Column]
+    #[Assert\NotNull]
+    #[Assert\PositiveOrZero]
     private ?int $orderNumber = null;
 
     #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'userSectionContent')]

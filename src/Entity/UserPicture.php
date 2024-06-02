@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\UserPictureRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserPictureRepository::class)]
 class UserPicture
@@ -21,6 +22,8 @@ class UserPicture
     private $image = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 2, max: 255)]
     private ?string $description = null;
 
     #[ORM\OneToOne(mappedBy: 'picture', cascade: ['persist', 'remove'])]

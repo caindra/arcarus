@@ -16,6 +16,8 @@ class Organization
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 2, max: 255)]
     private ?string $name = null;
 
     #[ORM\OneToMany(targetEntity: Template::class, mappedBy: 'organization', orphanRemoval: true)]

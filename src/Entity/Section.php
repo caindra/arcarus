@@ -16,12 +16,18 @@ class Section
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Assert\NotNull]
+    #[Assert\Positive]
     private ?int $height = null;
 
     #[ORM\Column]
+    #[Assert\NotNull]
+    #[Assert\Positive]
     private ?int $width = null;
 
     #[ORM\Column]
+    #[Assert\NotNull]
+    #[Assert\PositiveOrZero]
     private ?int $maxColQuantity = null;
 
     #[ORM\ManyToOne(inversedBy: 'sections')]
@@ -29,9 +35,13 @@ class Section
     private ?Template $template = null;
 
     #[ORM\Column]
+    #[Assert\NotNull]
+    #[Assert\PositiveOrZero]
     private ?int $positionTop = null;
 
     #[ORM\Column]
+    #[Assert\NotNull]
+    #[Assert\PositiveOrZero]
     private ?int $positionLeft = null;
 
     #[ORM\OneToMany(targetEntity: SectionContent::class, mappedBy: 'section', orphanRemoval: true)]

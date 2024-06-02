@@ -16,6 +16,8 @@ class SectionContent
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 2, max: 255)]
     private ?string $title = null;
 
     #[ORM\ManyToOne(inversedBy: 'sectionContents')]
