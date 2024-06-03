@@ -15,3 +15,5 @@ administration.config: Configuración general
 help.info: Ayuda
 help.login: Iniciar sesión
 help.logout: Cerrar sesión
+
+list.groups: Listar grupos
