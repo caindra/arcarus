@@ -35,4 +35,18 @@ class GroupRepository extends ServiceEntityRepository
     {
         $this->getEntityManager()->persist($group);
     }
+
+    public function getUsersInGroup(int $groupId): array
+    {
+        return $this->createQueryBuilder('g')
+            ->select('u')
+            ->leftJoin('g.students', 's')
+            ->leftJoin('g.professors', 'p')
+            ->leftJoin('p.groups', 'pg')
+            ->leftJoin('s.group', 'sg')
+            ->where('g.id = :groupId')
+            ->setParameter('groupId', $groupId)
+            ->getQuery()
+            ->getArrayResult();
+    }
 }
