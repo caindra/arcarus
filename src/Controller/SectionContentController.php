@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\SectionContent;
+use App\Entity\UserSectionContent;
 use App\Form\SectionContentType;
 use App\Repository\SectionContentRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -60,25 +61,44 @@ class SectionContentController extends AbstractController
         ]);
     }
 
-    #[Route('/section-contents/modify/{id}', name: 'section_content_edit')]
-    public function modifySectionContent(
-        Request $request,
+    #[Route('/section-content/{id}/edit', name: 'section_content_edit')]
+    public function edit(
         SectionContent $sectionContent,
-        SectionContentRepository $sectionContentRepository,
+        Request $request,
+        EntityManagerInterface $entityManager,
+        UserRepository $userRepository
     ): Response {
         $form = $this->createForm(SectionContentType::class, $sectionContent);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
-            try {
-                $sectionContentRepository->save();
-                $this->addFlash('success', 'La modificación se ha realizado correctamente');
-                return $this->redirectToRoute('section_contents');
-            } catch (\Exception $e) {
-                $this->addFlash('error', 'No se han podido aplicar las modificaciones. Error: ' . $e->getMessage());
+            foreach ($sectionContent->getUserContents() as $userContent) {
+                if ($userContent->getOrderNumber() === 0) {
+                    $sectionContent->removeUserContent($userContent);
+                }
+            }
+            $entityManager->flush();
+            return $this->redirectToRoute('section_content_success');
+        }
+
+        $allUsers = $userRepository->findAll(); // Adaptar a tu lógica de negocio
+        foreach ($sectionContent->getUserContents() as $userContent) {
+            $user = $userContent->getContainedUsers();
+            if ($allUsers->contains($user)) {
+                $allUsers->removeElement($user);
             }
         }
-        return $this->render('general/section_content/modify.html.twig', [
-            'form' => $form->createView()
+
+        foreach ($allUsers as $user) {
+            $newUserContent = new UserSectionContent();
+            $newUserContent->setSectionContent($user);
+            $newUserContent->setSectionContent($sectionContent);
+            $newUserContent->setOrderNumber(0);
+            $sectionContent->addUserContent($newUserContent);
+        }
+
+        return $this->render('section_content/edit.html.twig', [
+            'sectionContentForm' => $form->createView(),
         ]);
     }
 

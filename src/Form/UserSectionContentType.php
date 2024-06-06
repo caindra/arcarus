@@ -3,7 +3,9 @@
 namespace App\Form;
 
 use App\Entity\UserSectionContent;
+use Doctrine\DBAL\Types\TextType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -12,9 +14,12 @@ class UserSectionContentType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('description')
-            ->add('orderNumber')
-            ->add('sectionContent')
+            ->add('description', TextType::class, [
+                'required' => false,
+            ])
+            ->add('orderNumber', IntegerType::class, [
+                'attr' => ['min' => 0],
+            ]);
         ;
     }
 
