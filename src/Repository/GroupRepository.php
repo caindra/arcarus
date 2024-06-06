@@ -49,4 +49,26 @@ class GroupRepository extends ServiceEntityRepository
             ->getQuery()
             ->getArrayResult();
     }
+
+    public function findProfessorsByGroupId(int $groupId): array
+    {
+        return $this->createQueryBuilder('g')
+            ->select('p.id', 'p.name', 'p.surnames')
+            ->innerJoin('g.professors', 'p')
+            ->where('g.id = :groupId')
+            ->setParameter('groupId', $groupId)
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    public function findStudentsByGroupId(int $groupId): array
+    {
+        return $this->createQueryBuilder('g')
+            ->select('s.id', 's.name', 's.surnames')
+            ->innerJoin('g.students', 's')
+            ->where('g.id = :groupId')
+            ->setParameter('groupId', $groupId)
+            ->getQuery()
+            ->getArrayResult();
+    }
 }
