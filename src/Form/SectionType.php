@@ -56,15 +56,8 @@ class SectionType extends AbstractType
                 'class' => Template::class,
                 'choice_label' => 'styleName',
                 'label' => 'Plantilla',
-                'required' => true
-            ])
-            ->add('sectionContents', EntityType::class, [
-                'class' => SectionContent::class,
-                'choice_label' => 'title',
-                'label' => 'Contenido de la sección',
                 'required' => true,
-                'multiple'=> true,
-                'expanded' => true
+                'disabled' => $options['disable_template']
             ])
         ;
     }
@@ -73,6 +66,9 @@ class SectionType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Section::class,
+            'disable_template' => false
         ]);
+
+        $resolver->setAllowedTypes('disable_template', 'bool');
     }
 }

@@ -42,11 +42,15 @@
                                     <div class="media-content">
                                         <p class="title is-4">{{ template.styleName }}</p>
                                     </div>
+                                    <div class="section">
+                                        <p>{{ template.sections | join(' | ') }}</p>
+                                    </div>
                                 </div>
                             </div>
                             <footer class="card-footer">
                                 <a href="{{ path('modify_template', {id: template.id}) }}" class="card-footer-item button is-primary is-fullwidth">Edit</a>
                                 <a href="{{ path('delete_template', {id: template.id}) }}" class="card-footer-item button is-danger is-fullwidth">Delete</a>
+                                <a href="{{ path('section_template_create', {id: template.id}) }}" class="card-footer-item button is-light is-fullwidth">Crear sección a la plantilla</a>
                             </footer>
                         </div>
                     </div>

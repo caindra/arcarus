@@ -8,7 +8,7 @@
             <img src="{{ asset('images/logos/arcarus_purple.png') }}" alt="logo" class="image is-64x64">
         </div>
         <div class="column">
-            <h1 class="title">Selecciona una plantilla para la orla</h1>
+            <h1 class="title">{{ 'list.title' | trans({}, 'templates') }}</h1>
         </div>
         <div class="column has-text-right">
             <a href="{{ path('main') }}" class="button is-dark">
@@ -42,10 +42,13 @@
                             <div class="media-content">
                                 <p class="title is-4">{{ template.styleName }}</p>
                             </div>
+                            <div class="section">
+                                <p>{{ template.sections | join(' | ') }}</p>
+                            </div>
                         </div>
                     </div>
                     <footer class="card-footer">
-                        <a href="{{ path('create_template', {template_id: template.id, group_id: group}) }}" class="card-footer-item button is-primary is-fullwidth">Seleccionar plantilla</a>
+                        <a href="{{ path('class_picture_create', {templateId: template.id, groupId: group.id}) }}" class="card-footer-item button is-primary is-fullwidth">Seleccionar plantilla</a>
                     </footer>
                 </div>
             </div>

@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Section;
+use App\Entity\Template;
 use App\Form\SectionType;
 use App\Repository\SectionRepository;
+use App\Repository\TemplateRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -108,6 +110,37 @@ class SectionController extends AbstractController
 
         return $this->render('general/section/delete.html.twig', [
             'group' => $section
+        ]);
+    }
+
+    #[Route('/template/{id}/sections/create', name: 'section_template_create')]
+    public function createSectionOnTemplate(
+        Template $template,
+        SectionRepository $sectionRepository,
+        Request $request
+    ): Response {
+        $section = new Section();
+        $section->setTemplate($template);
+
+        $form = $this->createForm(SectionType::class, $section, [
+            'disable_template' => true
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            try {
+                $sectionRepository->add($section);
+                $sectionRepository->save();
+                $this->addFlash('success', 'Sección creada con éxito');
+                return $this->redirectToRoute('templates');
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Error al crear la sección: ' . $e->getMessage());
+            }
+        }
+
+        return $this->render('general/section/create_section_template.html.twig', [
+            'form' => $form->createView(),
+            'template' => $template
         ]);
     }
 
