@@ -17,12 +17,15 @@ class SectionContentType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title', TextType::class)
+            ->add('title', TextType::class ,[
+                'label' => 'Título'
+            ])
             ->add('userContents', CollectionType::class, [
                 'entry_type' => UserSectionContentType::class,
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
+                'label' => 'Usuarios'
             ]);
         ;
     }

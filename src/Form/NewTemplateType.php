@@ -6,6 +6,7 @@ use App\Entity\Organization;
 use App\Entity\Template;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -29,6 +30,12 @@ class NewTemplateType extends AbstractType
                 'placeholder' => 'Selecciona una opción',
                 'label' => 'Centro educativo'
             ])
+            ->add('sections', CollectionType::class, [
+                'entry_type' => SectionType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+            ]);
         ;
     }
 

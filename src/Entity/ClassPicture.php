@@ -20,7 +20,7 @@ class ClassPicture
     #[Assert\Length(min: 2, max: 255)]
     private ?string $description = null;
 
-    #[ORM\OneToMany(targetEntity: SectionContent::class, mappedBy: 'classPicture')]
+    #[ORM\OneToMany(targetEntity: SectionContent::class, mappedBy: 'classPicture', cascade: ['persist', 'remove'])]
     private Collection $sectionContents;
 
     #[ORM\OneToOne(mappedBy: 'classPicture', cascade: ['persist', 'remove'])]

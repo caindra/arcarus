@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Entity\ClassPicture;
 use App\Entity\Group;
+use App\Entity\SectionContent;
 use App\Entity\Template;
 use App\Repository\ClassPictureRepository;
+use App\Repository\GroupRepository;
 use App\Repository\TemplateRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -17,7 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ClassPictureController extends AbstractController
 {
     #[Route('/class-pictures', name: 'class_pictures')]
-    final public function listAcademicYears(
+    final public function viewClassPictures(
         EntityManagerInterface $entityManager,
         ClassPictureRepository $classPictureRepository,
         PaginatorInterface $paginator,
@@ -49,83 +51,49 @@ class ClassPictureController extends AbstractController
             $request->query->getInt('page', 1), // page number
             15 // limit per page
         );
+
         return $this->render('class_picture/select_template.html.twig', [
             'pagination' => $pagination,
             'group' => $group
         ]);
     }
 
-    #[Route('/class-picture/create/{group_id}/{template_id}', name: 'class_picture_create')]
+    #[Route('/class-picture/create/{groupId}/{templateId}', name: 'class_picture_create')]
     final public function createClassPicture(
-        Group $group,
-        Template $template,
+        Group $groupId,
+        GroupRepository $groupRepository,
+        Template $templateId,
+        TemplateRepository $templateRepository,
+        ClassPictureRepository $classPictureRepository,
         Request $request,
     ): Response
     {
+        $group = $groupRepository->find($groupId);
+        $template = $templateRepository->find($templateId);
         $classPicture = new ClassPicture();
 
-        // se asigna tanto el grupo como la plantilla a la orla
-        $classPicture->setGroup($group);
-        $classPicture->setTemplate($template);
-        $classPicture->setDescription('Orla de la clase de ' . $group->getName());
+        if ($group && $template) {
+            try{
+                $classPicture->setGroup($group);
+                $classPicture->setTemplate($template);
 
-
-        return $this->render('general/class_picture/create.html.twig', [
-            'classPicture' => $classPicture
-        ]);
-    }
-
-    #[Route('/academic-years/modify/{id}', name: 'academic_year_edit')]
-    public function modifyAcademicYear(
-        Request $request,
-        AcademicYear $academicYear,
-        AcademicYearRepository $academicYearRepository,
-    ): Response {
-        $form = $this->createForm(AcademicYearType::class, $academicYear);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            try {
-                $academicYearRepository->save();
-                $this->addFlash('success', 'La modificación se ha realizado correctamente');
-                return $this->redirectToRoute('academic-years');
-            } catch (\Exception $e) {
-                $this->addFlash('error', 'No se han podido aplicar las modificaciones. Error: ' . $e->getMessage());
-            }
-        }
-        return $this->render('general/academic_year/modify.html.twig', [
-            'form' => $form->createView()
-        ]);
-    }
-
-    #[Route('/academic-years/delete/{id}', name: 'academic_year_delete')]
-    final public function deleteAcademicYear(
-        AcademicYear $academicYear,
-        AcademicYearRepository $academicYearRepository,
-        GroupRepository $groupRepository, // Asegúrate de inyectar el repositorio de Group
-        Request $request
-    ): Response
-    {
-        if ($request->request->has('confirmar')) {
-            try {
-                // Eliminar todos los grupos asociados al curso académico
-                foreach ($academicYear->getGroups() as $group) {
-                    $groupRepository->remove($group);
+                foreach ($template->getSections() as $section) {
+                    $sectionContent = new SectionContent();
+                    $sectionContent->setClassPicture($classPicture);
+                    $sectionContent->setSection($section);
+                    $classPicture->addSectionContent($sectionContent);
                 }
-                $academicYearRepository->save();
 
-                // Ahora eliminar el curso académico
-                $academicYearRepository->remove($academicYear);
-                $academicYearRepository->save();
-
-                $this->addFlash('success', 'El curso académico ha sido eliminado con éxito');
-                return $this->redirectToRoute('academic-years');
-            } catch (\Exception $e) {
-                $this->addFlash('error', 'No se ha podido eliminar el curso académico. Error: ' . $e->getMessage());
+                $classPictureRepository->add($classPicture);
+                $classPictureRepository->save();
+            }catch (\Exception $e) {
+                $this->addFlash('error', 'No se ha podido crear. Error: ' . $e->getMessage());
+                return $this->redirectToRoute('groups');
             }
         }
 
-        return $this->render('general/academic_year/delete.html.twig', [
-            'academicYear' => $academicYear
+        return $this->render('class_picture/create.html.twig', [
+            'classPicture' => $classPicture
         ]);
     }
 }
