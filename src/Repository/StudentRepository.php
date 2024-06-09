@@ -35,4 +35,13 @@ class StudentRepository extends ServiceEntityRepository
     {
         $this->getEntityManager()->persist($student);
     }
+
+    public function findAllWithPictures()
+    {
+        return $this->createQueryBuilder('s')
+            ->leftJoin('s.picture', 'pic')
+            ->addSelect('pic')
+            ->getQuery()
+            ->getResult();
+    }
 }

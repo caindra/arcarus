@@ -18,14 +18,14 @@ class SectionType extends AbstractType
     {
         $builder
             ->add('height', IntegerType::class, [
-                'label' => 'Alto',
+                'label' => 'Alto (en milímetros)',
                 'required' => true,
                 'attr' => [
                     'min' => 1
                 ]
             ])
             ->add('width', IntegerType::class, [
-                'label' => 'Ancho',
+                'label' => 'Ancho (en milímetros)',
                 'required' => true,
                 'attr' => [
                     'min' => 1
@@ -39,14 +39,14 @@ class SectionType extends AbstractType
                 ]
             ])
             ->add('positionTop', IntegerType::class, [
-                'label' => 'Posición Arriba',
+                'label' => 'Posición Arriba (distancia desde donde empieza en milímetros)',
                 'required' => true,
                 'attr' => [
                     'min' => 0
                 ]
             ])
             ->add('positionLeft', IntegerType::class, [
-                'label' => 'Posición Izquierda',
+                'label' => 'Posición Izquierda (distancia desde donde empieza en milímetros)',
                 'required' => true,
                 'attr' => [
                     'min' => 0

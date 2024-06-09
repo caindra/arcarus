@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Entity\SectionContent;
 use App\Entity\UserSectionContent;
 use App\Form\SectionContentType;
+use App\Repository\GroupRepository;
 use App\Repository\SectionContentRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -65,39 +67,58 @@ class SectionContentController extends AbstractController
     public function edit(
         SectionContent $sectionContent,
         Request $request,
-        EntityManagerInterface $entityManager,
-        UserRepository $userRepository
+        SectionContentRepository $sectionContentRepository,
+        UserRepository $userRepository,
+        GroupRepository $groupRepository
     ): Response {
         $form = $this->createForm(SectionContentType::class, $sectionContent);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            foreach ($sectionContent->getUserContents() as $userContent) {
-                if ($userContent->getOrderNumber() === 0) {
-                    $sectionContent->removeUserContent($userContent);
+        // Obtener todos los usuarios del grupo asociado al ClassPicture
+        $group = $sectionContent->getClassPicture()->getGroup();
+        $allUsers = array_merge(
+            $groupRepository->findStudentsByGroupId($group->getId()),
+            $groupRepository->findProfessorsByGroupId($group->getId())
+        );
+
+        // Filtrar los usuarios que ya están en userContents
+        foreach ($sectionContent->getUserContents() as $userContent) {
+            $user = $userContent->getContainedUsers()->first(); // Suponiendo que hay un solo usuario por UserSectionContent
+            foreach ($allUsers as $key => $groupUser) {
+                if ($groupUser['id'] === $user->getId()) {
+                    unset($allUsers[$key]);
                 }
             }
-            $entityManager->flush();
-            return $this->redirectToRoute('section_content_success');
         }
 
-        $allUsers = $userRepository->findAll(); // Adaptar a tu lógica de negocio
-        foreach ($sectionContent->getUserContents() as $userContent) {
-            $user = $userContent->getContainedUsers();
-            if ($allUsers->contains($user)) {
-                $allUsers->removeElement($user);
+        if ($form->isSubmitted() && $form->isValid()) {
+            try {
+                // Eliminar UserSectionContent con orderNumber 0
+                foreach ($sectionContent->getUserContents() as $userContent) {
+                    if ($userContent->getOrderNumber() === 0) {
+                        $sectionContent->removeUserContent($userContent);
+                    }
+                }
+
+                // Añadir los usuarios restantes a la sección con orderNumber 0
+                foreach ($allUsers as $groupUser) {
+                    $newUserContent = new UserSectionContent();
+                    $user = $userRepository->find($groupUser->getId());
+                    $newUserContent->addContainedUser($user);
+                    $newUserContent->setSectionContent($sectionContent);
+                    $newUserContent->setOrderNumber(0);
+                    $sectionContent->addUserContent($newUserContent);
+                }
+
+                $sectionContentRepository->save();
+
+                return $this->redirectToRoute('section_contents');
+            }catch (\Exception $e) {
+                $this->addFlash('error', 'No se ha podido crear. Error: ' . $e->getMessage());
             }
         }
 
-        foreach ($allUsers as $user) {
-            $newUserContent = new UserSectionContent();
-            $newUserContent->setSectionContent($user);
-            $newUserContent->setSectionContent($sectionContent);
-            $newUserContent->setOrderNumber(0);
-            $sectionContent->addUserContent($newUserContent);
-        }
-
-        return $this->render('section_content/edit.html.twig', [
+        return $this->render('general/section_content/modify.html.twig', [
             'sectionContentForm' => $form->createView(),
         ]);
     }

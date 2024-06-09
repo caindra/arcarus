@@ -18,7 +18,7 @@ class SectionContentType extends AbstractType
     {
         $builder
             ->add('title', TextType::class ,[
-                'label' => 'Título'
+                'label' => 'Nombre de la Sección',
             ])
             ->add('userContents', CollectionType::class, [
                 'entry_type' => UserSectionContentType::class,

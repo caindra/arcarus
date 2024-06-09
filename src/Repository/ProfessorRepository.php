@@ -35,4 +35,13 @@ class ProfessorRepository extends ServiceEntityRepository
     {
         $this->getEntityManager()->persist($professor);
     }
+
+    public function findAllWithPictures()
+    {
+        return $this->createQueryBuilder('p')
+            ->leftJoin('p.picture', 'pic')
+            ->addSelect('pic')
+            ->getQuery()
+            ->getResult();
+    }
 }

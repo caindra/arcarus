@@ -45,4 +45,13 @@ class UserRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findAllWithPictures()
+    {
+        return $this->createQueryBuilder('u')
+            ->leftJoin('u.picture', 'p')
+            ->addSelect('p')
+            ->getQuery()
+            ->getResult();
+    }
+
 }
