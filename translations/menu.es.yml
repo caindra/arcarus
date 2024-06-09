@@ -17,3 +17,4 @@ help.login: Iniciar sesión
 help.logout: Cerrar sesión
 
 list.groups: Listar grupos
+list.groups.create.classPicture: Crear orla

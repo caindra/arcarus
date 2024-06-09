@@ -37,6 +37,23 @@ class ClassPictureController extends AbstractController
         ]);
     }
 
+    #[Route('//class-picture/select-group', name: 'class_picture_select_group')]
+    final public function selectGroupClassPicture(
+        GroupRepository $groupRepository,
+        PaginatorInterface $paginator,
+        Request $request
+    ): Response {
+        $query = $groupRepository->findAll();
+        $pagination = $paginator->paginate(
+            $query, // query, NOT result
+            $request->query->getInt('page', 1), // page number
+            15 // limit per page
+        );
+        return $this->render('class_picture/select_group.html.twig', [
+            'pagination' => $pagination
+        ]);
+    }
+
     #[Route('/class-picture/select-template/{id}', name: 'class_picture_select_template')]
     final public function selectTemplateClassPicture(
         //el id que se pasa es el de group, ya que es necesario para un controlador posterior
@@ -76,6 +93,7 @@ class ClassPictureController extends AbstractController
             try{
                 $classPicture->setGroup($group);
                 $classPicture->setTemplate($template);
+                $classPicture->setDescription('Orla de ' . $group->getName());
 
                 foreach ($template->getSections() as $section) {
                     $sectionContent = new SectionContent();
@@ -88,7 +106,7 @@ class ClassPictureController extends AbstractController
                 $classPictureRepository->save();
             }catch (\Exception $e) {
                 $this->addFlash('error', 'No se ha podido crear. Error: ' . $e->getMessage());
-                return $this->redirectToRoute('groups');
+                return $this->redirectToRoute('main');
             }
         }
 
