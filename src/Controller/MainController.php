@@ -11,7 +11,7 @@ class MainController extends AbstractController
     #[Route('/', name: 'main')]
     final public function index(): Response
     {
-        //$this->denyAccessUnlessGranted('ROLE_USER');
+        $this->denyAccessUnlessGranted('ROLE_USER');
         return $this->render('main/home.html.twig');
     }
 

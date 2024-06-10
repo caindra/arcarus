@@ -26,6 +26,12 @@
                 <li class="menu-item"><a href="{{ path('help') }}">{{ 'help.info' | trans({}, 'menu') }}</a></li>
                 <li class="menu-item"><a href="#">{{ 'help.logout' | trans({}, 'menu') }}</a></li>
             </ul>
+            {% if app.user %}
+                <h3>Conectado como {{ app.user.username }}</h3>
+                <a href="{{ path('app_logout') }}" class="button is-danger">Cerrar sesión</a>
+            {% else %}
+                <a href="{{ path('app_login') }}" class="button is-link">Iniciar sesión</a>
+            {% endif %}
         </aside>
     </div>
 </div>
