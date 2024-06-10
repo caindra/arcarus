@@ -37,7 +37,7 @@ class ClassPictureController extends AbstractController
         ]);
     }
 
-    #[Route('//class-picture/select-group', name: 'class_picture_select_group')]
+    #[Route('/class-picture/select-group', name: 'class_picture_select_group')]
     final public function selectGroupClassPicture(
         GroupRepository $groupRepository,
         PaginatorInterface $paginator,
@@ -104,6 +104,8 @@ class ClassPictureController extends AbstractController
 
                 $classPictureRepository->add($classPicture);
                 $classPictureRepository->save();
+                $this->addFlash('sucess', 'Se ha creado la orla con éxito');
+                return $this->redirectToRoute('main');
             }catch (\Exception $e) {
                 $this->addFlash('error', 'No se ha podido crear. Error: ' . $e->getMessage());
                 return $this->redirectToRoute('main');
