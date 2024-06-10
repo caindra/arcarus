@@ -33,20 +33,32 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        UserPictureFactory::createMany(35);
+        // Crear 120 imágenes de usuario para asegurar suficiente cantidad
+        $userPictures = UserPictureFactory::createMany(120);
 
-        StudentFactory::createMany(50, [
+        // Crear 100 estudiantes y asignarles las primeras 100 imágenes
+        $students = StudentFactory::createMany(100, [
             'password' => $this->passwordHasher->hashPassword(
                 new Student(), 'prueba'
             )
         ]);
 
-        ProfessorFactory::createMany(20, [
+        foreach ($students as $index => $student) {
+            $student->object()->setPicture($userPictures[$index]->object());
+        }
+
+        // Crear 20 profesores y asignarles las imágenes restantes
+        $professors = ProfessorFactory::createMany(20, [
             'password' => $this->passwordHasher->hashPassword(
                 new Professor(), 'prueba'
             )
         ]);
 
+        foreach ($professors as $index => $professor) {
+            $professor->object()->setPicture($userPictures[$index + 100]->object());
+        }
+
+        // Crear profesores adicionales con datos específicos
         $sheldon = ProfessorFactory::createOne([
             'name' => 'Sheldon',
             'surnames' => 'Cooper Tucker',
@@ -55,7 +67,8 @@ class AppFixtures extends Fixture
                 new Professor(), 'bazinga'
             ),
             'userName' => 'sheldonAdmin',
-            'isAdmin' => true
+            'isAdmin' => true,
+            'picture' => UserPictureFactory::createOne()->object()
         ]);
 
         $aelin = ProfessorFactory::createOne([
@@ -66,7 +79,8 @@ class AppFixtures extends Fixture
                 new Professor(), 'terrasen'
             ),
             'userName' => 'flameQueen',
-            'isAdmin' => false
+            'isAdmin' => false,
+            'picture' => UserPictureFactory::createOne()->object()
         ]);
 
         $nesta = ProfessorFactory::createOne([
@@ -77,7 +91,8 @@ class AppFixtures extends Fixture
                 new Professor(), 'ataraxia'
             ),
             'userName' => 'ladyDeath',
-            'isAdmin' => false
+            'isAdmin' => false,
+            'picture' => UserPictureFactory::createOne()->object()
         ]);
 
         $cassian = StudentFactory::createOne([
@@ -88,7 +103,7 @@ class AppFixtures extends Fixture
                 new Student(), 'general'
             ),
             'userName' => 'cassianIlliyrian',
-            'picture' => UserPictureFactory::createOne()
+            'picture' => UserPictureFactory::createOne()->object()
         ]);
 
         AcademicYearFactory::createMany(2);
