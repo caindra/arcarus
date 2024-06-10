@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3cf6c26f7627846bf53421723b1f556b",
+    "content-hash": "7800aadcf7dc089e19bbbd4f242f07c0",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -6285,16 +6285,16 @@
         },
         {
             "name": "symfony/ux-cropperjs",
-            "version": "v2.17.0",
+            "version": "v2.18.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ux-cropperjs.git",
-                "reference": "e32e091fb2b3d36e0bd2bf251b1907cf6b3f88ad"
+                "reference": "00e20b8edeac93a64f2c44b09d1bfdb6d52d1200"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ux-cropperjs/zipball/e32e091fb2b3d36e0bd2bf251b1907cf6b3f88ad",
-                "reference": "e32e091fb2b3d36e0bd2bf251b1907cf6b3f88ad",
+                "url": "https://api.github.com/repos/symfony/ux-cropperjs/zipball/00e20b8edeac93a64f2c44b09d1bfdb6d52d1200",
+                "reference": "00e20b8edeac93a64f2c44b09d1bfdb6d52d1200",
                 "shasum": ""
             },
             "require": {
@@ -6350,7 +6350,7 @@
                 "symfony-ux"
             ],
             "support": {
-                "source": "https://github.com/symfony/ux-cropperjs/tree/v2.17.0"
+                "source": "https://github.com/symfony/ux-cropperjs/tree/v2.18.0"
             },
             "funding": [
                 {
@@ -6366,7 +6366,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-04-19T06:36:45+00:00"
+            "time": "2024-06-01T17:50:16+00:00"
         },
         {
             "name": "symfony/ux-dropzone",
