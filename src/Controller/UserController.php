@@ -16,6 +16,7 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -195,5 +196,37 @@ class UserController extends AbstractController
         return $this->render('users/delete_professor.html.twig', [
             'user' => $professor
         ]);
+    }
+
+    #[Route('/student/photo/{id}', name: 'student_photo')]
+    public function getStudentPhotoAction(Student $student): Response
+    {
+        $callback = function () use ($student) {
+            if ($student->getPicture()) {
+                echo stream_get_contents($student->getPicture()->getImage());
+            } else {
+                readfile($this->getParameter('kernel.project_dir') . '/public/images/user/user_default.png');
+            }
+        };
+
+        $response = new StreamedResponse($callback);
+        $response->headers->set('Content-Type', 'image/png');
+        return $response;
+    }
+
+    #[Route('/professor/photo/{id}', name: 'professor_photo')]
+    public function getProfessorPhotoAction(Professor $professor): Response
+    {
+        $callback = function () use ($professor) {
+            if ($professor->getPicture()) {
+                echo stream_get_contents($professor->getPicture()->getImage());
+            } else {
+                readfile($this->getParameter('kernel.project_dir') . '/public/images/user/user_default.png');
+            }
+        };
+
+        $response = new StreamedResponse($callback);
+        $response->headers->set('Content-Type', 'image/png');
+        return $response;
     }
 }
