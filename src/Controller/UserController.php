@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Professor;
 use App\Entity\Student;
+use App\Entity\UserPicture;
 use App\Form\NewProfessorType;
 use App\Form\NewStudentType;
 use App\Form\ProfessorType;
@@ -29,7 +30,7 @@ class UserController extends AbstractController
         PaginatorInterface $paginator,
         Request $request
     ): Response {
-        $query = $userRepository->findAllBySurnameName();
+        $query = $userRepository->findAllWithPicturesSorted();
         $pagination = $paginator->paginate(
             $query, // query, NOT result
             $request->query->getInt('page', 1), // page number
@@ -201,25 +202,21 @@ class UserController extends AbstractController
     #[Route('/student/photo/{id}', name: 'student_photo')]
     public function getStudentPhotoAction(Student $student): Response
     {
-        $callback = function () use ($student) {
-            if ($student->getPicture()) {
-                echo stream_get_contents($student->getPicture()->getImage());
-            } else {
-                readfile($this->getParameter('kernel.project_dir') . '/public/images/user/user_default.png');
-            }
-        };
-
-        $response = new StreamedResponse($callback);
-        $response->headers->set('Content-Type', 'image/png');
-        return $response;
+        return $this->streamImage($student->getPicture());
     }
 
     #[Route('/professor/photo/{id}', name: 'professor_photo')]
     public function getProfessorPhotoAction(Professor $professor): Response
     {
-        $callback = function () use ($professor) {
-            if ($professor->getPicture()) {
-                echo stream_get_contents($professor->getPicture()->getImage());
+        return $this->streamImage($professor->getPicture());
+    }
+
+
+    private function streamImage(?UserPicture $picture): Response
+    {
+        $callback = function () use ($picture) {
+            if ($picture) {
+                echo stream_get_contents($picture->getImage());
             } else {
                 readfile($this->getParameter('kernel.project_dir') . '/public/images/user/user_default.png');
             }

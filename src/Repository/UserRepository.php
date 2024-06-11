@@ -54,4 +54,15 @@ class UserRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findAllWithPicturesSorted()
+    {
+        return $this->createQueryBuilder('u')
+            ->leftJoin('u.picture', 'p')
+            ->addSelect('p')
+            ->orderBy('u.surnames', 'ASC')
+            ->addOrderBy('u.name', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
 }

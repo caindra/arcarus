@@ -1,0 +1,55 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+    <div class="columns is-align-items-center head">
+        <div class="column is-narrow">
+            <img src="{{ asset('images/logos/arcarus_purple.png') }}" alt="logo" class="image is-64x64">
+        </div>
+        <div class="column">
+            <h1 class="title is-4 mb-2">Recortar Foto</h1>
+        </div>
+        <div class="column">
+            <a href="{{ path('users') }}" class="button is-dark">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-arrow-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12h14" /><path d="M5 12l6 6" /><path d="M5 12l6-6" /></svg>
+                {{ 'going_back' | trans({}, 'home') }}
+            </a>
+        </div>
+    </div>
+    <div class="box">
+        {% for message in app.flashes('success') %}
+            <div class="notification is-success">{{ message }}</div>
+        {% endfor %}
+        {% for message in app.flashes('error') %}
+            <div class="notification is-danger">{{ message }}</div>
+        {% endfor %}
+
+        {% if croppedImage is null %}
+            {{ form_start(form) }}
+            <div class="columns">
+                <div class="column is-9">
+                    {{ form_widget(form) }}
+                </div>
+                <div class="column is-3">
+                    <div id="cropper-preview" class="image is-200x200"></div>
+                </div>
+            </div>
+            <button type="submit" class="button is-dark mt-5 is-fullwidth">¡Recorta!</button>
+            {{ form_end(form) }}
+        {% else %}
+            <div class="columns">
+                <div class="column is-9">
+                    <figure class="image">
+                        <img src="{{ croppedImage }}" class="is-rounded" alt="Cropped image">
+                        <figcaption class="has-text-centered">La imagen recortada.</figcaption>
+                    </figure>
+                </div>
+                <div class="column is-3">
+                    <figure class="image">
+                        <img src="{{ croppedThumbnail }}" class="is-rounded" alt="Cropped thumbnail">
+                        <figcaption class="has-text-centered">Una miniatura de la imagen recortada.</figcaption>
+                    </figure>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

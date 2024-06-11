@@ -39,7 +39,7 @@ class UserPictureController extends AbstractController
             }
 
             // Asignar el usuario logueado a la entidad UserPicture
-            $userPicture->setUser($this->security->getUser());
+            $userPicture->setUser($this->getUser());
 
             try {
                 $userPictureRepository->add($userPicture);
