@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\ChangeUserPasswordType;
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -51,6 +53,24 @@ class SecurityController extends AbstractController
         }
         return $this->render('security/change_password.html.twig', [
             'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/users-change-password', name: 'users_password')]
+    final public function listUsers(
+        EntityManagerInterface $entityManager,
+        UserRepository $userRepository,
+        PaginatorInterface $paginator,
+        Request $request
+    ): Response {
+        $query = $userRepository->findAllBySurnameName();
+        $pagination = $paginator->paginate(
+            $query, // query, NOT result
+            $request->query->getInt('page', 1), // page number
+            15 // limit per page
+        );
+        return $this->render('security/list_users_password.html.twig', [
+            'pagination' => $pagination
         ]);
     }
 
