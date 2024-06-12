@@ -1,6 +1,6 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}Orla - seleccionar grupo{% endblock %}
+{% block title %}Seleccionar Grupo{% endblock %}
 
 {% block content %}
     <div class="columns is-align-items-center head">
@@ -12,8 +12,13 @@
         </div>
         <div class="column has-text-right">
             <a href="{{ path('main') }}" class="button is-dark">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0" /><path d="M5 12l6 6" /><path d="M5 12l6 -6" /></svg>
-                {{ 'going_back' | trans({}, 'home') }}
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-left">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M5 12l14 0" />
+                    <path d="M5 12l6 6" />
+                    <path d="M5 12l6 -6" />
+                </svg>
+                Volver
             </a>
         </div>
     </div>
@@ -38,10 +43,13 @@
                         </div>
                     </div>
                     <footer class="card-footer">
-                        <a href="{{ path('class_picture_select_template', {id: group.id}) }}" class="card-footer-item button is-primary is-small">Crear orla</a>
+                        <a href="{{ path('class_picture_select_template', {'id': group.id}) }}" class="card-footer-item button is-primary is-small">Crear orla</a>
                     </footer>
                 </div>
             </div>
         {% endfor %}
+    </div>
+    <div class="has-text-centered">
+        {{ knp_pagination_render(pagination) }}
     </div>
 {% endblock %}

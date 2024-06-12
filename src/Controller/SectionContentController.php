@@ -145,4 +145,38 @@ class SectionContentController extends AbstractController
             'group' => $sectionContent
         ]);
     }
+
+    #[Route('/section-content/edit/{id}', name: 'section_content_class_picture')]
+    public function editSectionContent(
+        SectionContent $sectionContent,
+        SectionContentRepository $sectionContentRepository,
+        Request $request,
+        GroupRepository $groupRepository
+    ): Response {
+        $group = $sectionContent->getClassPicture()->getGroup();
+        $users = array_merge(
+            $groupRepository->findProfessorsByGroupId($group),
+            $groupRepository->findStudentsByGroupId($group)
+        );
+
+        $form = $this->createForm(SectionContentType::class, $sectionContent);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            foreach ($sectionContent->getUserContents() as $userContent) {
+                if ($userContent->getOrderNumber() === 0) {
+                    $sectionContent->removeUserContent($userContent);
+                }
+            }
+            $sectionContentRepository->save();
+
+            $this->addFlash('success', 'Section content updated successfully');
+            return $this->redirectToRoute('main');
+        }
+
+        return $this->render('class_picture/edit_section_content.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
 }

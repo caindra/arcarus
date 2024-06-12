@@ -6,12 +6,14 @@ use App\Entity\ClassPicture;
 use App\Entity\Group;
 use App\Entity\SectionContent;
 use App\Entity\Template;
+use App\Form\SectionContentTitleType;
 use App\Repository\ClassPictureRepository;
 use App\Repository\GroupRepository;
 use App\Repository\TemplateRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,7 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ClassPictureController extends AbstractController
 {
     #[Route('/class-pictures', name: 'class_pictures')]
-    final public function viewClassPictures(
+    public function viewClassPictures(
         EntityManagerInterface $entityManager,
         ClassPictureRepository $classPictureRepository,
         PaginatorInterface $paginator,
@@ -27,9 +29,9 @@ class ClassPictureController extends AbstractController
     ): Response {
         $query = $classPictureRepository->findAll();
         $pagination = $paginator->paginate(
-            $query, // query, NOT result
-            $request->query->getInt('page', 1), // page number
-            15 // limit per page
+            $query,
+            $request->query->getInt('page', 1),
+            15
         );
 
         return $this->render('class_picture/index.html.twig', [
@@ -38,16 +40,16 @@ class ClassPictureController extends AbstractController
     }
 
     #[Route('/class-picture/select-group', name: 'class_picture_select_group')]
-    final public function selectGroupClassPicture(
+    public function selectGroupClassPicture(
         GroupRepository $groupRepository,
         PaginatorInterface $paginator,
         Request $request
     ): Response {
         $query = $groupRepository->findAll();
         $pagination = $paginator->paginate(
-            $query, // query, NOT result
-            $request->query->getInt('page', 1), // page number
-            15 // limit per page
+            $query,
+            $request->query->getInt('page', 1),
+            15
         );
         return $this->render('class_picture/select_group.html.twig', [
             'pagination' => $pagination
@@ -55,8 +57,7 @@ class ClassPictureController extends AbstractController
     }
 
     #[Route('/class-picture/select-template/{id}', name: 'class_picture_select_template')]
-    final public function selectTemplateClassPicture(
-        //el id que se pasa es el de group, ya que es necesario para un controlador posterior
+    public function selectTemplateClassPicture(
         Group $group,
         TemplateRepository $templateRepository,
         PaginatorInterface $paginator,
@@ -64,9 +65,9 @@ class ClassPictureController extends AbstractController
     ): Response {
         $query = $templateRepository->findAll();
         $pagination = $paginator->paginate(
-            $query, // query, NOT result
-            $request->query->getInt('page', 1), // page number
-            15 // limit per page
+            $query,
+            $request->query->getInt('page', 1),
+            15
         );
 
         return $this->render('class_picture/select_template.html.twig', [
@@ -76,40 +77,52 @@ class ClassPictureController extends AbstractController
     }
 
     #[Route('/class-picture/create/{groupId}/{templateId}', name: 'class_picture_create')]
-    final public function createClassPicture(
-        Group $groupId,
+    public function createClassPicture(
+        int $groupId,
         GroupRepository $groupRepository,
-        Template $templateId,
+        int $templateId,
         TemplateRepository $templateRepository,
         ClassPictureRepository $classPictureRepository,
-        Request $request,
-    ): Response
-    {
+        Request $request
+    ): Response {
         $group = $groupRepository->find($groupId);
         $template = $templateRepository->find($templateId);
         $classPicture = new ClassPicture();
 
         if ($group && $template) {
-            try{
-                $classPicture->setGroup($group);
-                $classPicture->setTemplate($template);
-                $classPicture->setDescription('Orla de ' . $group->getName());
+            $classPicture->setGroup($group);
+            $classPicture->setTemplate($template);
+            $classPicture->setDescription('Orla de ' . $group->getName());
 
-                foreach ($template->getSections() as $section) {
-                    $sectionContent = new SectionContent();
+            foreach ($template->getSections() as $section) {
+                $sectionContent = new SectionContent();
+                $sectionContent->setSection($section);
+                $classPicture->addSectionContent($sectionContent);
+            }
+
+            $form = $this->createFormBuilder($classPicture)
+                ->add('sectionContents', CollectionType::class, [
+                    'entry_type' => SectionContentTitleType::class,
+                    'allow_add' => false,
+                    'by_reference' => false,
+                ])
+                ->getForm();
+
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                foreach ($classPicture->getSectionContents() as $sectionContent) {
                     $sectionContent->setClassPicture($classPicture);
-                    $sectionContent->setSection($section);
-                    $classPicture->addSectionContent($sectionContent);
                 }
-
-                $classPictureRepository->add($classPicture);
-                $classPictureRepository->save();
-                $this->addFlash('sucess', 'Se ha creado la orla con éxito');
-                return $this->redirectToRoute('main');
-            }catch (\Exception $e) {
-                $this->addFlash('error', 'No se ha podido crear. Error: ' . $e->getMessage());
+                $classPictureRepository->save($classPicture);
+                $this->addFlash('success', 'Se ha creado la orla con éxito');
                 return $this->redirectToRoute('main');
             }
+
+            return $this->render('class_picture/create.html.twig', [
+                'form' => $form->createView(),
+                'classPicture' => $classPicture
+            ]);
         }
 
         return $this->render('class_picture/create.html.twig', [

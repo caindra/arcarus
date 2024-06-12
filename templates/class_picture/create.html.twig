@@ -11,14 +11,14 @@
             <h1 class="title">Crear Orla para el Grupo {{ classPicture.group.name }}</h1>
         </div>
         <div class="column has-text-right">
-            <a href="{{ path('groups') }}" class="button is-dark">
+            <a href="{{ path('class_picture_select_template', {'id': classPicture.group.id}) }}" class="button is-dark">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-left">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                     <path d="M5 12l14 0" />
                     <path d="M5 12l6 6" />
                     <path d="M5 12l6 -6" />
                 </svg>
-                Volver a grupos
+                Volver a seleccionar plantilla
             </a>
         </div>
     </div>
@@ -34,19 +34,17 @@
                 <div class="card-content">
                     <p class="title is-4">Detalles de la Orla</p>
                     <div class="content">
-                        <p><strong>Grupo:</strong> {{ classPicture.group.name }}</p>
-                        <p><strong>Plantilla:</strong> {{ classPicture.template.styleName }}</p>
-                        <img src="{{ path('template_layout', {'id': classPicture.template.id}) }}" alt="Template Image">
-                        <p><strong>Secciones:</strong></p>
-                        <ul>
-                            {% for sectionContent in classPicture.sectionContents %}
-                                <li>{{ sectionContent.section.name }}</li>
-                            {% endfor %}
-                        </ul>
+                        {{ form_start(form) }}
+                        <div class="form-group">
+                            {{ form_label(form.sectionContents) }}
+                            {{ form_errors(form.sectionContents) }}
+                            {{ form_widget(form.sectionContents) }}
+                        </div>
+                        <button class="btn btn-primary">Crear</button>
+                        {{ form_end(form) }}
                     </div>
                 </div>
                 <footer class="card-footer">
-
                 </footer>
             </div>
         </div>
