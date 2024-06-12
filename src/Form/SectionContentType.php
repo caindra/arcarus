@@ -17,9 +17,6 @@ class SectionContentType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title', TextType::class ,[
-                'label' => 'Nombre de la Sección',
-            ])
             ->add('userContents', CollectionType::class, [
                 'entry_type' => UserSectionContentType::class,
                 'allow_add' => true,

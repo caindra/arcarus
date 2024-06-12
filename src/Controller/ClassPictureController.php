@@ -5,8 +5,9 @@ namespace App\Controller;
 use App\Entity\ClassPicture;
 use App\Entity\Group;
 use App\Entity\SectionContent;
-use App\Entity\Template;
+use App\Entity\UserSectionContent;
 use App\Form\SectionContentTitleType;
+use App\Form\SectionContentType;
 use App\Repository\ClassPictureRepository;
 use App\Repository\GroupRepository;
 use App\Repository\TemplateRepository;
@@ -22,12 +23,11 @@ class ClassPictureController extends AbstractController
 {
     #[Route('/class-pictures', name: 'class_pictures')]
     public function viewClassPictures(
-        EntityManagerInterface $entityManager,
         ClassPictureRepository $classPictureRepository,
         PaginatorInterface $paginator,
         Request $request
     ): Response {
-        $query = $classPictureRepository->findAll();
+        $query = $classPictureRepository->findAllWithGroupAndTemplate();
         $pagination = $paginator->paginate(
             $query,
             $request->query->getInt('page', 1),
@@ -127,6 +127,55 @@ class ClassPictureController extends AbstractController
 
         return $this->render('class_picture/create.html.twig', [
             'classPicture' => $classPicture
+        ]);
+    }
+
+    #[Route('/class-picture/edit-section/{id}', name: 'class_picture_edit_section')]
+    public function editSectionContent(
+        SectionContent $sectionContent,
+        GroupRepository $groupRepository,
+        UserRepository $userRepository,
+        EntityManagerInterface $entityManager,
+        Request $request
+    ): Response {
+        $group = $sectionContent->getClassPicture()->getGroup();
+        $users = $userRepository->findByGroup($group);
+
+        // Eliminar usuarios ya asociados
+        foreach ($sectionContent->getUserContents() as $userContent) {
+            if (($key = array_search($userContent->getContainedUsers(), $users)) !== false) {
+                unset($users[$key]);
+            }
+        }
+
+        // Añadir nuevos UserSectionContent con orderNumber 0
+        foreach ($users as $user) {
+            $userSectionContent = new UserSectionContent();
+            $userSectionContent->addContainedUser($user);
+            $userSectionContent->setSectionContent($sectionContent);
+            $userSectionContent->setOrderNumber(0);
+            $sectionContent->addUserContent($userSectionContent);
+        }
+
+        $form = $this->createForm(SectionContentType::class, $sectionContent);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            foreach ($sectionContent->getUserContents() as $userContent) {
+                if ($userContent->getOrderNumber() === 0) {
+                    $sectionContent->removeUserContent($userContent);
+                    $entityManager->remove($userContent);
+                }
+            }
+
+            $entityManager->flush();
+            $this->addFlash('success', 'Sección actualizada con éxito');
+            return $this->redirectToRoute('class_picture_edit_section', ['id' => $sectionContent->getId()]);
+        }
+
+        return $this->render('class_picture/edit_section.html.twig', [
+            'form' => $form->createView(),
+            'sectionContent' => $sectionContent,
         ]);
     }
 }

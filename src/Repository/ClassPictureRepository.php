@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\ClassPicture;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -34,5 +35,15 @@ class ClassPictureRepository extends ServiceEntityRepository
     public function add(ClassPicture $classPicture): void
     {
         $this->getEntityManager()->persist($classPicture);
+    }
+
+    public function findAllWithGroupAndTemplate(): QueryBuilder
+    {
+        return $this->createQueryBuilder('cp')
+            ->leftJoin('cp.group', 'g')
+            ->addSelect('g')
+            ->leftJoin('cp.template', 't')
+            ->addSelect('t')
+            ->orderBy('cp.id', 'DESC');
     }
 }

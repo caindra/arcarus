@@ -1,0 +1,57 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Editar Sección{% endblock %}
+
+{% block content %}
+    <div class="columns is-align-items-center head">
+        <div class="column is-narrow">
+            <img src="{{ asset('images/logos/arcarus_purple.png') }}" alt="logo" class="image is-64x64">
+        </div>
+        <div class="column">
+            <h1 class="title">Editar Sección</h1>
+        </div>
+        <div class="column has-text-right">
+            <a href="{{ path('class_pictures') }}" class="button is-dark">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-left">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M5 12l14 0" />
+                    <path d="M5 12l6 6" />
+                    <path d="M5 12l6 -6" />
+                </svg>
+                Volver
+            </a>
+        </div>
+    </div>
+    {% for message in app.flashes('success') %}
+        <div class="notification is-success">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('error') %}
+        <div class="notification is-danger">{{ message }}</div>
+    {% endfor %}
+    <div class="columns">
+        <div class="column is-full">
+            <div class="card">
+                <div class="card-content">
+                    <p class="title is-4">Personalizar Sección</p>
+                    <div class="content">
+                        {{ form_start(form) }}
+                        <div class="form-group">
+                            {{ form_label(form.title) }}
+                            {{ form_errors(form.title) }}
+                            {{ form_widget(form.title) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.userContents) }}
+                            {{ form_errors(form.userContents) }}
+                            {{ form_widget(form.userContents) }}
+                        </div>
+                        <button class="btn btn-primary">Guardar</button>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+                <footer class="card-footer">
+                </footer>
+            </div>
+        </div>
+    </div>
+{% endblock %}
