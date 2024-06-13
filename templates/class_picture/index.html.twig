@@ -11,14 +11,8 @@
             <h1 class="title">Listado de Orlas</h1>
         </div>
         <div class="column has-text-right">
-            <a href="{{ path('main') }}" class="button is-dark">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-left">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                    <path d="M5 12l14 0" />
-                    <path d="M5 12l6 6" />
-                    <path d="M5 12l6 -6" />
-                </svg>
-                Volver
+            <a href="{{ path('class_picture_select_group') }}" class="button is-dark">
+                Crear Nueva Orla
             </a>
         </div>
     </div>
@@ -35,12 +29,12 @@
                     <div class="card-content">
                         <p class="title is-4">{{ classPicture.description }}</p>
                         <div class="content">
-                            <p><strong>Grupo:</strong> {{ classPicture.group.name }}</p>
-                            <p><strong>Plantilla:</strong> {{ classPicture.template.styleName }}</p>
+                            <p><strong>Grupo:</strong> {{ classPicture.group ? classPicture.group.name : 'Sin Grupo' }}</p>
+                            <p><strong>Plantilla:</strong> {{ classPicture.template ? classPicture.template.styleName : 'Sin Plantilla' }}</p>
                         </div>
                     </div>
                     <footer class="card-footer">
-                        <a href="{{ path('class_picture_edit_section', {'id': classPicture.id}) }}" class="card-footer-item button is-primary is-fullwidth">Editar Sección</a>
+                        <a href="{{ path('class_picture_edit_sections', {'classPictureId': classPicture.id}) }}" class="card-footer-item button is-primary is-fullwidth">Editar Sección</a>
                     </footer>
                 </div>
             </div>

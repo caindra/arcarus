@@ -1,6 +1,6 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}Editar Sección{% endblock %}
+{% block title %}Editar Secciones{% endblock %}
 
 {% block content %}
     <div class="columns is-align-items-center head">
@@ -8,16 +8,10 @@
             <img src="{{ asset('images/logos/arcarus_purple.png') }}" alt="logo" class="image is-64x64">
         </div>
         <div class="column">
-            <h1 class="title">Editar Sección</h1>
+            <h1 class="title">Editar Secciones</h1>
         </div>
         <div class="column has-text-right">
             <a href="{{ path('class_pictures') }}" class="button is-dark">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-left">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                    <path d="M5 12l14 0" />
-                    <path d="M5 12l6 6" />
-                    <path d="M5 12l6 -6" />
-                </svg>
                 Volver
             </a>
         </div>
@@ -30,40 +24,41 @@
     {% endfor %}
     <div class="columns">
         <div class="column is-full">
-            <div class="card">
-                <div class="card-content">
-                    <p class="title is-4">Personalizar Sección</p>
-                    <div class="content">
-                        {{ form_start(form) }}
-                        <div class="form-group">
-                            {{ form_label(form.userContents) }}
-                            {{ form_errors(form.userContents) }}
-                            <table class="table is-fullwidth is-striped">
-                                <thead>
-                                <tr>
-                                    <th>Usuario</th>
-                                    <th>Descripción</th>
-                                    <th>Número de Orden</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for userContent in form.userContents %}
+            {% for form in forms %}
+                <div class="card">
+                    <div class="card-content">
+                        <p class="title is-4">Personalizar Sección</p>
+                        <div class="content">
+                            {{ form_start(form) }}
+                            <div class="form-group">
+                                {{ form_label(form.userContents) }}
+                                {{ form_errors(form.userContents) }}
+                                <table class="table is-fullwidth is-striped">
+                                    <thead>
                                     <tr>
-                                        <td>{{ form_widget(userContent.containedUsers) }}</td>
-                                        <td>{{ form_widget(userContent.description) }}</td>
-                                        <td>{{ form_widget(userContent.orderNumber) }}</td>
+                                        <th>Usuario</th>
+                                        <th>Descripción</th>
+                                        <th>Número de Orden</th>
                                     </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                    {% for userContent in form.userContents %}
+                                        <tr>
+                                            <td>{{ form_widget(userContent.containedUsers) }}</td>
+                                            <td>{{ form_widget(userContent.description) }}</td>
+                                            <td>{{ form_widget(userContent.orderNumber) }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <button class="button is-primary">Guardar</button>
+                            {{ form_end(form) }}
                         </div>
-                        <button class="button is-primary">Guardar</button>
-                        {{ form_end(form) }}
                     </div>
+                    <footer class="card-footer"></footer>
                 </div>
-                <footer class="card-footer">
-                </footer>
-            </div>
+            {% endfor %}
         </div>
     </div>
 {% endblock %}

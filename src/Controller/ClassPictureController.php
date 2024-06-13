@@ -13,9 +13,7 @@ use App\Repository\GroupRepository;
 use App\Repository\ProfessorRepository;
 use App\Repository\StudentRepository;
 use App\Repository\TemplateRepository;
-use App\Repository\UserRepository;
 use App\Repository\UserSectionContentRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -142,61 +140,92 @@ class ClassPictureController extends AbstractController
         ]);
     }
 
-    #[Route('/class-picture/edit-section/{id}', name: 'class_picture_edit_section')]
-    public function editSectionContent(
-        SectionContent               $sectionContent,
-        StudentRepository            $studentRepository,
-        ProfessorRepository          $professorRepository,
+    #[Route('/class-picture/edit-sections/{classPictureId}', name: 'class_picture_edit_sections')]
+    public function editSectionContents(
+        int $classPictureId,
+        ClassPictureRepository $classPictureRepository,
+        StudentRepository $studentRepository,
+        ProfessorRepository $professorRepository,
         UserSectionContentRepository $userSectionContentRepository,
-        Request                      $request
-    ): Response
-    {
-        $group = $sectionContent->getClassPicture()->getGroup();
+        Request $request
+    ): Response {
+        $classPicture = $classPictureRepository->find($classPictureId);
+        if (!$classPicture) {
+            throw $this->createNotFoundException('No se encontró la orla solicitada.');
+        }
+
+        $group = $classPicture->getGroup();
+        if (!$group) {
+            $this->addFlash('error', 'No se encontró el grupo asociado a la orla.');
+            return $this->redirectToRoute('class_pictures');
+        }
+
         $students = $studentRepository->findByGroup($group);
         $professors = $professorRepository->findByGroup($group);
 
         $users = array_merge($students, $professors);
 
-        // Eliminar usuarios ya asociados
-        foreach ($sectionContent->getUserContents() as $userContent) {
-            $user = $userContent->getContainedUsers()->first();
-            if (($key = array_search($user, $users)) !== false) {
-                unset($users[$key]);
+        $sectionContents = $classPicture->getSectionContents();
+        foreach ($sectionContents as $sectionContent) {
+            // Eliminar usuarios ya asociados
+            foreach ($sectionContent->getUserContents() as $userContent) {
+                $user = $userContent->getContainedUsers()->first();
+                if (($key = array_search($user, $users)) !== false) {
+                    unset($users[$key]);
+                }
+            }
+
+            // Añadir nuevos UserSectionContent con orderNumber 0
+            foreach ($users as $user) {
+                $userSectionContent = new UserSectionContent();
+                $userSectionContent->addContainedUser($user);
+                $userSectionContent->setSectionContent($sectionContent);
+                $userSectionContent->setOrderNumber(0);
+                $sectionContent->addUserContent($userSectionContent);
             }
         }
 
-        // Añadir nuevos UserSectionContent con orderNumber 0
-        foreach ($users as $user) {
-            $userSectionContent = new UserSectionContent();
-            $userSectionContent->addContainedUser($user);
-            $userSectionContent->setSectionContent($sectionContent);
-            $userSectionContent->setOrderNumber(0);
-            $sectionContent->addUserContent($userSectionContent);
+        // Crear el formulario para todos los SectionContent
+        $forms = [];
+        foreach ($sectionContents as $sectionContent) {
+            $form = $this->createForm(SectionContentType::class, $sectionContent);
+            $forms[] = $form;
+            $form->handleRequest($request);
         }
 
-        $form = $this->createForm(SectionContentType::class, $sectionContent);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            try{
-                foreach ($sectionContent->getUserContents() as $userContent) {
-                    if ($userContent->getOrderNumber() === 0) {
-                        $sectionContent->removeUserContent($userContent);
-                        $userSectionContentRepository->remove($userContent);
-                    }
+        if ($request->isMethod('POST')) {
+            $allFormsValid = true;
+            foreach ($forms as $form) {
+                if (!$form->isSubmitted() || !$form->isValid()) {
+                    $allFormsValid = false;
+                    break;
                 }
+            }
 
-                $userSectionContentRepository->save();
-                $this->addFlash('success', 'Sección actualizada con éxito');
-                return $this->redirectToRoute('class_picture_edit_section', ['id' => $sectionContent->getId()]);
-            } catch (\Exception $e) {
-                $this->addFlash('error', 'No se ha podido editar. Error: ' . $e->getMessage());
+            if ($allFormsValid) {
+                try {
+                    foreach ($sectionContents as $sectionContent) {
+                        foreach ($sectionContent->getUserContents() as $userContent) {
+                            if ($userContent->getOrderNumber() === 0) {
+                                $sectionContent->removeUserContent($userContent);
+                                $userSectionContentRepository->remove($userContent);
+                            }
+                        }
+                    }
+
+                    $classPictureRepository->save();
+                    $userSectionContentRepository->save();
+                    $this->addFlash('success', 'Secciones actualizadas con éxito');
+                    return $this->redirectToRoute('class_picture_edit_sections', ['classPictureId' => $classPictureId]);
+                } catch (\Exception $e) {
+                    $this->addFlash('error', 'No se ha podido editar. Error: ' . $e->getMessage());
+                }
             }
         }
 
         return $this->render('class_picture/edit_section.html.twig', [
-            'form' => $form->createView(),
-            'sectionContent' => $sectionContent,
+            'forms' => $forms,
+            'sectionContents' => $sectionContents,
         ]);
     }
 }
