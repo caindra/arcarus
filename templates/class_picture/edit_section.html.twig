@@ -36,16 +36,28 @@
                     <div class="content">
                         {{ form_start(form) }}
                         <div class="form-group">
-                            {{ form_label(form.title) }}
-                            {{ form_errors(form.title) }}
-                            {{ form_widget(form.title) }}
-                        </div>
-                        <div class="form-group">
                             {{ form_label(form.userContents) }}
                             {{ form_errors(form.userContents) }}
-                            {{ form_widget(form.userContents) }}
+                            <table class="table is-fullwidth is-striped">
+                                <thead>
+                                <tr>
+                                    <th>Usuario</th>
+                                    <th>Descripción</th>
+                                    <th>Número de Orden</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for userContent in form.userContents %}
+                                    <tr>
+                                        <td>{{ form_widget(userContent.containedUsers) }}</td>
+                                        <td>{{ form_widget(userContent.description) }}</td>
+                                        <td>{{ form_widget(userContent.orderNumber) }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
-                        <button class="btn btn-primary">Guardar</button>
+                        <button class="button is-primary">Guardar</button>
                         {{ form_end(form) }}
                     </div>
                 </div>

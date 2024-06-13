@@ -10,7 +10,11 @@ use App\Form\SectionContentTitleType;
 use App\Form\SectionContentType;
 use App\Repository\ClassPictureRepository;
 use App\Repository\GroupRepository;
+use App\Repository\ProfessorRepository;
+use App\Repository\StudentRepository;
 use App\Repository\TemplateRepository;
+use App\Repository\UserRepository;
+use App\Repository\UserSectionContentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,9 +28,10 @@ class ClassPictureController extends AbstractController
     #[Route('/class-pictures', name: 'class_pictures')]
     public function viewClassPictures(
         ClassPictureRepository $classPictureRepository,
-        PaginatorInterface $paginator,
-        Request $request
-    ): Response {
+        PaginatorInterface     $paginator,
+        Request                $request
+    ): Response
+    {
         $query = $classPictureRepository->findAllWithGroupAndTemplate();
         $pagination = $paginator->paginate(
             $query,
@@ -41,10 +46,11 @@ class ClassPictureController extends AbstractController
 
     #[Route('/class-picture/select-group', name: 'class_picture_select_group')]
     public function selectGroupClassPicture(
-        GroupRepository $groupRepository,
+        GroupRepository    $groupRepository,
         PaginatorInterface $paginator,
-        Request $request
-    ): Response {
+        Request            $request
+    ): Response
+    {
         $query = $groupRepository->findAll();
         $pagination = $paginator->paginate(
             $query,
@@ -58,11 +64,12 @@ class ClassPictureController extends AbstractController
 
     #[Route('/class-picture/select-template/{id}', name: 'class_picture_select_template')]
     public function selectTemplateClassPicture(
-        Group $group,
+        Group              $group,
         TemplateRepository $templateRepository,
         PaginatorInterface $paginator,
-        Request $request
-    ): Response {
+        Request            $request
+    ): Response
+    {
         $query = $templateRepository->findAll();
         $pagination = $paginator->paginate(
             $query,
@@ -78,13 +85,14 @@ class ClassPictureController extends AbstractController
 
     #[Route('/class-picture/create/{groupId}/{templateId}', name: 'class_picture_create')]
     public function createClassPicture(
-        int $groupId,
-        GroupRepository $groupRepository,
-        int $templateId,
-        TemplateRepository $templateRepository,
+        int                    $groupId,
+        GroupRepository        $groupRepository,
+        int                    $templateId,
+        TemplateRepository     $templateRepository,
         ClassPictureRepository $classPictureRepository,
-        Request $request
-    ): Response {
+        Request                $request
+    ): Response
+    {
         $group = $groupRepository->find($groupId);
         $template = $templateRepository->find($templateId);
         $classPicture = new ClassPicture();
@@ -111,12 +119,16 @@ class ClassPictureController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                foreach ($classPicture->getSectionContents() as $sectionContent) {
-                    $sectionContent->setClassPicture($classPicture);
+                try {
+                    foreach ($classPicture->getSectionContents() as $sectionContent) {
+                        $sectionContent->setClassPicture($classPicture);
+                    }
+                    $classPictureRepository->save($classPicture);
+                    $this->addFlash('success', 'Se ha creado la orla con éxito');
+                    return $this->redirectToRoute('main');
+                } catch (\Exception $e) {
+                    $this->addFlash('error', 'No se ha podido crear. Error: ' . $e->getMessage());
                 }
-                $classPictureRepository->save($classPicture);
-                $this->addFlash('success', 'Se ha creado la orla con éxito');
-                return $this->redirectToRoute('main');
             }
 
             return $this->render('class_picture/create.html.twig', [
@@ -132,18 +144,23 @@ class ClassPictureController extends AbstractController
 
     #[Route('/class-picture/edit-section/{id}', name: 'class_picture_edit_section')]
     public function editSectionContent(
-        SectionContent $sectionContent,
-        GroupRepository $groupRepository,
-        UserRepository $userRepository,
-        EntityManagerInterface $entityManager,
-        Request $request
-    ): Response {
+        SectionContent               $sectionContent,
+        StudentRepository            $studentRepository,
+        ProfessorRepository          $professorRepository,
+        UserSectionContentRepository $userSectionContentRepository,
+        Request                      $request
+    ): Response
+    {
         $group = $sectionContent->getClassPicture()->getGroup();
-        $users = $userRepository->findByGroup($group);
+        $students = $studentRepository->findByGroup($group);
+        $professors = $professorRepository->findByGroup($group);
+
+        $users = array_merge($students, $professors);
 
         // Eliminar usuarios ya asociados
         foreach ($sectionContent->getUserContents() as $userContent) {
-            if (($key = array_search($userContent->getContainedUsers(), $users)) !== false) {
+            $user = $userContent->getContainedUsers()->first();
+            if (($key = array_search($user, $users)) !== false) {
                 unset($users[$key]);
             }
         }
@@ -161,16 +178,20 @@ class ClassPictureController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            foreach ($sectionContent->getUserContents() as $userContent) {
-                if ($userContent->getOrderNumber() === 0) {
-                    $sectionContent->removeUserContent($userContent);
-                    $entityManager->remove($userContent);
+            try{
+                foreach ($sectionContent->getUserContents() as $userContent) {
+                    if ($userContent->getOrderNumber() === 0) {
+                        $sectionContent->removeUserContent($userContent);
+                        $userSectionContentRepository->remove($userContent);
+                    }
                 }
-            }
 
-            $entityManager->flush();
-            $this->addFlash('success', 'Sección actualizada con éxito');
-            return $this->redirectToRoute('class_picture_edit_section', ['id' => $sectionContent->getId()]);
+                $userSectionContentRepository->save();
+                $this->addFlash('success', 'Sección actualizada con éxito');
+                return $this->redirectToRoute('class_picture_edit_section', ['id' => $sectionContent->getId()]);
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'No se ha podido editar. Error: ' . $e->getMessage());
+            }
         }
 
         return $this->render('class_picture/edit_section.html.twig', [

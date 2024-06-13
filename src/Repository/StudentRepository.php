@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Group;
 use App\Entity\Student;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -41,6 +42,15 @@ class StudentRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('s')
             ->leftJoin('s.picture', 'pic')
             ->addSelect('pic')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findByGroup(Group $group)
+    {
+        return $this->createQueryBuilder('s')
+            ->where('s.group = :group')
+            ->setParameter('group', $group)
             ->getQuery()
             ->getResult();
     }
