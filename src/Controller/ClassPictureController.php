@@ -6,11 +6,14 @@ use App\Entity\ClassPicture;
 use App\Entity\Group;
 use App\Entity\SectionContent;
 use App\Entity\UserSectionContent;
+use App\Form\ClassPictureSectionsType;
 use App\Form\SectionContentTitleType;
 use App\Form\SectionContentType;
+use App\Form\UserSectionContentType;
 use App\Repository\ClassPictureRepository;
 use App\Repository\GroupRepository;
 use App\Repository\ProfessorRepository;
+use App\Repository\SectionContentRepository;
 use App\Repository\StudentRepository;
 use App\Repository\TemplateRepository;
 use App\Repository\UserRepository;
@@ -142,61 +145,68 @@ class ClassPictureController extends AbstractController
         ]);
     }
 
-    #[Route('/class-picture/edit-section/{id}', name: 'class_picture_edit_section')]
-    public function editSectionContent(
-        SectionContent               $sectionContent,
-        StudentRepository            $studentRepository,
-        ProfessorRepository          $professorRepository,
-        UserSectionContentRepository $userSectionContentRepository,
-        Request                      $request
-    ): Response
+    #[Route('/class-picture/{id}/sections', name: 'class_picture_sections')]
+    public function showSections(int $id, ClassPictureRepository $classPictureRepository): Response
     {
-        $group = $sectionContent->getClassPicture()->getGroup();
-        $students = $studentRepository->findByGroup($group);
-        $professors = $professorRepository->findByGroup($group);
+        $classPicture = $classPictureRepository->find($id);
 
-        $users = array_merge($students, $professors);
-
-        // Eliminar usuarios ya asociados
-        foreach ($sectionContent->getUserContents() as $userContent) {
-            $user = $userContent->getContainedUsers()->first();
-            if (($key = array_search($user, $users)) !== false) {
-                unset($users[$key]);
-            }
+        if (!$classPicture) {
+            throw $this->createNotFoundException('Orla no encontrada');
         }
 
-        // Añadir nuevos UserSectionContent con orderNumber 0
-        foreach ($users as $user) {
-            $userSectionContent = new UserSectionContent();
-            $userSectionContent->addContainedUser($user);
-            $userSectionContent->setSectionContent($sectionContent);
-            $userSectionContent->setOrderNumber(0);
-            $sectionContent->addUserContent($userSectionContent);
+        return $this->render('class_picture/show_sections.html.twig', [
+            'classPicture' => $classPicture,
+            'sections' => $classPicture->getSectionContents(),
+        ]);
+    }
+
+    #[Route('/section-content/{id}/edit', name: 'section_content_edit')]
+    public function editSectionContent(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $sectionContent = $entityManager->getRepository(SectionContent::class)->find($id);
+
+        if (!$sectionContent) {
+            throw $this->createNotFoundException('SectionContent no encontrado');
         }
 
         $form = $this->createForm(SectionContentType::class, $sectionContent);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            try{
-                foreach ($sectionContent->getUserContents() as $userContent) {
-                    if ($userContent->getOrderNumber() === 0) {
-                        $sectionContent->removeUserContent($userContent);
-                        $userSectionContentRepository->remove($userContent);
-                    }
-                }
+            $entityManager->flush();
 
-                $userSectionContentRepository->save();
-                $this->addFlash('success', 'Sección actualizada con éxito');
-                return $this->redirectToRoute('class_picture_edit_section', ['id' => $sectionContent->getId()]);
-            } catch (\Exception $e) {
-                $this->addFlash('error', 'No se ha podido editar. Error: ' . $e->getMessage());
-            }
+            $this->addFlash('success', 'SectionContent editado con éxito');
+            return $this->redirectToRoute('class_picture_sections', ['id' => $sectionContent->getClassPicture()->getId()]);
         }
 
         return $this->render('class_picture/edit_section.html.twig', [
-            'form' => $form->createView(),
             'sectionContent' => $sectionContent,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/user-section-content/{id}/edit', name: 'user_section_content_edit')]
+    public function editUserSectionContent(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $userSectionContent = $entityManager->getRepository(UserSectionContent::class)->find($id);
+
+        if (!$userSectionContent) {
+            throw $this->createNotFoundException('UserSectionContent no encontrado');
+        }
+
+        $form = $this->createForm(UserSectionContentType::class, $userSectionContent);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            $this->addFlash('success', 'UserSectionContent editado con éxito');
+            return $this->redirectToRoute('section_content_edit', ['id' => $userSectionContent->getSectionContent()->getId()]);
+        }
+
+        return $this->render('class_picture/edit_user_section_content.html.twig', [
+            'userSectionContent' => $userSectionContent,
+            'form' => $form->createView(),
         ]);
     }
 }
