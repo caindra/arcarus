@@ -18,13 +18,9 @@ class UserSectionContentType extends AbstractType
         $builder
             ->add('containedUsers', EntityType::class, [
                 'class' => User::class,
-                'choice_label' => function (User $user) {
-                    return $user->getName() . ' ' . $user->getSurnames();
-                },
+                'choice_label' => 'Usuario',
                 'disabled' => false,
                 'label' => 'Usuario',
-                'multiple' => true,
-                'expanded' => true,
             ])
             ->add('description', TextType::class, [
                 'label' => 'Descripción',
