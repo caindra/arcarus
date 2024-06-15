@@ -161,12 +161,22 @@ class ClassPictureController extends AbstractController
     }
 
     #[Route('/section-content/{id}/edit', name: 'section_content_edit')]
-    public function editSectionContent(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    public function editSectionContent(
+        int $id,
+        Request $request,
+        EntityManagerInterface $entityManager,
+        SectionContentRepository $sectionContentRepository
+    ): Response
     {
-        $sectionContent = $entityManager->getRepository(SectionContent::class)->find($id);
+        $sectionContent = $sectionContentRepository->find($id);
 
         if (!$sectionContent) {
             throw $this->createNotFoundException('SectionContent no encontrado');
+        }
+
+        // Si el SectionContent tiene UserSectionContent, usa el formulario de UserSectionContent
+        if ($sectionContent->getUserContents()->count() > 0) {
+            return $this->editUserSectionContent($sectionContent->getUserContents()->first()->getId(), $request, $entityManager);
         }
 
         $form = $this->createForm(SectionContentType::class, $sectionContent);
@@ -185,8 +195,7 @@ class ClassPictureController extends AbstractController
         ]);
     }
 
-    #[Route('/user-section-content/{id}/edit', name: 'user_section_content_edit')]
-    public function editUserSectionContent(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    private function editUserSectionContent(int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
         $userSectionContent = $entityManager->getRepository(UserSectionContent::class)->find($id);
 
@@ -207,6 +216,46 @@ class ClassPictureController extends AbstractController
         return $this->render('class_picture/edit_user_section_content.html.twig', [
             'userSectionContent' => $userSectionContent,
             'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/class-picture/delete/{id}', name: 'class_picture_delete')]
+    public function deleteClassPicture(
+        ClassPicture $classPicture,
+        ClassPictureRepository $classPictureRepository,
+        SectionContentRepository $sectionContentRepository,
+        UserSectionContentRepository $userSectionContentRepository,
+        EntityManagerInterface $entityManager,
+        Request $request
+    ): Response
+    {
+        if ($request->request->has('confirmar')) {
+            try {
+                // Eliminar dependencias de UserSectionContent y User
+                foreach ($classPicture->getSectionContents() as $sectionContent) {
+                    foreach ($sectionContent->getUserContents() as $userContent) {
+                        // Eliminar User que depende de UserSectionContent
+                        foreach ($userContent->getContainedUsers() as $user) {
+                            $entityManager->remove($user);
+                        }
+                        $entityManager->remove($userContent);
+                    }
+                    $entityManager->remove($sectionContent);
+                }
+
+                // Eliminar ClassPicture
+                $entityManager->remove($classPicture);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'La orla ha sido eliminada con éxito');
+                return $this->redirectToRoute('class_pictures');
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'No se ha podido eliminar la orla. Error: ' . $e->getMessage());
+            }
+        }
+
+        return $this->render('class_picture/delete.html.twig', [
+            'classPicture' => $classPicture
         ]);
     }
 }
