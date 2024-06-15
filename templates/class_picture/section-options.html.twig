@@ -1,0 +1,47 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Opciones de Sección{% endblock %}
+
+{% block content %}
+    <div class="columns is-align-items-center head">
+        <div class="column is-narrow">
+            <img src="{{ asset('images/logos/arcarus_purple.png') }}" alt="logo" class="image is-64x64">
+        </div>
+        <div class="column">
+            <h1 class="title">Opciones de Sección</h1>
+        </div>
+    </div>
+
+    <form method="POST" action="{{ path('section_options', {'id': sectionContent.id}) }}">
+        <div class="field">
+            <label class="label">¿La sección tiene usuarios?</label>
+            <div class="control">
+                <label class="radio">
+                    <input type="radio" name="has_users" value="yes" required>
+                    Sí
+                </label>
+                <label class="radio">
+                    <input type="radio" name="has_users" value="no" required>
+                    No
+                </label>
+            </div>
+        </div>
+
+        <div id="user-type-options" class="field" style="display: none;">
+            <label class="label">Tipo de usuarios</label>
+            <div class="control">
+                <div class="select">
+                    <select name="user_type">
+                        <option value="students">Estudiantes</option>
+                        <option value="professors">Profesores</option>
+                        <option value="all">Todos</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="control">
+            <button type="submit" class="button is-primary">Enviar</button>
+        </div>
+    </form>
+{% endblock %}

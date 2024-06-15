@@ -42,16 +42,24 @@
             <div class="section" style="top: {{ section.section.positionTop }}px; left: {{ section.section.positionLeft }}px; width: {{ section.section.width }}px; height: {{ section.section.height }}px;">
                 <h3>{{ section.title }}</h3>
                 {% for userContent in section.userContents %}
-                    {% if userContent.containedUsers|length > 0 %}
-                        {% set user = userContent.containedUsers.first %}
-                        {% if user %}
-                            <p>{{ user.name }}</p>
-                        {% else %}
-                            <p>Usuario no encontrado</p>
-                        {% endif %}
-                    {% else %}
-                        <p>No hay usuarios contenidos</p>
-                    {% endif %}
+                    <table>
+                        <tr>
+                            {% for column in section.maxColQuantity %}
+                                {% if userContent.containedUsers|length > 0 %}
+                                    {% set user = userContent.containedUsers.first %}
+                                    {% if user %}
+                                        td{{ dump(user.userPicture) }}
+                                        <td>{{ user.userPicture }}</td>
+                                        <td>{{ user.name }}</td>
+                                    {% else %}
+                                        <p>Usuario no encontrado</p>
+                                    {% endif %}
+                                {% else %}
+                                    <p>No hay usuarios contenidos</p>
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
+                    </table>
                 {% endfor %}
             </div>
         {% endfor %}

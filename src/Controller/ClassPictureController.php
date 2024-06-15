@@ -6,13 +6,14 @@ use App\Entity\ClassPicture;
 use App\Entity\Group;
 use App\Entity\SectionContent;
 use App\Entity\UserSectionContent;
-use App\Form\ClassPictureSectionsType;
 use App\Form\SectionContentTitleType;
 use App\Form\SectionContentType;
 use App\Form\UserSectionContentType;
 use App\Repository\ClassPictureRepository;
 use App\Repository\GroupRepository;
+use App\Repository\ProfessorRepository;
 use App\Repository\SectionContentRepository;
+use App\Repository\StudentRepository;
 use App\Repository\TemplateRepository;
 use App\Repository\UserSectionContentRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -155,6 +156,261 @@ class ClassPictureController extends AbstractController
             'classPicture' => $classPicture,
             'sections' => $classPicture->getSectionContents(),
         ]);
+    }
+
+    #[Route('class-picture/section/{id}/options', name: 'section_options')]
+    public function sectionOptions(
+        int $id,
+        Request $request,
+        SectionContentRepository $sectionContentRepository
+    ): Response
+    {
+        $sectionContent = $sectionContentRepository->find($id);
+
+        if (!$sectionContent) {
+            throw $this->createNotFoundException('Sección no encontrada');
+        }
+
+        $formSubmitted = $request->isMethod('POST');
+
+        if ($formSubmitted) {
+            $hasUsers = $request->request->get('has_users');
+            if ($hasUsers === 'yes') {
+                $userType = $request->request->get('user_type');
+                switch ($userType) {
+                    case 'students':
+                        return $this->redirectToRoute('students_page', [
+                            'id' => $id
+                        ]);
+                    case 'professors':
+                        return $this->redirectToRoute('professors_page', [
+                            'id' => $id
+                        ]);
+                    case 'all':
+                        return $this->redirectToRoute('all_users_page', [
+                            'id' => $id
+                        ]);
+
+                }
+            } else {
+                return $this->redirectToRoute('no_users_page', [
+                    'id' => $id
+                ]);
+            }
+        }
+
+        return $this->render('class_picture/section-options.html.twig', [
+            'sectionContent' => $sectionContent,
+        ]);
+    }
+
+    #[Route('/class-picture/section/{id}/students', name: 'students_page')]
+    public function studentsPage(
+        int $id,
+        SectionContentRepository $sectionContentRepository,
+        StudentRepository $studentRepository,
+        UserSectionContentRepository $userSectionContentRepository,
+        Request $request,
+        EntityManagerInterface $entityManager
+    ): Response
+    {
+        $sectionContent = $sectionContentRepository->find($id);
+
+        if (!$sectionContent) {
+            throw $this->createNotFoundException('Sección no encontrada');
+        }
+
+        $classPicture = $sectionContent->getClassPicture();
+        $group = $classPicture->getGroup();
+
+        $students = $studentRepository->findByGroup($group);
+        $formBuilder = $this->createFormBuilder();
+
+        $userSectionContents = [];
+        foreach ($students as $student) {
+            $userSectionContent = new UserSectionContent();
+            $userSectionContent->addContainedUser($student);
+            $entityManager->persist($userSectionContent);
+
+            $formBuilder->add('userSectionContent_' . $student->getId(), UserSectionContentType::class, [
+                'data' => $userSectionContent,
+            ]);
+
+            $userSectionContents[$student->getId()] = $userSectionContent;
+        }
+
+        $form = $formBuilder->getForm();
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            try {
+                foreach ($userSectionContents as $userSectionContent) {
+                    $userSectionContentRepository->add($userSectionContent);
+                    $sectionContent->addUserContent($userSectionContent);
+                }
+
+                $userSectionContentRepository->save();
+                $sectionContentRepository->save();
+
+                $this->addFlash('success', 'Usuarios agregados a la sección con éxito.');
+                return $this->redirectToRoute('class_pictures');
+            }catch (\Exception $e){
+                $this->addFlash('error', 'No se ha podido modificar el contenido de la seccion. Error: ' . $e->getMessage());
+            }
+        }
+
+        return $this->render('class_picture/section-options-student.html.twig', [
+            'sectionContent' => $sectionContent,
+            'students' => $students,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/class-picture/section/{id}/professors', name: 'professors_page')]
+    public function professorsPage(
+        int $id,
+        SectionContentRepository $sectionContentRepository,
+        ProfessorRepository $professorRepository,
+        UserSectionContentRepository $userSectionContentRepository,
+        Request $request,
+        EntityManagerInterface $entityManager
+    ): Response
+    {
+        $sectionContent = $sectionContentRepository->find($id);
+
+        if (!$sectionContent) {
+            throw $this->createNotFoundException('Sección no encontrada');
+        }
+
+        $classPicture = $sectionContent->getClassPicture();
+        $group = $classPicture->getGroup();
+
+        $professors = $professorRepository->findByGroup($group);
+        $formBuilder = $this->createFormBuilder();
+
+        $userSectionContents = [];
+        foreach ($professors as $professor) {
+            $userSectionContent = new UserSectionContent();
+            $userSectionContent->addContainedUser($professor);
+            $entityManager->persist($userSectionContent);
+
+            $formBuilder->add('userSectionContent_' . $professor->getId(), UserSectionContentType::class, [
+                'data' => $userSectionContent,
+            ]);
+
+            $userSectionContents[$professor->getId()] = $userSectionContent;
+        }
+
+        $form = $formBuilder->getForm();
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            try {
+                foreach ($userSectionContents as $userSectionContent) {
+                    $userSectionContentRepository->add($userSectionContent);
+                    $sectionContent->addUserContent($userSectionContent);
+                }
+
+                $userSectionContentRepository->save();
+                $sectionContentRepository->save();
+
+                $this->addFlash('success', 'Usuarios agregados a la sección con éxito.');
+                return $this->redirectToRoute('class_pictures');
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'No se ha podido modificar el contenido de la sección. Error: ' . $e->getMessage());
+            }
+        }
+
+        return $this->render('class_picture/section-options-professor.html.twig', [
+            'sectionContent' => $sectionContent,
+            'professors' => $professors,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('class-picture/section/{id}/all-users', name: 'all_users_page')]
+    public function allUsersPage(
+        int $id,
+        SectionContentRepository $sectionContentRepository,
+        StudentRepository $studentRepository,
+        ProfessorRepository $professorRepository,
+        UserSectionContentRepository $userSectionContentRepository,
+        Request $request,
+        EntityManagerInterface $entityManager
+    ): Response
+    {
+        $sectionContent = $sectionContentRepository->find($id);
+
+        if (!$sectionContent) {
+            throw $this->createNotFoundException('Sección no encontrada');
+        }
+
+        $classPicture = $sectionContent->getClassPicture();
+        $group = $classPicture->getGroup();
+
+        $students = $studentRepository->findByGroup($group);
+        $professors = $professorRepository->findByGroup($group);
+
+        // Unir estudiantes y profesores en un solo array
+        $allUsers = array_merge($students, $professors);
+
+        // Crear el formulario principal
+        $formBuilder = $this->createFormBuilder();
+
+        $userSectionContents = [];
+        foreach ($allUsers as $user) {
+            $userSectionContent = new UserSectionContent();
+            $userSectionContent->addContainedUser($user);
+            $entityManager->persist($userSectionContent);
+
+            $formBuilder->add('userSectionContent_' . $user->getId(), UserSectionContentType::class, [
+                'data' => $userSectionContent,
+            ]);
+
+            $userSectionContents[$user->getId()] = $userSectionContent;
+        }
+
+        $form = $formBuilder->getForm();
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            try {
+                foreach ($userSectionContents as $userSectionContent) {
+                    $userSectionContentRepository->add($userSectionContent);
+                    $sectionContent->addUserContent($userSectionContent);
+                }
+
+                $userSectionContentRepository->save();
+                $sectionContentRepository->save();
+
+                $this->addFlash('success', 'Usuarios agregados a la sección con éxito.');
+                return $this->redirectToRoute('all_users_page', ['id' => $id]);
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'No se ha podido modificar el contenido de la sección. Error: ' . $e->getMessage());
+            }
+        }
+
+        return $this->render('class_picture/section-options-all-users.html.twig', [
+            'sectionContent' => $sectionContent,
+            'allUsers' => $allUsers,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/section/{id}/no-users', name: 'no_users_page')]
+    public function noUsersPage(
+        int $id,
+        SectionContentRepository $sectionContentRepository
+    ): Response
+    {
+        $sectionContent = $sectionContentRepository->find($id);
+
+        if (!$sectionContent) {
+            throw $this->createNotFoundException('Sección no encontrada');
+        }
+
+        // Lógica para la página sin usuarios
+        return new Response('Página sin Usuarios para la sección con ID: ' . $id);
     }
 
     #[Route('/section-content/{id}/edit', name: 'section_content_edit')]

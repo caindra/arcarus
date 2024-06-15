@@ -9,3 +9,4 @@
 import './styles/app.scss';
 import './scripts/menu';
 import './scripts/delete_btn';
+import './scripts/options_sectionContent';

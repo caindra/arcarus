@@ -1,0 +1,39 @@
+{# templates/class_picture/section-options-student.html.twig #}
+{% extends 'layout.html.twig' %}
+
+{% block title %}Agregar Usuarios a la Sección{% endblock %}
+
+{% block content %}
+    <div class="columns is-align-items-center head">
+        <div class="column is-narrow">
+            <img src="{{ asset('images/logos/arcarus_purple.png') }}" alt="logo" class="image is-64x64">
+        </div>
+        <div class="column">
+            <h1 class="title">Agregar Estudiantes a la Sección</h1>
+        </div>
+    </div>
+
+    {% for message in app.flashes('success') %}
+        <div class="notification is-success">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('error') %}
+        <div class="notification is-danger">{{ message }}</div>
+    {% endfor %}
+
+    <div class="box">
+        {{ form_start(form) }}
+        {% for student in students %}
+            <h2>Formulario para {{ student.name }}</h2>
+            <div class="field">
+                {{ form_row(form['userSectionContent_' ~ student.id].description) }}
+            </div>
+            <div class="field">
+                {{ form_row(form['userSectionContent_' ~ student.id].orderNumber) }}
+            </div>
+        {% endfor %}
+        <div class="control">
+            <button class="button is-primary">Guardar</button>
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
