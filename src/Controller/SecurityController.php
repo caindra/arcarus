@@ -37,8 +37,7 @@ class SecurityController extends AbstractController
         Request $request,
         UserPasswordHasherInterface $passwordEncoder,
         UserRepository $userRepository
-    ): Response
-    {
+    ): Response {
         $user = $this->getUser();
         $form = $this->createForm(ChangeUserPasswordType::class, $user);
 
@@ -53,6 +52,7 @@ class SecurityController extends AbstractController
         }
         return $this->render('security/change_password.html.twig', [
             'form' => $form->createView(),
+            'admin' => false,
         ]);
     }
 
@@ -80,11 +80,11 @@ class SecurityController extends AbstractController
         UserPasswordHasherInterface $passwordEncoder,
         UserRepository $userRepository,
         User $user
-    ): Response
-    {
+    ): Response {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        $isAdmin = $user !== $this->getUser();
         $form = $this->createForm(ChangeUserPasswordType::class, $user, [
-            'admin' => $user !== $this->getUser()
+            'admin' => $isAdmin
         ]);
 
         $form->handleRequest($request);
@@ -98,6 +98,7 @@ class SecurityController extends AbstractController
         }
         return $this->render('security/change_password.html.twig', [
             'form' => $form->createView(),
+            'admin' => $isAdmin,
         ]);
     }
 }
