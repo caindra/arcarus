@@ -1,6 +1,6 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}Editar Contenido de Usuario{% endblock %}
+{% block title %}Editar Contenido de Usuario de Sección{% endblock %}
 
 {% block content %}
     <div class="columns is-align-items-center head">
@@ -8,10 +8,10 @@
             <img src="{{ asset('images/logos/arcarus_purple.png') }}" alt="logo" class="image is-64x64">
         </div>
         <div class="column">
-            <h1 class="title">Editar Contenido de Usuario</h1>
+            <h1 class="title">Editar Contenido de Usuario de Sección</h1>
         </div>
         <div class="column has-text-right">
-            <a href="{{ path('section_content_edit', {'id': userSectionContent.sectionContent.id}) }}" class="button is-dark">
+            <a href="{{ path('class_picture_sections', { 'id': userSectionContent.sectionContent.classPicture.id }) }}" class="button is-dark">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-left">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                     <path d="M5 12l14 0" />
@@ -22,18 +22,10 @@
             </a>
         </div>
     </div>
-    {% for message in app.flashes('success') %}
-        <div class="notification is-success">{{ message }}</div>
-    {% endfor %}
-    {% for message in app.flashes('error') %}
-        <div class="notification is-danger">{{ message }}</div>
-    {% endfor %}
-    <div class="box">
+    <div class="form box">
         {{ form_start(form) }}
         {{ form_widget(form) }}
-        <div class="buttons is-right">
-            <button type="submit" class="button is-primary">Guardar</button>
-        </div>
+        <button type="submit" class="button is-link">{{ 'save' | trans({}, 'home') }}</button>
         {{ form_end(form) }}
     </div>
 {% endblock %}

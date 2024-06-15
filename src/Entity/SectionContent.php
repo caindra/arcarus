@@ -29,7 +29,7 @@ class SectionContent
     #[ORM\JoinColumn(nullable: false)]
     private ?ClassPicture $classPicture = null;
 
-    #[ORM\OneToMany(targetEntity: UserSectionContent::class, mappedBy: 'sectionContent')]
+    #[ORM\OneToMany(targetEntity: UserSectionContent::class, mappedBy: 'sectionContent', cascade: ['persist', 'remove'])]
     private Collection $userContents;
 
     public function __construct()

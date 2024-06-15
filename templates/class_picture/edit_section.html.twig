@@ -23,9 +23,21 @@
         </div>
     </div>
     <div class="form box">
-        {{ form_start(form) }}
-        {{ form_widget(form) }}
+        {{ form_start(sectionContentForm) }}
+        {{ form_widget(sectionContentForm) }}
         <button type="submit" class="button is-link">{{ 'save' | trans({}, 'home') }}</button>
-        {{ form_end(form) }}
+        {{ form_end(sectionContentForm) }}
     </div>
+
+    {% if userSectionContentForms is not empty %}
+        <h2 class="title is-4">Contenido de Usuario de la Sección</h2>
+        {% for userSectionContentForm in userSectionContentForms %}
+            <div class="form box">
+                {{ form_start(userSectionContentForm) }}
+                {{ form_widget(userSectionContentForm) }}
+                <button type="submit" class="button is-link">{{ 'save' | trans({}, 'home') }}</button>
+                {{ form_end(userSectionContentForm) }}
+            </div>
+        {% endfor %}
+    {% endif %}
 {% endblock %}
