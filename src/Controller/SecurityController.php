@@ -56,6 +56,30 @@ class SecurityController extends AbstractController
         ]);
     }
 
+    #[Route('/login/change-password', name: 'app_change_password_login')]
+    public function changePasswordLogin(
+        Request $request,
+        UserPasswordHasherInterface $passwordEncoder,
+        UserRepository $userRepository
+    ): Response {
+        $user = $this->getUser();
+        $form = $this->createForm(ChangeUserPasswordType::class, $user);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user->setPassword(
+                $passwordEncoder->hashPassword($user, $form->get('newPassword')->getData())
+            );
+            $userRepository->save();
+            $this->addFlash('success', 'Contraseña cambiada correctamente');
+            return $this->redirectToRoute('app_login');
+        }
+        return $this->render('security/own_password.html.twig', [
+            'form' => $form->createView(),
+            'admin' => false,
+        ]);
+    }
+
     #[Route('/users-change-password', name: 'users_password')]
     final public function listUsers(
         EntityManagerInterface $entityManager,
