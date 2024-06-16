@@ -1,0 +1,29 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Elige opción de exportación{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="title">Elige opción de exportación</h1>
+        <form action="{{ path('class_picture_handle_export', {'id': id}) }}" method="post" enctype="multipart/form-data">
+            <div class="field">
+                <label class="label">Exportar con plantilla existente</label>
+                <div class="control">
+                    <input type="radio" name="export_option" value="template" checked> Usar plantilla existente
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Subir PDF personalizado como fondo</label>
+                <div class="control">
+                    <input type="radio" name="export_option" value="custom_pdf"> Subir PDF personalizado
+                    <input type="file" name="custom_pdf_file" accept="application/pdf">
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <button type="submit" class="button is-primary">Exportar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
