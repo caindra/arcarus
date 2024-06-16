@@ -1,0 +1,30 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Editar Sección sin Usuarios{% endblock %}
+
+{% block content %}
+    <div class="columns is-align-items-center head">
+        <div class="column is-narrow">
+            <img src="{{ asset('images/logos/arcarus_purple.png') }}" alt="logo" class="image is-64x64">
+        </div>
+        <div class="column">
+            <h1 class="title">Editar Sección sin Usuarios</h1>
+        </div>
+    </div>
+
+    {% for message in app.flashes('success') %}
+        <div class="notification is-success">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('error') %}
+        <div class="notification is-danger">{{ message }}</div>
+    {% endfor %}
+
+    <div class="box">
+        {{ form_start(form) }}
+        {{ form_row(form.options) }}
+        <div class="control">
+            <button class="button is-primary">{{ form.save.vars.label }}</button>
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

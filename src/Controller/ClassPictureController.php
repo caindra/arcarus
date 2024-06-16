@@ -6,11 +6,14 @@ use App\Entity\ClassPicture;
 use App\Entity\Group;
 use App\Entity\SectionContent;
 use App\Entity\UserSectionContent;
+use App\Form\NoUsersSectionContentType;
 use App\Form\SectionContentTitleType;
 use App\Form\SectionContentType;
 use App\Form\UserSectionContentType;
+use App\Repository\AcademicYearRepository;
 use App\Repository\ClassPictureRepository;
 use App\Repository\GroupRepository;
+use App\Repository\OrganizationRepository;
 use App\Repository\ProfessorRepository;
 use App\Repository\SectionContentRepository;
 use App\Repository\StudentRepository;
@@ -397,10 +400,11 @@ class ClassPictureController extends AbstractController
         ]);
     }
 
-    #[Route('/section/{id}/no-users', name: 'no_users_page')]
+    #[Route('class-picture/section/{id}/no-users', name: 'no_users_page')]
     public function noUsersPage(
         int $id,
-        SectionContentRepository $sectionContentRepository
+        SectionContentRepository $sectionContentRepository,
+        Request $request
     ): Response
     {
         $sectionContent = $sectionContentRepository->find($id);
@@ -409,65 +413,46 @@ class ClassPictureController extends AbstractController
             throw $this->createNotFoundException('Sección no encontrada');
         }
 
-        // Lógica para la página sin usuarios
-        return new Response('Página sin Usuarios para la sección con ID: ' . $id);
-    }
+        // Obtener el grupo, el año académico y la organización relacionados
+        $group = $sectionContent->getClassPicture()->getGroup();
+        $academicYear = $group->getAcademicYear();
+        $organization = $group->getOrganization();
 
-    #[Route('/section-content/{id}/edit', name: 'section_content_edit')]
-    public function editSectionContent(
-        int $id,
-        Request $request,
-        EntityManagerInterface $entityManager,
-        SectionContentRepository $sectionContentRepository
-    ): Response
-    {
-        $sectionContent = $sectionContentRepository->find($id);
-
-        if (!$sectionContent) {
-            throw $this->createNotFoundException('SectionContent no encontrado');
-        }
-
-        // Si el SectionContent tiene UserSectionContent, usa el formulario de UserSectionContent
-        if ($sectionContent->getUserContents()->count() > 0) {
-            return $this->editUserSectionContent($sectionContent->getUserContents()->first()->getId(), $request, $entityManager);
-        }
-
-        $form = $this->createForm(SectionContentType::class, $sectionContent);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            $this->addFlash('success', 'SectionContent editado con éxito');
-            return $this->redirectToRoute('class_picture_sections', ['id' => $sectionContent->getClassPicture()->getId()]);
-        }
-
-        return $this->render('class_picture/edit_section.html.twig', [
-            'sectionContent' => $sectionContent,
-            'form' => $form->createView(),
+        // Crear el formulario
+        $form = $this->createForm(NoUsersSectionContentType::class, null, [
+            'group' => $group,
+            'academic_year' => $academicYear,
+            'organization' => $organization,
         ]);
-    }
 
-    private function editUserSectionContent(int $id, Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $userSectionContent = $entityManager->getRepository(UserSectionContent::class)->find($id);
-
-        if (!$userSectionContent) {
-            throw $this->createNotFoundException('UserSectionContent no encontrado');
-        }
-
-        $form = $this->createForm(UserSectionContentType::class, $userSectionContent);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+            // Procesar los datos del formulario
+            $data = $form->getData();
+            $selectedOptions = $data['options'];
 
-            $this->addFlash('success', 'UserSectionContent editado con éxito');
-            return $this->redirectToRoute('section_content_edit', ['id' => $userSectionContent->getSectionContent()->getId()]);
+            $title = $sectionContent->getTitle();
+            foreach ($selectedOptions as $option) {
+                switch ($option) {
+                    case 'group_name':
+                        $title = $group->getName();
+                        break;
+                    case 'academic_year_description':
+                        $title = $academicYear->getDescription();
+                        break;
+                    case 'organization_name':
+                        $title = $organization->getName();
+                        break;
+                }
+            }
+
+            $this->addFlash('success', 'Sección actualizada con éxito.');
+            return $this->redirectToRoute('class_pictures', ['id' => $id]);
         }
 
-        return $this->render('class_picture/edit_user_section_content.html.twig', [
-            'userSectionContent' => $userSectionContent,
+        return $this->render('class_picture/no-users.html.twig', [
+            'sectionContent' => $sectionContent,
             'form' => $form->createView(),
         ]);
     }
