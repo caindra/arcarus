@@ -70,6 +70,8 @@ class ExportClassPictureController extends AbstractController
         $mpdf = $this->mpdfFactory->createMpdfObject([
             'mode' => 'utf-8',
             'format' => 'A3',
+            'margin_left' => 15,
+            'margin_right' => 15,
             'margin_header' => 5,
             'margin_footer' => 5,
             'orientation' => 'L'
@@ -81,7 +83,7 @@ class ExportClassPictureController extends AbstractController
         $groupName = $classPicture->getGroup()->getName();
 
         $headerHtml = "
-            <div style='text-align: center; margin-bottom: 20px;'>
+            <div style='text-align: center; margin-bottom: 20px; margin-top: 50px;'>
                 <h1>$organizationName</h1>
                 <h2>$academicYearDescription</h2>
                 <h3>$groupName</h3>
@@ -101,7 +103,7 @@ class ExportClassPictureController extends AbstractController
 
         $mpdf->AddPage();
         $mpdf->Image($templateImagePath, 0, 0, 420, 297, 'png', '', true, false);
-        $mpdf->WriteFixedPosHTML($fullHtml, 10, 10, 400, 270);
+        $mpdf->WriteFixedPosHTML($fullHtml, 20, 30, 380, 270);  // Ajuste de los márgenes izquierdo y derecho
 
         return new Response($mpdf->Output('orla_' . $classPicture->getGroup()->getName() . '.pdf', 'D'), 200, [
             'Content-Type' => 'application/pdf'
@@ -113,6 +115,8 @@ class ExportClassPictureController extends AbstractController
         $mpdf = $this->mpdfFactory->createMpdfObject([
             'mode' => 'utf-8',
             'format' => 'A3',
+            'margin_left' => 15,
+            'margin_right' => 15,
             'margin_header' => 5,
             'margin_footer' => 5,
             'orientation' => 'L'
@@ -128,7 +132,7 @@ class ExportClassPictureController extends AbstractController
         $groupName = $classPicture->getGroup()->getName();
 
         $headerHtml = "
-            <div style='text-align: center; margin-bottom: 20px;'>
+            <div style='text-align: center; margin-bottom: 20px; margin-top: 50px;'>
                 <h1>$organizationName</h1>
                 <h2>$academicYearDescription</h2>
                 <h3>$groupName</h3>
@@ -146,7 +150,7 @@ class ExportClassPictureController extends AbstractController
         // Combinar el header y el contenido en un solo HTML
         $fullHtml = $headerHtml . $contentHtml;
 
-        $mpdf->WriteFixedPosHTML($fullHtml, 10, 10, 400, 270);
+        $mpdf->WriteFixedPosHTML($fullHtml, 20, 30, 380, 270);  // Ajuste de los márgenes izquierdo y derecho
 
         return new Response($mpdf->Output('orla_' . $classPicture->getGroup()->getName() . '.pdf', 'D'), 200, [
             'Content-Type' => 'application/pdf'
@@ -162,7 +166,7 @@ class ExportClassPictureController extends AbstractController
             $containedUsers = $userContent->getContainedUsers();
             foreach ($containedUsers as $user) {
                 $userPicture = $user->getPicture();
-                $imageUrl = 'public/images/user/user_default.png'; // Default image path
+                $imageUrl = $this->getParameter('kernel.project_dir') . '/public/images/user/user_default.png'; // Default image path
 
                 if ($userPicture) {
                     $imageData = stream_get_contents($userPicture->getImage());
@@ -179,7 +183,7 @@ class ExportClassPictureController extends AbstractController
         }
 
         $maxColQuantity = $sectionContent->getSection()->getMaxColQuantity();
-        $htmlContent = '<table style="width: 100%;">';
+        $htmlContent = '<table style="width: 100%; margin-left: 20px; margin-right: 20px;">'; // Añadir márgenes
         $numUsers = count($users);
         $rows = ceil($numUsers / $maxColQuantity);
 
