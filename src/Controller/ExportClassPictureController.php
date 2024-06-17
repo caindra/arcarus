@@ -178,19 +178,25 @@ class ExportClassPictureController extends AbstractController
             }
         }
 
+        $maxColQuantity = $sectionContent->getSection()->getMaxColQuantity();
         $htmlContent = '<table style="width: 100%;">';
         $numUsers = count($users);
-        $columns = 3;
-        $rows = ceil($numUsers / $columns);
+        $rows = ceil($numUsers / $maxColQuantity);
 
         for ($row = 0; $row < $rows; $row++) {
             $htmlContent .= '<tr>';
-            for ($col = 0; $col < $columns; $col++) {
-                $index = $row * $columns + $col;
+            $colsInRow = ($row == $rows - 1 && $numUsers % $maxColQuantity != 0) ? $numUsers % $maxColQuantity : $maxColQuantity;
+            $paddingCols = floor(($maxColQuantity - $colsInRow) / 2);
+            if ($paddingCols > 0) {
+                $htmlContent .= str_repeat('<td style="padding: 10px;"></td>', $paddingCols);
+            }
+
+            for ($col = 0; $col < $colsInRow; $col++) {
+                $index = $row * $maxColQuantity + $col;
                 if ($index < $numUsers) {
                     $user = $users[$index];
                     $htmlContent .= '<td style="padding: 10px; text-align: center;">';
-                    $htmlContent .= '<div style="border: 1px solid #ccc; padding: 10px; width: 150px;">';
+                    $htmlContent .= '<div style="border: 1px solid #ccc; padding: 10px; width: 100%;">';
                     $htmlContent .= '<img src="' . $user['imageUrl'] . '" alt="Foto" style="width:100px;height:100px;">';
                     $htmlContent .= '<p>' . $user['name'] . '</p>';
                     if ($user['description']) {
@@ -198,9 +204,11 @@ class ExportClassPictureController extends AbstractController
                     }
                     $htmlContent .= '</div>';
                     $htmlContent .= '</td>';
-                } else {
-                    $htmlContent .= '<td></td>';
                 }
+            }
+
+            if ($paddingCols > 0) {
+                $htmlContent .= str_repeat('<td style="padding: 10px;"></td>', $paddingCols);
             }
             $htmlContent .= '</tr>';
         }
