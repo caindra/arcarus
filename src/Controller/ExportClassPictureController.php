@@ -77,7 +77,7 @@ class ExportClassPictureController extends AbstractController
             'orientation' => 'L'
         ]);
 
-        // Añadir detalles de la organización, año académico y grupo
+        // Añadir detalles de la organización, año académico y grupo con más protagonismo al nombre del grupo
         $organizationName = $template->getOrganization()->getName();
         $academicYearDescription = $classPicture->getGroup()->getAcademicYear()->getDescription();
         $groupName = $classPicture->getGroup()->getName();
@@ -86,7 +86,7 @@ class ExportClassPictureController extends AbstractController
             <div style='text-align: center; margin-bottom: 20px; margin-top: 50px;'>
                 <h1>$organizationName</h1>
                 <h2>$academicYearDescription</h2>
-                <h3>$groupName</h3>
+                <h2 style='font-size: 24px;'>$groupName</h2>
             </div>
         ";
 
@@ -126,7 +126,7 @@ class ExportClassPictureController extends AbstractController
         $tplId = $mpdf->importPage($pagecount);
         $mpdf->useTemplate($tplId, 0, 0, 420, 297);
 
-        // Añadir detalles de la organización, año académico y grupo
+        // Añadir detalles de la organización, año académico y grupo con más protagonismo al nombre del grupo
         $organizationName = $classPicture->getTemplate()->getOrganization()->getName();
         $academicYearDescription = $classPicture->getGroup()->getAcademicYear()->getDescription();
         $groupName = $classPicture->getGroup()->getName();
@@ -135,7 +135,7 @@ class ExportClassPictureController extends AbstractController
             <div style='text-align: center; margin-bottom: 20px; margin-top: 50px;'>
                 <h1>$organizationName</h1>
                 <h2>$academicYearDescription</h2>
-                <h3>$groupName</h3>
+                <h2 style='font-size: 24px;'>$groupName</h2>
             </div>
         ";
 
@@ -166,7 +166,7 @@ class ExportClassPictureController extends AbstractController
             $containedUsers = $userContent->getContainedUsers();
             foreach ($containedUsers as $user) {
                 $userPicture = $user->getPicture();
-                $imageUrl = $this->getParameter('kernel.project_dir') . '/public/images/user/user_default.png'; // Default image path
+                $imageUrl = $this->getParameter('kernel.project_dir') . '/public/images/user/user_default.png';
 
                 if ($userPicture) {
                     $imageData = stream_get_contents($userPicture->getImage());
@@ -175,7 +175,7 @@ class ExportClassPictureController extends AbstractController
                 }
 
                 $users[] = [
-                    'name' => $user->getName() . ' ' . $user->getSurnames(),
+                    'name' => '<b>' . $user->getName() . ' ' . $user->getSurnames() . '</b>',
                     'imageUrl' => $imageUrl,
                     'description' => $userContent->getDescription()
                 ];
@@ -183,12 +183,12 @@ class ExportClassPictureController extends AbstractController
         }
 
         $maxColQuantity = $sectionContent->getSection()->getMaxColQuantity();
-        $htmlContent = '<table style="width: 100%; margin-left: 20px; margin-right: 20px;">'; // Añadir márgenes
+        $htmlContent = '<table style="width: 100%; margin-left: 20px; margin-right: 20px; vertical-align: top;">'; // Añadir márgenes y alinear verticalmente al top
         $numUsers = count($users);
         $rows = ceil($numUsers / $maxColQuantity);
 
         for ($row = 0; $row < $rows; $row++) {
-            $htmlContent .= '<tr>';
+            $htmlContent .= '<tr style="vertical-align: top;">'; // Alinear verticalmente al top
             $colsInRow = ($row == $rows - 1 && $numUsers % $maxColQuantity != 0) ? $numUsers % $maxColQuantity : $maxColQuantity;
             $paddingCols = floor(($maxColQuantity - $colsInRow) / 2);
             if ($paddingCols > 0) {
@@ -199,8 +199,8 @@ class ExportClassPictureController extends AbstractController
                 $index = $row * $maxColQuantity + $col;
                 if ($index < $numUsers) {
                     $user = $users[$index];
-                    $htmlContent .= '<td style="padding: 10px; text-align: center;">';
-                    $htmlContent .= '<div style="border: 1px solid #ccc; padding: 10px; width: 100%;">';
+                    $htmlContent .= '<td style="padding: 10px; text-align: center; width: 150px; vertical-align: top;">'; // Alinear verticalmente al top
+                    $htmlContent .= '<div style="border: 1px solid #ccc; padding: 10px; width: 100%; height: 100%;">';
                     $htmlContent .= '<img src="' . $user['imageUrl'] . '" alt="Foto" style="width:100px;height:100px;">';
                     $htmlContent .= '<p>' . $user['name'] . '</p>';
                     if ($user['description']) {
