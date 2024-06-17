@@ -34,10 +34,10 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         // Crear 120 imágenes de usuario para asegurar suficiente cantidad
-        $userPictures = UserPictureFactory::createMany(120);
+        $userPictures = UserPictureFactory::createMany(70);
 
         // Crear 100 estudiantes y asignarles las primeras 100 imágenes
-        $students = StudentFactory::createMany(100, [
+        $students = StudentFactory::createMany(50, [
             'password' => $this->passwordHasher->hashPassword(
                 new Student(), 'prueba'
             )
@@ -53,10 +53,6 @@ class AppFixtures extends Fixture
                 new Professor(), 'prueba'
             )
         ]);
-
-        foreach ($professors as $index => $professor) {
-            $professor->object()->setPicture($userPictures[$index + 100]->object());
-        }
 
         // Crear profesores adicionales con datos específicos
         $sheldon = ProfessorFactory::createOne([
@@ -79,7 +75,7 @@ class AppFixtures extends Fixture
                 new Professor(), 'terrasen'
             ),
             'userName' => 'flameQueen',
-            'isAdmin' => false,
+            'isAdmin' => true,
             'picture' => UserPictureFactory::createOne()->object()
         ]);
 
