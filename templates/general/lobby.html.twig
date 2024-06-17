@@ -13,11 +13,13 @@
 </div>
 
         <div class="buttons">
-            <a href="{{ path('groups') }}" class="button is-link is is-large">Groups</a>
-            <a href="{{ path('academic-years') }}" class="button is-link is-large">Academic Years</a>
-            <a href="{{ path('organizations') }}" class="button is-link is-large">Organizations</a>
-            <a href="{{ path('sections') }}" class="button is-link is-large">Secciones</a>
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('groups') }}" class="button is-link is is-large">Grupos</a>
+                <a href="{{ path('academic-years') }}" class="button is-link is-large">Curso académico</a>
+                <a href="{{ path('organizations') }}" class="button is-link is-large">Centros educativos</a>
+                <a href="{{ path('sections') }}" class="button is-link is-large">Secciones</a>
+                <a href="{{ path('users_password') }}" class="button is-link is-large">Cambiar la contraseña a un usuario</a>
+            {% endif %}
             <a href="{{ path('app_change_password') }}" class="button is-link is-large">Cambiar mi contraseña</a>
-            <a href="{{ path('users_password') }}" class="button is-link is-large">Cambiar la contraseña a un usuario</a>
         </div>
     {% endblock %}

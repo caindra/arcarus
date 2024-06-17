@@ -40,8 +40,10 @@
                         </div>
                     </div>
                     <footer class="card-footer">
-                        <a href="{{ path('class_picture_sections', {'id': classPicture.id}) }}" class="card-footer-item button is-primary is-fullwidth">Editar Secciones</a>
-                        <a href="{{ path('class_picture_delete', {'id': classPicture.id}) }}" class="card-footer-item button is-danger is-fullwidth">Eliminar Orla</a>
+                        {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MENTOR') %}
+                            <a href="{{ path('class_picture_sections', {'id': classPicture.id}) }}" class="card-footer-item button is-primary is-fullwidth">Editar Secciones</a>
+                            <a href="{{ path('class_picture_delete', {'id': classPicture.id}) }}" class="card-footer-item button is-danger is-fullwidth">Eliminar Orla</a>
+                        {% endif %}
                         <a href="{{ path('class_picture_choose_export', {'id': classPicture.id}) }}" class="card-footer-item button is-link is-fullwidth">Exportar orla</a>
                     </footer>
                 </div>

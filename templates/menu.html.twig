@@ -5,33 +5,40 @@
         <aside class="menu" id="sidebarMenu">
             <div class="has-text-centered">
                 <a href="{{ path('main') }}">
-                    <img src="{{ asset('images/logos/logo_1080_pink_white.png') }}" alt="logo menu" class="image is-64x64" style="margin-top: 20px; margin-bottom: 20px;">
+                    <img src="{{ asset('images/logos/logo_1080_pink_white.png') }}" alt="logo menu" class="image is-64x64" style="margin-top: .5em; margin-bottom: .5em;">
                 </a>
             </div>
             <p class="menu-label">{{ 'label.class_picture' | trans({}, 'menu') }}</p>
             <ul class="menu-list">
                 <li class="menu-item"><a href="{{ path('create_user_picture') }}">{{ 'class_picture.user' | trans({}, 'menu') }}</a></li>
-                <li class="menu-item"><a href="{{ path('groups') }}">{{ 'list.groups' | trans({}, 'menu') }}</a></li>
-                <li class="menu-item"><a href="{{ path('class_picture_select_group') }}">{{ 'list.groups.create.classPicture' | trans({}, 'menu') }}</a></li>
+                {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_PROFESSOR') %}
+                    <li class="menu-item"><a href="{{ path('groups') }}">{{ 'list.groups' | trans({}, 'menu') }}</a></li>
+                {% endif %}
+                {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MENTOR') %}
+                    <li class="menu-item"><a href="{{ path('class_picture_select_group') }}">{{ 'list.groups.create.classPicture' | trans({}, 'menu') }}</a></li>
+                {% endif %}
                 <li class="menu-item"><a href="{{ path('class_pictures') }}">{{ 'class_picture.watch' | trans({}, 'menu') }}</a></li>
             </ul>
             <p class="menu-label">{{ 'label.administration' | trans({}, 'menu') }}</p>
             <ul class="menu-list">
-                <li class="menu-item"><a href="{{ path('users') }}">{{ 'administration.user' | trans({}, 'menu') }}</a></li>
-                <li class="menu-item"><a href="{{ path('templates') }}">{{ 'administration.template' | trans({}, 'menu') }}</a></li>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li class="menu-item"><a href="{{ path('users') }}">{{ 'administration.user' | trans({}, 'menu') }}</a></li>
+                    <li class="menu-item"><a href="{{ path('templates') }}">{{ 'administration.template' | trans({}, 'menu') }}</a></li>
+                {% endif %}
                 <li class="menu-item"><a href="{{ path('general') }}">{{ 'administration.config' | trans({}, 'menu') }}</a></li>
             </ul>
             <p class="menu-label">{{ 'label.help' | trans({}, 'menu') }}</p>
             <ul class="menu-list">
                 <li class="menu-item"><a href="{{ path('help') }}">{{ 'help.info' | trans({}, 'menu') }}</a></li>
-                <li class="menu-item"><a href="#">{{ 'help.logout' | trans({}, 'menu') }}</a></li>
             </ul>
-            {% if app.user %}
-                <h3>Conectado como {{ app.user.username }}</h3>
-                <a href="{{ path('app_logout') }}" class="button is-danger">Cerrar sesión</a>
-            {% else %}
-                <a href="{{ path('app_login') }}" class="button is-link">Iniciar sesión</a>
-            {% endif %}
+            <div class="section footer">
+                {% if app.user %}
+                    <h4>Conectado como {{ app.user.name }} {{ app.user.surnames }}</h4>
+                    <a href="{{ path('app_logout') }}" class="button is-danger">{{ 'help.logout' | trans({}, 'menu') }}</a>
+                {% else %}
+                    <a href="{{ path('app_login') }}" class="button is-link">{{ 'help.login' | trans({}, 'menu') }}</a>
+                {% endif %}
+            </div>
         </aside>
     </div>
 </div>

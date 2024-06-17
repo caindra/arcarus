@@ -12,13 +12,15 @@
                     <input type="radio" name="export_option" value="template" checked> Usar plantilla existente
                 </div>
             </div>
-            <div class="field">
-                <label class="label">Subir PDF personalizado como fondo</label>
-                <div class="control">
-                    <input type="radio" name="export_option" value="custom_pdf"> Subir PDF personalizado
-                    <input type="file" name="custom_pdf_file" accept="application/pdf">
+            {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MENTOR') or is_granted('ROLE_PROFESSOR')%}
+                <div class="field">
+                    <label class="label">Subir PDF personalizado como fondo</label>
+                    <div class="control">
+                        <input type="radio" name="export_option" value="custom_pdf"> Subir PDF personalizado
+                        <input type="file" name="custom_pdf_file" accept="application/pdf">
+                    </div>
                 </div>
-            </div>
+            {% endif %}
             <div class="field">
                 <div class="control">
                     <button type="submit" class="button is-primary">Exportar</button>
