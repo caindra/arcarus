@@ -1,5 +1,7 @@
 {% extends 'layout.html.twig' %}
 
+{% block title %}{{ 'help.title' | trans({}, 'help') }}{% endblock %}
+
 {% block content %}
     <div class="columns is-align-items-center head">
         <div class="column is-narrow">
@@ -8,45 +10,51 @@
         <div class="column">
             <h1 class="title">{{ 'help.title' | trans({}, 'help') }}</h1>
         </div>
-        <div class="column">
+        <div class="column has-text-right">
             <a href="{{ path('users') }}" class="button is-dark">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0" /><path d="M5 12l6 6" /><path d="M5 12l6 -6" /></svg>
+                <span class="icon">
+                    <i class="fas fa-arrow-left"></i>
+                </span>
                 {{ 'going_back' | trans({}, 'home') }}
             </a>
         </div>
     </div>
+
     <div class="bulma-section">
-        <h2 class="title is-4">General Questions</h2>
+        <h2 class="title is-4">Preguntas Generales</h2>
         <div class="box">
-            <h3 class="title is-5">How do I create an account?</h3>
-            <p>To create an account, click on the "Sign Up" button at the top right corner and fill in your details.</p>
+            <h3 class="title is-5">¿Cómo creo una cuenta?</h3>
+            <p>El encargado de administración de la aplicación es la persona encargada de gestionar las cuentas. Si tienes problemas, no dudes en contactar con ellos.</p>
         </div>
         <div class="box">
-            <h3 class="title is-5">How can I reset my password?</h3>
-            <p>If you forgot your password, click on the "Forgot Password" link on the login page and follow the instructions.</p>
-        </div>
-
-        <h2 class="title is-4">Technical Support</h2>
-        <div class="box">
-            <h3 class="title is-5">Why can't I log in?</h3>
-            <p>Ensure that you are using the correct email and password. If the problem persists, contact support.</p>
-        </div>
-        <div class="box">
-            <h3 class="title is-5">How do I contact support?</h3>
-            <p>You can contact our support team by emailing <a href="mailto:support@example.com">support@example.com</a>.</p>
+            <h3 class="title is-5">¿Cómo puedo restablecer mi contraseña?</h3>
+            <p>Si olvidaste tu contraseña, contacta con el encargado de administración de la aplicación para cambiar tu contraseña.</p>
         </div>
 
-        <h2 class="title is-4">Account Management</h2>
+        <h2 class="title is-4">Soporte Técnico</h2>
         <div class="box">
-            <h3 class="title is-5">How do I update my profile information?</h3>
-            <p>To update your profile, go to the "Profile" section in your account settings and edit your details.</p>
+            <h3 class="title is-5">¿Por qué no puedo iniciar sesión?</h3>
+            <p>Asegúrate de estar utilizando el correo electrónico y la contraseña correctos. Si el problema persiste, contacta con el encargado de administración de la aplicación para cambiar tu contraseña.</p>
         </div>
         <div class="box">
-            <h3 class="title is-5">How do I delete my account?</h3>
-            <p>If you wish to delete your account, please contact our support team for assistance.</p>
+            <h3 class="title is-5">¿Cómo contacto al soporte?</h3>
+            <p>Puedes contactar a nuestro equipo de soporte enviando un correo electrónico a <a href="mailto:support@example.com">support@example.com</a>.</p>
+        </div>
+
+        <h2 class="title is-4">Gestión de Cuenta</h2>
+        <div class="box">
+            <h3 class="title is-5">¿Cómo subo una foto de mí para mi orla?</h3>
+            <p>Dirígete a la opción de "Subir foto", y desde ahí escoges la imagen que más te guste y... ¡listo!</p>
+        </div>
+        <div class="box">
+            <h3 class="title is-5">¿Cómo elimino mi cuenta?</h3>
+            <p>Si deseas eliminar tu cuenta, por favor contacta con los encargados de la aplicación en tu centro para obtener asistencia.</p>
+        </div>
+
+        <h2 class="title is-4">Problemas con la Aplicación</h2>
+        <div class="box">
+            <h3 class="title is-5">¿Tienes problemas con la aplicación?</h3>
+            <p>Si tienes algún problema o pregunta adicional sobre la aplicación, no dudes en ponerte en contacto con la creadora del proyecto.</p>
         </div>
     </div>
-
 {% endblock %}
-
-{% block title %}{{ 'help.title' | trans({}, 'help') }}{% endblock %}

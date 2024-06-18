@@ -1,25 +1,27 @@
 {% extends 'layout.html.twig' %}
 
-    {% block title %}Admin Panel{% endblock %}
+{% block title %}Admin Panel{% endblock %}
 
-    {% block content %}
-<div class="columns is-align-items-center head">
-    <div class="column is-narrow">
-        <img src="{{ asset('images/logos/arcarus_purple.png') }}" alt="logo" class="image is-64x64">
-    </div>
-    <div class="column">
-        <h1 class="title">General</h1>
-    </div>
-</div>
-
-        <div class="buttons">
-            {% if is_granted('ROLE_ADMIN') %}
-                <a href="{{ path('groups') }}" class="button is-link is is-large">Grupos</a>
-                <a href="{{ path('academic-years') }}" class="button is-link is-large">Curso académico</a>
-                <a href="{{ path('organizations') }}" class="button is-link is-large">Centros educativos</a>
-                <a href="{{ path('sections') }}" class="button is-link is-large">Secciones</a>
-                <a href="{{ path('users_password') }}" class="button is-link is-large">Cambiar la contraseña a un usuario</a>
-            {% endif %}
-            <a href="{{ path('app_change_password') }}" class="button is-link is-large">Cambiar mi contraseña</a>
+{% block content %}
+    <div class="columns is-align-items-center head">
+        <div class="column is-narrow">
+            <div class="column is-narrow">
+                <img src="{{ asset('images/logos/arcarus_purple.png') }}" alt="logo" class="image is-64x64">
+            </div>
         </div>
-    {% endblock %}
+        <div class="column">
+            <h1 class="title">General</h1>
+        </div>
+    </div>
+
+    <div class="buttons">
+        {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('groups') }}" class="button is-link is-large">Grupos</a>
+            <a href="{{ path('academic-years') }}" class="button is-link is-large">Curso académico</a>
+            <a href="{{ path('organizations') }}" class="button is-link is-large">Centros educativos</a>
+            <a href="{{ path('sections') }}" class="button is-link is-large">Secciones</a>
+            <a href="{{ path('users_password') }}" class="button is-link is-large">Cambiar la contraseña a un usuario</a>
+        {% endif %}
+        <a href="{{ path('app_change_password') }}" class="button is-link is-large">Cambiar mi contraseña</a>
+    </div>
+{% endblock %}
