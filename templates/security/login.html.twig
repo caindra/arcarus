@@ -11,12 +11,12 @@
                         <h1 class="title">Log in</h1>
                         {% if error %}
                             <div class="notification is-danger">
-                                {{ error.message }}
+                                {{ error.messageKey|trans(error.messageData, 'security') }}
                             </div>
                         {% endif %}
                         <div class="field">
                             <div class="control">
-                                <input class="input" type="text" name="_username" placeholder="Email" value="{{ last_email }}" required {% if not error %}autofocus{% endif %}/>
+                                <input class="input" type="text" name="_username" placeholder="Email" value="{{ last_username }}" required {% if not error %}autofocus{% endif %}/>
                             </div>
                         </div>
                         <div class="field">
