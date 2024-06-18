@@ -12,12 +12,7 @@
         </div>
         <div class="column has-text-right">
             <a href="{{ path('class_picture_select_template', {'id': classPicture.group.id}) }}" class="button is-dark">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-left">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                    <path d="M5 12l14 0" />
-                    <path d="M5 12l6 6" />
-                    <path d="M5 12l6 -6" />
-                </svg>
+                <i class="fas fa-arrow-left"></i>
                 Volver a seleccionar plantilla
             </a>
         </div>
@@ -35,10 +30,12 @@
                     <p class="title is-4">Detalles de la Orla</p>
                     <div class="content">
                         {{ form_start(form) }}
-                        <div class="form-group">
-                            {{ form_label(form.sectionContents) }}
-                            {{ form_errors(form.sectionContents) }}
-                            {{ form_widget(form.sectionContents) }}
+                        <div class="field">
+                            <div class="control">
+                                {{ form_label(form.sectionContents) }}
+                                {{ form_errors(form.sectionContents) }}
+                                {{ form_widget(form.sectionContents) }}
+                            </div>
                         </div>
                         <button class="button is-primary">Crear</button>
                         {{ form_end(form) }}

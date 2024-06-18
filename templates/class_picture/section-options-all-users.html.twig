@@ -22,7 +22,7 @@
     <div class="box">
         {{ form_start(form) }}
         {% for user in allUsers %}
-            <h2>Formulario para {{ user.name }}</h2>
+            <h2 class="title is-5">Formulario para {{ user.name }}</h2>
             <div class="field">
                 {{ form_row(form['userSectionContent_' ~ user.id].description) }}
             </div>
@@ -30,8 +30,10 @@
                 {{ form_row(form['userSectionContent_' ~ user.id].orderNumber) }}
             </div>
         {% endfor %}
-        <div class="control">
-            <button class="button is-primary">Guardar</button>
+        <div class="field is-grouped is-grouped-right">
+            <div class="control">
+                <button class="button is-primary">Guardar</button>
+            </div>
         </div>
         {{ form_end(form) }}
     </div>

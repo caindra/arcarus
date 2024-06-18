@@ -10,33 +10,33 @@
             </div>
             <p class="menu-label">{{ 'label.class_picture' | trans({}, 'menu') }}</p>
             <ul class="menu-list">
-                <li class="menu-item"><a href="{{ path('create_user_picture') }}">{{ 'class_picture.user' | trans({}, 'menu') }}</a></li>
+                <li class="menu-item"><a href="{{ path('create_user_picture') }}"><i class="fas fa-user"></i> {{ 'class_picture.user' | trans({}, 'menu') }}</a></li>
                 {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_PROFESSOR') %}
-                    <li class="menu-item"><a href="{{ path('groups') }}">{{ 'list.groups' | trans({}, 'menu') }}</a></li>
+                    <li class="menu-item"><a href="{{ path('groups') }}"><i class="fas fa-users"></i> {{ 'list.groups' | trans({}, 'menu') }}</a></li>
                 {% endif %}
                 {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MENTOR') %}
-                    <li class="menu-item"><a href="{{ path('class_picture_select_group') }}">{{ 'list.groups.create.classPicture' | trans({}, 'menu') }}</a></li>
+                    <li class="menu-item"><a href="{{ path('class_picture_select_group') }}"><i class="fas fa-plus"></i> {{ 'list.groups.create.classPicture' | trans({}, 'menu') }}</a></li>
                 {% endif %}
-                <li class="menu-item"><a href="{{ path('class_pictures') }}">{{ 'class_picture.watch' | trans({}, 'menu') }}</a></li>
+                <li class="menu-item"><a href="{{ path('class_pictures') }}"><i class="fas fa-eye"></i> {{ 'class_picture.watch' | trans({}, 'menu') }}</a></li>
             </ul>
             <p class="menu-label">{{ 'label.administration' | trans({}, 'menu') }}</p>
             <ul class="menu-list">
                 {% if is_granted('ROLE_ADMIN') %}
-                    <li class="menu-item"><a href="{{ path('users') }}">{{ 'administration.user' | trans({}, 'menu') }}</a></li>
-                    <li class="menu-item"><a href="{{ path('templates') }}">{{ 'administration.template' | trans({}, 'menu') }}</a></li>
+                    <li class="menu-item"><a href="{{ path('users') }}"><i class="fas fa-user-cog"></i> {{ 'administration.user' | trans({}, 'menu') }}</a></li>
+                    <li class="menu-item"><a href="{{ path('templates') }}"><i class="fas fa-file-alt"></i> {{ 'administration.template' | trans({}, 'menu') }}</a></li>
                 {% endif %}
-                <li class="menu-item"><a href="{{ path('general') }}">{{ 'administration.config' | trans({}, 'menu') }}</a></li>
+                <li class="menu-item"><a href="{{ path('general') }}"><i class="fas fa-cogs"></i> {{ 'administration.config' | trans({}, 'menu') }}</a></li>
             </ul>
             <p class="menu-label">{{ 'label.help' | trans({}, 'menu') }}</p>
             <ul class="menu-list">
-                <li class="menu-item"><a href="{{ path('help') }}">{{ 'help.info' | trans({}, 'menu') }}</a></li>
+                <li class="menu-item"><a href="{{ path('help') }}"><i class="fas fa-info-circle"></i> {{ 'help.info' | trans({}, 'menu') }}</a></li>
             </ul>
             <div class="section footer">
                 {% if app.user %}
-                    <h4>Conectado como {{ app.user.name }} {{ app.user.surnames }}</h4>
-                    <a href="{{ path('app_logout') }}" class="button is-danger">{{ 'help.logout' | trans({}, 'menu') }}</a>
+                    <p>Conectado como <strong>{{ app.user.name }} {{ app.user.surnames }}</strong></p>
+                    <a href="{{ path('app_logout') }}" class="button is-danger is-fullwidth mt-2"><i class="fas fa-sign-out-alt"></i> {{ 'help.logout' | trans({}, 'menu') }}</a>
                 {% else %}
-                    <a href="{{ path('app_login') }}" class="button is-link">{{ 'help.login' | trans({}, 'menu') }}</a>
+                    <a href="{{ path('app_login') }}" class="button is-link is-fullwidth mt-2"><i class="fas fa-sign-in-alt"></i> {{ 'help.login' | trans({}, 'menu') }}</a>
                 {% endif %}
             </div>
         </aside>

@@ -4,18 +4,18 @@
 {% block title %}Arcarus - Class Picture generator{% endblock %}
 
 {% block content %}
-    <div class="columns is-align-items-center head">
+    <div class="columns is-align-items-center head hero is-halfheight">
         <div class="column is-narrow">
             <img src="{{ asset('images/logos/arcarus_purple.png') }}" alt="logo" class="image is-64x64">
         </div>
         <div class="column">
-            <h1 class="title">{{ 'greeting' | trans({}, 'home') }}</h1>
+            <h1 class="title">{{ 'greeting' | trans({}, 'home') }}, {{ app.user.name }} {{ app.user.surnames }}</h1>
         </div>
+        {% for message in app.flashes('success') %}
+            <div class="notification is-success">{{ message }}</div>
+        {% endfor %}
+        {% for message in app.flashes('error') %}
+            <div class="notification is-danger">{{ message }}</div>
+        {% endfor %}
     </div>
-    {% for message in app.flashes('success') %}
-        <div class="notification is-success">{{ message }}</div>
-    {% endfor %}
-    {% for message in app.flashes('error') %}
-        <div class="notification is-danger">{{ message }}</div>
-    {% endfor %}
 {% endblock %}

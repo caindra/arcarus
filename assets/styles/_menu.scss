@@ -10,13 +10,15 @@
   padding: 1.25em;
   color: #fff;
   overflow-y: auto;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease;
   transform: translateX(-100%);
+  opacity: 0;
   z-index: 1;
 }
 
 .sidebar.is-active {
   transform: translateX(0);
+  opacity: 1;
   display: block;
 }
 
@@ -24,6 +26,7 @@
   .sidebar {
     display: block;
     transform: translateX(0);
+    opacity: 1;
   }
 
   .main-content {
@@ -61,6 +64,18 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-svg {
-  fill: #fafafa;
+.navbar-burger .fas {
+  color: #14161A;
+}
+
+/* Estilos adicionales para el footer */
+.footer {
+  width: 100%;
+  background-color: #14161A;
+  color: #fff;
+  padding: 1em;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
 }

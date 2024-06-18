@@ -1,7 +1,7 @@
 {# templates/class_picture/section-options-student.html.twig #}
 {% extends 'layout.html.twig' %}
 
-{% block title %}Agregar Usuarios a la Sección{% endblock %}
+{% block title %}Agregar Estudiantes a la Sección{% endblock %}
 
 {% block content %}
     <div class="columns is-align-items-center head">
@@ -23,7 +23,7 @@
     <div class="box">
         {{ form_start(form) }}
         {% for student in students %}
-            <h2>Formulario para {{ student.name }}</h2>
+            <h2 class="title is-5">Formulario para {{ student.name }}</h2>
             <div class="field">
                 {{ form_row(form['userSectionContent_' ~ student.id].description) }}
             </div>
@@ -31,8 +31,10 @@
                 {{ form_row(form['userSectionContent_' ~ student.id].orderNumber) }}
             </div>
         {% endfor %}
-        <div class="control">
-            <button class="button is-primary">Guardar</button>
+        <div class="field is-grouped is-grouped-right">
+            <div class="control">
+                <button class="button is-primary">Guardar</button>
+            </div>
         </div>
         {{ form_end(form) }}
     </div>

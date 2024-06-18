@@ -21,9 +21,13 @@
 
     <div class="box">
         {{ form_start(form) }}
-        {{ form_row(form.options) }}
-        <div class="control">
-            <button class="button is-primary">{{ form.save.vars.label }}</button>
+        <div class="field">
+            {{ form_row(form.options) }}
+        </div>
+        <div class="field is-grouped is-grouped-right">
+            <div class="control">
+                <button class="button is-primary">{{ form.save.vars.label }}</button>
+            </div>
         </div>
         {{ form_end(form) }}
     </div>
