@@ -31,7 +31,7 @@
                 <div class="list-item columns is-mobile">
                     <div class="list-item-image column is-narrow">
                         <figure class="image is-48x48">
-                            <img class="is-rounded" src="{{ path(user.isProfessor ? 'professor_photo' : 'student_photo', {'id': user.id}) | default(asset('images/user/user_default.png')) }}" alt="{{ user.name }}">
+                            <img class="is-rounded" src="{{ user.isProfessor ? path('professor_photo', {'id': user.id}) : path('student_photo', {'id': user.id}) }}" alt="{{ user.name }}'s photo">
                         </figure>
                     </div>
                     <div class="list-item-content column">

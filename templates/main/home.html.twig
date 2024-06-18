@@ -11,11 +11,11 @@
         <div class="column">
             <h1 class="title">{{ 'greeting' | trans({}, 'home') }}, {{ app.user.name }} {{ app.user.surnames }}</h1>
         </div>
-        {% for message in app.flashes('success') %}
-            <div class="notification is-success">{{ message }}</div>
-        {% endfor %}
-        {% for message in app.flashes('error') %}
-            <div class="notification is-danger">{{ message }}</div>
-        {% endfor %}
     </div>
+    {% for message in app.flashes('success') %}
+        <div class="notification is-success">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('error') %}
+        <div class="notification is-danger">{{ message }}</div>
+    {% endfor %}
 {% endblock %}

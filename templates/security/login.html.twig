@@ -8,7 +8,10 @@
             <div class="columns is-centered">
                 <div class="column is-one-third">
                     <form method="post">
-                        <h1 class="title">Log in</h1>
+                        <div class="is-narrow is-centered is-large">
+                            <img src="{{ asset('images/logos/arcarus_purple.png') }}" alt="logo" class="image is-64x64">
+                        </div>
+                        <h1 class="title has-text-centered">Log in</h1>
                         {% if error %}
                             <div class="notification is-danger">
                                 {{ error.messageKey|trans(error.messageData, 'security') }}
@@ -16,7 +19,7 @@
                         {% endif %}
                         <div class="field">
                             <div class="control">
-                                <input class="input" type="text" name="_username" placeholder="Email" value="{{ last_username }}" required {% if not error %}autofocus{% endif %}/>
+                                <input class="input" type="text" name="_username" placeholder="Email" value="{{ last_email }}" required {% if not error %}autofocus{% endif %}/>
                             </div>
                         </div>
                         <div class="field">

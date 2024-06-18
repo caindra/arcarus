@@ -211,11 +211,10 @@ class UserController extends AbstractController
         return $this->streamImage($professor->getPicture());
     }
 
-
     private function streamImage(?UserPicture $picture): Response
     {
         $callback = function () use ($picture) {
-            if ($picture) {
+            if ($picture && $picture->getImage()) {
                 echo stream_get_contents($picture->getImage());
             } else {
                 readfile($this->getParameter('kernel.project_dir') . '/public/images/user/user_default.png');

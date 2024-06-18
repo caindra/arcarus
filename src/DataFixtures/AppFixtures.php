@@ -33,28 +33,18 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        // Crear 120 imágenes de usuario para asegurar suficiente cantidad
-        $userPictures = UserPictureFactory::createMany(70);
-
-        // Crear 100 estudiantes y asignarles las primeras 100 imágenes
         $students = StudentFactory::createMany(50, [
             'password' => $this->passwordHasher->hashPassword(
                 new Student(), 'prueba'
             )
         ]);
 
-        foreach ($students as $index => $student) {
-            $student->object()->setPicture($userPictures[$index]->object());
-        }
-
-        // Crear 20 profesores y asignarles las imágenes restantes
         $professors = ProfessorFactory::createMany(20, [
             'password' => $this->passwordHasher->hashPassword(
                 new Professor(), 'prueba'
             )
         ]);
 
-        // Crear profesores adicionales con datos específicos
         $sheldon = ProfessorFactory::createOne([
             'name' => 'Sheldon',
             'surnames' => 'Cooper Tucker',
@@ -64,7 +54,6 @@ class AppFixtures extends Fixture
             ),
             'userName' => 'sheldonAdmin',
             'isAdmin' => true,
-            'picture' => UserPictureFactory::createOne()->object()
         ]);
 
         $aelin = ProfessorFactory::createOne([
@@ -76,7 +65,6 @@ class AppFixtures extends Fixture
             ),
             'userName' => 'flameQueen',
             'isAdmin' => true,
-            'picture' => UserPictureFactory::createOne()->object()
         ]);
 
         $nesta = ProfessorFactory::createOne([
@@ -88,7 +76,6 @@ class AppFixtures extends Fixture
             ),
             'userName' => 'ladyDeath',
             'isAdmin' => false,
-            'picture' => UserPictureFactory::createOne()->object()
         ]);
 
         $cassian = StudentFactory::createOne([
@@ -99,7 +86,6 @@ class AppFixtures extends Fixture
                 new Student(), 'general'
             ),
             'userName' => 'cassianIlliyrian',
-            'picture' => UserPictureFactory::createOne()->object()
         ]);
 
         AcademicYearFactory::createMany(2);

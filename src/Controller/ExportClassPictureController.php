@@ -177,7 +177,7 @@ class ExportClassPictureController extends AbstractController
                 $users[] = [
                     'name' => '<b>' . $user->getName() . ' ' . $user->getSurnames() . '</b>',
                     'imageUrl' => $imageUrl,
-                    'description' => $userContent->getDescription()
+                    'description' => $userContent->getDescription() ? $userContent->getDescription() : ''
                 ];
             }
         }
