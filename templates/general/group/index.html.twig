@@ -41,11 +41,12 @@
                         </div>
                     </div>
                     <footer class="card-footer">
-                        {% if is_granted('ROLE_ADMIN') %}
+                        {% set isMentor = app.user.mentoredClass and app.user.mentoredClass.id == group.id %}
+                        {% if is_granted('ROLE_ADMIN') or (is_granted('ROLE_MENTOR') and isMentor) %}
                             <a href="{{ path('group_edit', {id: group.id}) }}" class="card-footer-item button is-info is-small">Edit</a>
                             <a href="{{ path('group_delete', {id: group.id}) }}" class="card-footer-item button is-danger is-small">Delete</a>
                         {% endif %}
-                        {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MENTOR')%}
+                        {% if is_granted('ROLE_ADMIN') or (is_granted('ROLE_MENTOR') and isMentor) %}
                             <a href="{{ path('class_picture_select_template', {id: group.id}) }}" class="card-footer-item button is-primary is-small">Crear orla</a>
                         {% endif %}
                     </footer>

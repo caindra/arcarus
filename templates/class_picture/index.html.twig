@@ -40,11 +40,15 @@
                         </div>
                     </div>
                     <footer class="card-footer">
-                        {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MENTOR') %}
+                        {% set isMentor = app.user.mentoredClass and app.user.mentoredClass.id == classPicture.group.id %}
+                        {% if is_granted('ROLE_ADMIN') or (is_granted('ROLE_MENTOR') and isMentor) %}
                             <a href="{{ path('class_picture_sections', {'id': classPicture.id}) }}" class="card-footer-item button is-primary is-fullwidth">Editar Secciones</a>
                             <a href="{{ path('class_picture_delete', {'id': classPicture.id}) }}" class="card-footer-item button is-danger is-fullwidth">Eliminar Orla</a>
                         {% endif %}
-                        <a href="{{ path('class_picture_choose_export', {'id': classPicture.id}) }}" class="card-footer-item button is-link is-fullwidth">Exportar orla</a>
+                        {% set isInGroup = classPicture.group and (classPicture.group.professors.contains(app.user) or classPicture.group.students.contains(app.user)) %}
+                        {% if isInGroup %}
+                            <a href="{{ path('class_picture_choose_export', {'id': classPicture.id}) }}" class="card-footer-item button is-link is-fullwidth">Exportar orla</a>
+                        {% endif %}
                     </footer>
                 </div>
             </div>

@@ -43,7 +43,10 @@
                         </div>
                     </div>
                     <footer class="card-footer">
-                        <a href="{{ path('class_picture_select_template', {'id': group.id}) }}" class="card-footer-item button is-primary is-small">Crear orla</a>
+                        {% set isMentor = app.user.mentoredClass and app.user.mentoredClass.id == group.id %}
+                        {% if is_granted('ROLE_ADMIN') or (is_granted('ROLE_MENTOR') and isMentor) %}
+                            <a href="{{ path('class_picture_select_template', {'id': group.id}) }}" class="card-footer-item button is-primary is-small">Crear orla</a>
+                        {% endif %}
                     </footer>
                 </div>
             </div>
