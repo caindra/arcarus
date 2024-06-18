@@ -35,7 +35,7 @@
                         </div>
                     </div>
                     <footer class="card-footer">
-                        {% set isMentor = app.user.mentoredClass and app.user.mentoredClass.id == classPicture.group.id %}
+                        {% set isMentor = app.user is same as('App\\Entity\\Professor') and app.user.mentoredClass and classPicture.group and app.user.mentoredClass.id == classPicture.group.id %}
                         {% if is_granted('ROLE_ADMIN') or (is_granted('ROLE_MENTOR') and isMentor) %}
                             <a href="{{ path('class_picture_sections', {'id': classPicture.id}) }}" class="card-footer-item button is-primary is-fullwidth">Editar Secciones</a>
                             <a href="{{ path('class_picture_delete', {'id': classPicture.id}) }}" class="card-footer-item button is-danger is-fullwidth">Eliminar Orla</a>

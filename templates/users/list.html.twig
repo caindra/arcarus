@@ -41,8 +41,14 @@
                                 <span class="tag is-rounded">{{ user.email }}</span>
                                 <span class="tag is-rounded">{{ user.username }}</span>
                                 <span class="tag is-rounded">{{ user.isProfessor ? 'Profesor' : 'Estudiante' | default('———') }}</span>
-                                <span class="tag is-rounded">{{ user.group | default('---') }}</span>
-                                <span class="tag is-rounded">{{ user.mentor ? user.mentor : 'No tiene clase tutorizada' | default('———') }}</span>
+                                <span class="tag is-rounded">{{ user.group ? user.group.name : '---' }}</span>
+                                <span class="tag is-rounded">
+                                    {% if user.isProfessor and user.mentoredClass %}
+                                        Clase tutorizada: {{ user.mentoredClass.name }}
+                                    {% else %}
+                                        No tiene clase tutorizada
+                                    {% endif %}
+                                </span>
                             </div>
                         </div>
                     </div>

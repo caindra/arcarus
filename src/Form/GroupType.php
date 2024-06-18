@@ -20,7 +20,7 @@ class GroupType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => 'Nombre del centro',
+                'label' => 'Nombre del grupo',
             ])
             ->add('organization', EntityType::class, [
                 'class' => Organization::class,
