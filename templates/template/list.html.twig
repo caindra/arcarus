@@ -2,71 +2,90 @@
 {% trans_default_domain 'templates.es.yml' %}
 
 {% block content %}
+    <div class="columns is-align-items-center head">
+        <div class="column is-narrow">
+            <img src="{{ asset('images/logos/arcarus_purple.png') }}" alt="logo" class="image is-64x64">
+        </div>
+        <div class="column">
+            <h1 class="title">{{ 'list.title' | trans({}, 'templates') }}</h1>
+        </div>
+        <div class="column has-text-right">
+            <a href="{{ path('main') }}" class="button is-dark">
+                <span class="icon">
+                    <i class="fas fa-arrow-left"></i>
+                </span>
+                {{ 'going_back' | trans({}, 'home') }}
+            </a>
+            <a href="{{ path('create_template') }}" class="button is-link">
+                <span class="icon">
+                    <i class="fas fa-user-plus"></i>
+                </span>
+                {{ 'list.add.template' | trans({}, 'templates') }}
+            </a>
+        </div>
+    </div>
 
-            <div class="columns is-align-items-center head">
-                <div class="column is-narrow">
-                    <img src="{{ asset('images/logos/arcarus_purple.png') }}" alt="logo" class="image is-64x64">
-                </div>
-                <div class="column">
-                    <h1 class="title">{{ 'list.title' | trans({}, 'templates') }}</h1>
-                </div>
-                <div class="column has-text-right">
-                    <a href="{{ path('main') }}" class="button is-dark">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0" /><path d="M5 12l6 6" /><path d="M5 12l6 -6" /></svg>
-                        {{ 'going_back' | trans({}, 'home') }}
-                    </a>
-                    <a href="{{ path('create_template') }}" class="button is-link">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M16 19h6" /><path d="M19 16v6" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4" /></svg>
-                        {{ 'list.add.template' | trans({}, 'templates') }}
-                    </a>
-                </div>
-            </div>
-            {% for message in app.flashes('success') %}
-                <div class="notification is-success">{{ message }}</div>
-            {% endfor %}
-            {% for message in app.flashes('error') %}
-                <div class="notification is-danger">{{ message }}</div>
-            {% endfor %}
+    {% for message in app.flashes('success') %}
+        <div class="notification is-success">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('error') %}
+        <div class="notification is-danger">{{ message }}</div>
+    {% endfor %}
 
-            <div class="columns is-multiline">
-                {% for template in pagination.items %}
-                    <div class="column is-full-mobile is-full-tablet is-half-desktop">
-                        <div class="card">
-                            <div class="card-image">
-                                <figure class="image is-16by9">
-                                    <img src="{{ path('template_layout', {'id': template.id}) }}" alt="Template Image">
-                                </figure>
+    <div class="columns is-multiline">
+        {% for template in pagination.items %}
+            <div class="column is-full-mobile is-full-tablet is-half-desktop">
+                <div class="card">
+                    <div class="card-image">
+                        <figure class="image is-16by9">
+                            <img src="{{ path('template_layout', {'id': template.id}) }}" alt="Template Image">
+                        </figure>
+                    </div>
+                    <div class="card-content">
+                        <div class="media">
+                            <div class="media-content">
+                                <p class="title is-4">{{ template.styleName }}</p>
                             </div>
-                            <div class="card-content">
-                                <div class="media">
-                                    <div class="media-content">
-                                        <p class="title is-4">{{ template.styleName }}</p>
-                                    </div>
-                                    <div class="section">
-                                        <p>{{ template.sections | join(' | ') }}</p>
-                                    </div>
-                                </div>
+                            <div class="section">
+                                <p>{{ template.sections | join(' | ') }}</p>
                             </div>
-                            <footer class="card-footer">
-                                <a href="{{ path('modify_template', {id: template.id}) }}" class="card-footer-item button is-primary is-fullwidth">Edit</a>
-                                <a href="{{ path('delete_template', {id: template.id}) }}" class="card-footer-item button is-danger is-fullwidth">Delete</a>
-                                <a href="{{ path('section_template_create', {id: template.id}) }}" class="card-footer-item button is-light is-fullwidth">Crear sección a la plantilla</a>
-                            </footer>
                         </div>
                     </div>
-
-                {% else %}
-                    <div class="column is-full">
-                        <div class="notification is-info">
-                            {{ 'not_found' | trans({}, 'templates') }}
-                        </div>
-                    </div>
-                {% endfor %}
+                    <footer class="card-footer">
+                        <a href="{{ path('modify_template', {id: template.id}) }}" class="card-footer-item button is-primary is-fullwidth">
+                            <span class="icon">
+                                <i class="fas fa-edit"></i>
+                            </span>
+                            Edit
+                        </a>
+                        <a href="{{ path('delete_template', {id: template.id}) }}" class="card-footer-item button is-danger is-fullwidth">
+                            <span class="icon">
+                                <i class="fas fa-trash-alt"></i>
+                            </span>
+                            Delete
+                        </a>
+                        <a href="{{ path('section_template_create', {id: template.id}) }}" class="card-footer-item button is-light is-fullwidth">
+                            <span class="icon">
+                                <i class="fas fa-plus-circle"></i>
+                            </span>
+                            Crear sección a la plantilla
+                        </a>
+                    </footer>
+                </div>
             </div>
-            <div class="has-text-centered">
-                {{ knp_pagination_render(pagination) }}
+        {% else %}
+            <div class="column is-full">
+                <div class="notification is-info">
+                    {{ 'not_found' | trans({}, 'templates') }}
+                </div>
             </div>
-
+        {% endfor %}
+    </div>
+    <div class="has-text-centered">
+        {{ knp_pagination_render(pagination) }}
+    </div>
 {% endblock %}
 
-{% block title %}{{ 'list.title' | trans({}, 'templates') }}{% endblock %}
+{% block title %}
+    {{ 'list.title' | trans({}, 'templates') }}
+{% endblock %}
